@@ -1,15 +1,33 @@
 #[macro_use]
-extern crate glium;
+extern crate gtk;
 
-use glium::*;
+use gtk::prelude::*;
+use gtk::{Button, Window, WindowType};
+
 
 fn main() {
-//    use glium::DisplayBuild;
-    let display = glium::glutin::WindowBuilder::new()
-        .with_dimensions(1024,1024)
-        .with_title("rustafari")
-        .build_glium()
-        .unwrap();
-}
+    if gtk::init().is_err() {
+        println!("Failed to initialize GTK.");
+        return;
+    }
 
+    let window = Window::new(WindowType::Toplevel);
+    window.set_title("First GTK+ Program");
+    window.set_default_size(350, 70);
+
+    let button = Button::new_with_label("Fuck you!");
+    window.add(&button);
+    window.show_all();
+
+    window.connect_delete_event(|_, _| {
+        gtk::main_quit();
+        Inhibit(false)
+    });
+
+    button.connect_clicked(|_| {
+        println!("Fuck!");
+    });
+
+    gtk::main();
+}
 
