@@ -1,0 +1,7 @@
+[package]
+name = "rust_sample"
+version = "0.1.0"
+authors = ["anthony <antonsdl@gmail.com>"]
+
+[dependencies]
+glium = "*"
