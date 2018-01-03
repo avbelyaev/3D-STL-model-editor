@@ -1,16 +1,26 @@
-#[macro_use]
+#![feature(plugin)]
+#![plugin(rocket_codegen)]
 
 extern crate regex;
+extern crate rocket;
+extern crate rocket_contrib;
+extern crate serde;
+
+#[macro_use]
+extern crate serde_derive;
 
 use std::fs::File;
 use std::io::prelude::*;
 use regex::Regex;
+use rocket_contrib::Json;
+
 
 struct Point {
     x: f32,
     y: f32,
     z: f32
 }
+
 
 struct Triangle {
     a: Point,
@@ -19,6 +29,7 @@ struct Triangle {
     normal: Point
 }
 
+
 fn is_number(s: &str) -> bool {
     let num = s.parse::<f32>();
     match num {
@@ -26,6 +37,7 @@ fn is_number(s: &str) -> bool {
         Err(why) => false,
     }
 }
+
 
 fn normal_point<'a>(facet_normal_str: &'a str) -> Point {
 
@@ -38,11 +50,12 @@ fn normal_point<'a>(facet_normal_str: &'a str) -> Point {
     Point{ x: split[0], y: split[1], z: split[2] }
 }
 
+
 fn read_stl<'a, 'b>(filename: &'a str, path: &'a str) -> &'a str {
     return "asdsa";
 }
 
-fn main() {
+fn f() {
 
     let filename = "cube.stl";
     let mut f = File::open(filename)
@@ -61,3 +74,17 @@ fn main() {
     println!("{}", p.z)
 }
 
+
+#[derive(Serialize)]
+struct Task {
+    x: i32
+}
+
+#[get("/")]
+fn index<'a>() -> Json<Task> {
+    Json(Task{ x: 1337 })
+}
+
+fn main() {
+    rocket::ignite().mount("/api", routes![index]).launch();
+}
