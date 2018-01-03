@@ -1,33 +1,63 @@
 #[macro_use]
-extern crate gtk;
 
-use gtk::prelude::*;
-use gtk::{Button, Window, WindowType};
+extern crate regex;
 
+use std::fs::File;
+use std::io::prelude::*;
+use regex::Regex;
+
+struct Point {
+    x: f32,
+    y: f32,
+    z: f32
+}
+
+struct Triangle {
+    a: Point,
+    b: Point,
+    c: Point,
+    normal: Point
+}
+
+fn is_number(s: &str) -> bool {
+    let num = s.parse::<f32>();
+    match num {
+        Ok(val) => true,
+        Err(why) => false,
+    }
+}
+
+fn normal_point<'a>(facet_normal_str: &'a str) -> Point {
+
+    let re = Regex::new(r"\s+").unwrap();
+    let split: Vec<f32> = re.split(facet_normal_str)
+        .filter(|s| is_number(s))
+        .map(|num| num.parse::<f32>().unwrap())
+        .collect();
+
+    Point{ x: split[0], y: split[1], z: split[2] }
+}
+
+fn read_stl<'a, 'b>(filename: &'a str, path: &'a str) -> &'a str {
+    return "asdsa";
+}
 
 fn main() {
-    if gtk::init().is_err() {
-        println!("Failed to initialize GTK.");
-        return;
-    }
 
-    let window = Window::new(WindowType::Toplevel);
-    window.set_title("First GTK+ Program");
-    window.set_default_size(350, 70);
+    let filename = "cube.stl";
+    let mut f = File::open(filename)
+        .expect("file was not found");
 
-    let button = Button::new_with_label("Fuck you!");
-    window.add(&button);
-    window.show_all();
+    let mut contents_as_str = String::new();
+    f.read_to_string(&mut contents_as_str)
+        .expect("shitstorm");
 
-    window.connect_delete_event(|_, _| {
-        gtk::main_quit();
-        Inhibit(false)
-    });
+    let vec: Vec<&str> = contents_as_str.split("\n").collect();
 
-    button.connect_clicked(|_| {
-        println!("Fuck!");
-    });
+    let s = "a";
+    println!("{}", read_stl(&s, &"asd"));
 
-    gtk::main();
+    let p = normal_point("facet normal  0.0   0.0  -1.5");
+    println!("{}", p.z)
 }
 
