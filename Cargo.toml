@@ -2,7 +2,3 @@
 name = "rust_sample"
 version = "0.1.0"
 authors = ["anthony <antonsdl@gmail.com>"]
-
-[dependencies.gtk]
-version = "0.3.0"
-features = ["v3_10"]
