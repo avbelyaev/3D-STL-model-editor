@@ -1,0 +1,8 @@
+# Rocket runs on specific rust-nightly version of 21 dec 2017
+
+rustup install nightly
+rustup update
+rustup default nightly-2017-12-21
+
+# back to stable
+rustup default stable

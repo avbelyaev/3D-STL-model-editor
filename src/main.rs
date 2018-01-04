@@ -63,11 +63,6 @@ fn f() {
     f.read_to_string(&mut contents_as_str)
         .expect("shitstorm");
 
-    let vec: Vec<&str> = contents_as_str.split("\n").collect();
-
-    let s = "a";
-    println!("{}", read_stl(&s, &"asd"));
-
     let p = normal_point("facet normal  0.0   0.0  -1.5");
     println!("{}", p.z)
 }

@@ -1,5 +1,5 @@
 [package]
-name = "rust_sample"
+name = "geometry_server"
 version = "0.1.0"
 authors = ["anthony <antonsdl@gmail.com>"]
 
