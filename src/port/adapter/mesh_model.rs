@@ -6,7 +6,7 @@ use port::adapter::triangle_model::TriangleModelFactory;
 
 #[derive(Serialize)]
 pub struct MeshModel {
-    pub len: i32,
+    pub len: u32,
     pub triangles: Vec<TriangleModel>
 }
 
@@ -31,6 +31,6 @@ impl MeshModelFactory for MeshModel {
     }
 
     fn from_triangle_models(triangle_models: Vec<TriangleModel>) -> Self {
-        MeshModel{ len: triangle_models.len() as i32, triangles: triangle_models }
+        MeshModel{ len: triangle_models.len() as u32, triangles: triangle_models }
     }
 }

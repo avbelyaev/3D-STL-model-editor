@@ -1,6 +1,7 @@
 #![crate_name = "geometry_server"]
 
 
+extern crate base64;
 extern crate regex;
 extern crate rocket;
 #[macro_use] extern crate rocket_contrib;
