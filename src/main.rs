@@ -15,6 +15,7 @@ use regex::Regex;
 use rocket_contrib::Json;
 
 
+#[derive(Serialize, Copy, Clone)]
 struct Point {
     x: f32,
     y: f32,
@@ -22,6 +23,7 @@ struct Point {
 }
 
 
+#[derive(Serialize, Copy, Clone)]
 struct Triangle {
     a: Point,
     b: Point,
@@ -51,10 +53,6 @@ fn normal_point<'a>(facet_normal_str: &'a str) -> Point {
 }
 
 
-fn read_stl<'a, 'b>(filename: &'a str, path: &'a str) -> &'a str {
-    return "asdsa";
-}
-
 fn f() {
 
     let filename = "cube.stl";
@@ -75,16 +73,17 @@ fn f() {
 }
 
 
-#[derive(Serialize)]
-struct Task {
-    x: i32
+#[get("/")]
+fn index() -> Json<Vec<Triangle>> {
+    let p = normal_point("0.0   0.0  -1.5");
+    let t = Triangle{ a: p, b: p, c: p, normal: p };
+    let vec = vec![t, t];
+    Json(vec)
 }
 
-#[get("/")]
-fn index<'a>() -> Json<Task> {
-    Json(Task{ x: 1337 })
-}
 
 fn main() {
-    rocket::ignite().mount("/api", routes![index]).launch();
+    rocket::ignite()
+        .mount("/api", routes![index])
+        .launch();
 }
