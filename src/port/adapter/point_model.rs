@@ -1,10 +1,9 @@
 use domain::model::point::Point;
 
 
+#[derive(Serialize, Copy, Clone)]
 pub struct PointModel {
-    x: f32,
-    y: f32,
-    z: f32
+    pub v: [f32; 3]
 }
 
 pub trait PointModelFactory {
@@ -13,10 +12,6 @@ pub trait PointModelFactory {
 
 impl PointModelFactory for PointModel {
     fn from_point(point: Point) -> Self {
-        PointModel{
-            x: point.x,
-            y: point.y,
-            z: point.z,
-        }
+        PointModel{ v: [point.x, point.y, point.z] }
     }
 }

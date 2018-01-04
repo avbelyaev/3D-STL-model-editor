@@ -1,24 +1,36 @@
 use domain::model::mesh::Mesh;
+use domain::model::triangle::Triangle;
 use port::adapter::triangle_model::TriangleModel;
 use port::adapter::triangle_model::TriangleModelFactory;
 
 
+#[derive(Serialize)]
 pub struct MeshModel {
     pub len: i32,
     pub triangles: Vec<TriangleModel>
 }
 
-trait MeshModelFactory {
+pub trait MeshModelFactory {
     fn from_mesh(mesh: Mesh) -> Self;
+
+    fn from_triangles(triangles: Vec<Triangle>) -> Self;
+
+    fn from_triangle_models(triangle_models: Vec<TriangleModel>) -> Self;
 }
 
 impl MeshModelFactory for MeshModel {
     fn from_mesh(mesh: Mesh) -> Self {
-        let mut models: Vec<TriangleModel> = mesh.triangles.iter()
+        MeshModelFactory::from_triangles(mesh.triangles)
+    }
+
+    fn from_triangles(triangles: Vec<Triangle>) -> Self {
+        let models: Vec<TriangleModel> = triangles.iter()
             .map(|triangle| TriangleModelFactory::from_triangle(*triangle))
             .collect();
-        let models_amount = models.len() as i32;
+        MeshModelFactory::from_triangle_models(models)
+    }
 
-        MeshModel{ len: models_amount, triangles: models }
+    fn from_triangle_models(triangle_models: Vec<TriangleModel>) -> Self {
+        MeshModel{ len: triangle_models.len() as i32, triangles: triangle_models }
     }
 }
