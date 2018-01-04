@@ -19,4 +19,5 @@ use rocket_contrib::Json;
 
 
 pub mod domain;
+pub mod application;
 pub mod port;
