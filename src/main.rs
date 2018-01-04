@@ -15,44 +15,6 @@
 //use rocket_contrib::Json;
 //
 //
-//#[derive(Serialize, Copy, Clone)]
-//struct Point {
-//    x: f32,
-//    y: f32,
-//    z: f32
-//}
-//
-//
-//#[derive(Serialize, Copy, Clone)]
-//struct Triangle {
-//    a: Point,
-//    b: Point,
-//    c: Point,
-//    normal: Point
-//}
-//
-//
-//fn is_number(s: &str) -> bool {
-//    let num = s.parse::<f32>();
-//    match num {
-//        Ok(val) => true,
-//        Err(why) => false,
-//    }
-//}
-//
-//
-//fn normal_point<'a>(facet_normal_str: &'a str) -> Point {
-//
-//    let re = Regex::new(r"\s+").unwrap();
-//    let split: Vec<f32> = re.split(facet_normal_str)
-//        .filter(|s| is_number(s))
-//        .map(|num| num.parse::<f32>().unwrap())
-//        .collect();
-//
-//    Point{ x: split[0], y: split[1], z: split[2] }
-//}
-//
-//
 //fn f() {
 //
 //    let filename = "cube.stl";
@@ -68,30 +30,49 @@
 //}
 //
 //
-//#[get("/")]
-//fn index() -> Json<Vec<Triangle>> {
-//    let p = normal_point("0.0   0.0  -1.5");
-//    let t = Triangle{ a: p, b: p, c: p, normal: p };
-//    let vec = vec![t, t];
-//    Json(vec)
-//}
+
+#![feature(plugin)]
+#![plugin(rocket_codegen)]
 
 extern crate geometry_server;
-//
-//#[get("/")]
-//fn index() -> String {
-//    "asdsa"
-//}
+extern crate rocket;
+extern crate rocket_contrib;
 
+use rocket::Rocket;
+//extern crate serde;
+//
+//#[macro_use]
+//extern crate serde_derive;
+//
+//use rocket_contrib::Json;
+
+use geometry_server::port::adapter::mesh_resource;
+
+
+#[get("/extract")]
+fn extract_mesh_wrapper() -> String {
+    mesh_resource::extract_mesh_from_stl()
+}
+
+#[get("/create")]
+fn create_stl_wrapper() -> String {
+    mesh_resource::create_stl_from_mesh()
+}
+
+
+fn rocket() -> Rocket {
+    let rocket = rocket::ignite()
+        .mount("/api/mesh", routes![extract_mesh_wrapper])
+        .mount("/api/stl", routes![create_stl_wrapper]);
+    rocket
+}
 
 fn main() {
-//    rocket::ignite()
-//        .mount("/api", routes![index])
-//        .launch();
-    let p = geometry_server::domain::model::point::Point{x : 0.5, y: 0.0, z: 0.0};
-    let t = geometry_server::domain::model::triangle::Triangle{ a: p, b: p, c: p, normal: p };
-    println!("{}" , p.x);
-
-    let m = geometry_server::port::adapter::create_mesh_resource::create_mesh_resource("asa");
-    println!("{}", m);
+    rocket().launch();
+//    let p = geometry_server::domain::model::point::Point{x : 0.5, y: 0.0, z: 0.0};
+//    let t = geometry_server::domain::model::triangle::Triangle{ a: p, b: p, c: p, normal: p };
+//    println!("{}" , p.x);
+//
+//    let m = geometry_server::port::adapter::create_mesh_resource::create_mesh_resource("asa");
+//    println!("{}", m);
 }

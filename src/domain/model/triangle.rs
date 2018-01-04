@@ -1,7 +1,7 @@
 use domain::model::point::Point;
 
 
-#[derive(Serialize, Copy, Clone)]
+#[derive(Copy, Clone)]
 pub struct Triangle {
     pub a: Point,
     pub b: Point,
