@@ -1,3 +1,6 @@
+#![crate_name = "geometry_server"]
+
+
 #![feature(plugin)]
 #![plugin(rocket_codegen)]
 
@@ -16,3 +19,4 @@ use rocket_contrib::Json;
 
 
 pub mod domain;
+pub mod port;

@@ -91,4 +91,7 @@ fn main() {
     let p = geometry_server::domain::model::point::Point{x : 0.5, y: 0.0, z: 0.0};
     let t = geometry_server::domain::model::triangle::Triangle{ a: p, b: p, c: p, normal: p };
     println!("{}" , p.x);
+
+    let m = geometry_server::port::adapter::create_mesh_resource::create_mesh_resource();
+    println!("{}", m.x);
 }
