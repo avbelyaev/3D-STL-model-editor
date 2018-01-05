@@ -1,14 +1,12 @@
-use port::adapter::point_model::PointModel;
-use port::adapter::point_model::PointModelFactory;
 use domain::model::triangle::Triangle;
 
 
 #[derive(Serialize, Copy, Clone)]
 pub struct TriangleModel {
-    pub a: PointModel,
-    pub b: PointModel,
-    pub c: PointModel,
-    pub n: PointModel
+    pub a: [f32; 3],
+    pub b: [f32; 3],
+    pub c: [f32; 3],
+    pub n: [f32; 3]
 }
 
 pub trait TriangleModelFactory {
@@ -18,10 +16,10 @@ pub trait TriangleModelFactory {
 impl TriangleModelFactory for TriangleModel {
     fn from_triangle(triangle: Triangle) -> Self {
         TriangleModel{
-            a: PointModelFactory::from_point(triangle.a),
-            b: PointModelFactory::from_point(triangle.b),
-            c: PointModelFactory::from_point(triangle.c),
-            n: PointModelFactory::from_point(triangle.normal),
+            a: [triangle.a.x, triangle.a.y, triangle.a.z],
+            b: [triangle.b.x, triangle.b.y, triangle.b.z],
+            c: [triangle.c.x, triangle.c.y, triangle.c.z],
+            n: [triangle.normal.x, triangle.normal.y, triangle.normal.z],
         }
     }
 }
