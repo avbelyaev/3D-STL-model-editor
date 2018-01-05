@@ -1,5 +1,5 @@
 use domain::model::mesh::Mesh;
-use domain::model::triangle::Triangle;
+use domain::model::triangle::{Triangle, TriangleFactory};
 use domain::model::point::Point;
 use application::abstract_stl_reader::AbstractStlReader;
 
@@ -14,37 +14,7 @@ use std::str;
 use byteorder::{LittleEndian, ReadBytesExt};
 
 
-//struct BinaryStl {
-//    content: [u],
-//    triangles_num: u32,
-//    triangles: Vec<Triangle>
-//}
-
-//impl BinaryStl {
-//    fn new(bytes: Vec<u8>) -> Self {
-//        BinaryStl{
-//            content: bytes.as_slice(),
-//            triangles_num: 0,
-//            triangles: Vec::new(),
-//        }
-//    }
-//
-//    fn read_header<T: ReadBytesExt>(&self, cursor_to_content: &mut T) -> String {
-//        let mut u8buf = [0u8; 80];
-//        cursor_to_content.read(&mut u8buf);
-//
-////    let header = str::from_utf8(&u8buf).unwrap();
-////    println!("H: {}", header);
-//        str::from_utf8(&u8buf).unwrap().to_string()
-//    }
-//
-//    fn read_content<T: ReadBytesExt>(&self, cursor_to_content: &mut T) -> &Vec<Triangle> {
-//        unimplemented!()
-//    }
-//}
-
-
-pub fn read_mesh_from_binary_stl_file(stl: Data) -> String {
+pub fn mesh_from_binary_stl(stl: Data) -> Mesh {
 
     let bytes = convert_data_to_bytes(stl);
     let mut cursor = Cursor::new(bytes);
@@ -55,13 +25,9 @@ pub fn read_mesh_from_binary_stl_file(stl: Data) -> String {
     let triang_num = read_size(&mut cursor);
     println!("s:{}", triang_num);
 
-    let triangs = read_content(&mut cursor);
+    let triangs = read_content(&mut cursor, triang_num);
 
-    // write bytes into file to read it byte by byte with cursor
-//    let mut file = File::create("/tmp/mesh.stl").unwrap();
-//    file.write_all(&bytes);
-
-    "asdsa".to_string()
+    Mesh { triangles: triangs }
 }
 
 /// Unwraps base64 encoded data into vector of bytes
@@ -77,8 +43,6 @@ fn read_header<T: ReadBytesExt>(cursor: &mut T) -> String {
     let mut u8buf = [0u8; 80];
     cursor.read(&mut u8buf);
 
-//    let header = str::from_utf8(&u8buf).unwrap();
-//    println!("H: {}", header);
     str::from_utf8(&u8buf).unwrap().to_string()
 }
 
@@ -86,6 +50,18 @@ fn read_size<T: ReadBytesExt>(cursor: &mut T) -> u32 {
     cursor.read_u32::<LittleEndian>().unwrap()
 }
 
-fn read_content<T: ReadBytesExt>(cursor: &mut T) -> u32 {
-    1
+fn read_content<T: ReadBytesExt>(cursor: &mut T, content_len: u32) -> Vec<Triangle> {
+    let mut triangles = Vec::new();
+    let mut i = 0;
+    while i < content_len {
+
+        let mut vertex_buf = [0f32; 12];
+        cursor.read_f32_into::<LittleEndian>(&mut vertex_buf);
+        triangles.push(TriangleFactory::from_normal_and_points(&vertex_buf.to_vec()));
+
+        // skip Attribute byte count
+        cursor.read_u16::<LittleEndian>().unwrap();
+        i += 1;
+    }
+    triangles
 }

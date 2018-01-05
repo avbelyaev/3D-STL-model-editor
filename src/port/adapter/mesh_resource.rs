@@ -1,14 +1,14 @@
 use port::adapter::mesh_model::{MeshModel, MeshModelFactory};
 use port::adapter::triangle_model::TriangleModel;
-use application::binary_stl_reader::read_mesh_from_binary_stl_file;
+use application::binary_stl_reader::mesh_from_binary_stl;
 use rocket_contrib::Json;
 use rocket::Data;
 
 
 pub fn extract_mesh_from_stl(stl: Data) -> Json<MeshModel> {
-    let s = read_mesh_from_binary_stl_file(stl);
+    let mesh = mesh_from_binary_stl(stl);
 
-    Json(mesh_stub())
+    Json(MeshModelFactory::from_mesh(mesh))
 }
 
 

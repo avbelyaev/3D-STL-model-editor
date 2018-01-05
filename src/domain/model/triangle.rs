@@ -1,5 +1,7 @@
-use domain::model::point::Point;
+use domain::model::point::{Point, PointFactory};
 
+
+const TRIANGLE_POINTS_NUM: i32 = 12;
 
 #[derive(Copy, Clone)]
 pub struct Triangle {
@@ -7,4 +9,22 @@ pub struct Triangle {
     pub b: Point,
     pub c: Point,
     pub normal: Point
+}
+
+pub trait TriangleFactory {
+    fn from_normal_and_points(normal_and_points: &Vec<f32>) -> Self;
+}
+
+impl TriangleFactory for Triangle {
+    fn from_normal_and_points(v: &Vec<f32>) -> Self {
+        if TRIANGLE_POINTS_NUM != v.len() as i32 {
+            panic!("Wrong number of points provided!")
+        }
+        let n = PointFactory::from_slice(&v[0..3]);
+        let a = PointFactory::from_slice(&v[3..6]);
+        let b = PointFactory::from_slice(&v[6..9]);
+        let c = PointFactory::from_slice(&v[9..12]);
+
+        Triangle { a, b, c, normal: n }
+    }
 }
