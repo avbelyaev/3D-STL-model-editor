@@ -14,9 +14,9 @@ use std::str;
 use byteorder::{LittleEndian, ReadBytesExt};
 
 
-pub fn mesh_from_binary_stl(stl: Data) -> Mesh {
+pub fn mesh_from_binary_stl(stl: &str) -> Mesh {
 
-    let bytes = convert_data_to_bytes(stl);
+    let bytes = convert_base64_string_to_bytes(stl);
     let mut cursor = Cursor::new(bytes);
 
     let h = read_header(&mut cursor);
@@ -30,12 +30,9 @@ pub fn mesh_from_binary_stl(stl: Data) -> Mesh {
     Mesh { triangles: triangs }
 }
 
-/// Unwraps base64 encoded data into vector of bytes
-fn convert_data_to_bytes(data: Data) -> Vec<u8> {
-    let mut content = String::new();
-    data.open().read_to_string(&mut content);
-
-    decode(&content).unwrap()
+/// Unwraps base64 encoded string into vector of bytes
+fn convert_base64_string_to_bytes(str: &str) -> Vec<u8> {
+    decode(str).unwrap()
 }
 
 

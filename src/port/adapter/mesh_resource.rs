@@ -1,12 +1,14 @@
 use port::adapter::mesh_model::{MeshModel, MeshModelFactory};
 use port::adapter::triangle_model::TriangleModel;
+use port::adapter::command::perform_command::PerformCommand;
+use port::adapter::command::extract_mesh_command::ExtractMeshCommand;
 use application::binary_stl_reader::mesh_from_binary_stl;
 use rocket_contrib::Json;
 use rocket::Data;
 
 
-pub fn extract_mesh_from_stl(stl: Data) -> Json<MeshModel> {
-    let mesh = mesh_from_binary_stl(stl);
+pub fn extract_mesh_from_stl(cmd: Json<ExtractMeshCommand>) -> Json<MeshModel> {
+    let mesh = mesh_from_binary_stl(&cmd.binary_stl);
 
     Json(MeshModelFactory::from_mesh(mesh))
 }
@@ -19,6 +21,12 @@ pub fn return_mesh_stub() -> Json<MeshModel> {
 
 pub fn create_stl_from_mesh(mesh: Data) -> String {
     "STL from mesh".to_string()
+}
+
+
+pub fn perform_bool_operation(cmd: Json<PerformCommand>) -> Json<MeshModel> {
+    println!("{}", cmd.operation);
+    Json(mesh_stub())
 }
 
 
