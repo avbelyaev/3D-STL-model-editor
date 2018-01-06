@@ -1,7 +1,7 @@
 use domain::model::triangle::Triangle;
 
 
-#[derive(Serialize, Copy, Clone)]
+#[derive(Serialize, Deserialize, Copy, Clone)]
 pub struct TriangleModel {
     pub a: [f32; 3],
     pub b: [f32; 3],

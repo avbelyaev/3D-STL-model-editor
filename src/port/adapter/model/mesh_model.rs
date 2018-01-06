@@ -3,7 +3,7 @@ use domain::model::triangle::Triangle;
 use port::adapter::model::triangle_model::{TriangleModel, TriangleModelFactory};
 
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct MeshModel {
     pub len: u32,
     pub triangles: Vec<TriangleModel>
