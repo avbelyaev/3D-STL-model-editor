@@ -7,15 +7,14 @@ extern crate rocket_contrib;
 
 use rocket::{Rocket, Data};
 use rocket_contrib::Json;
-use geometry_server::port::adapter::mesh_resource;
+use geometry_server::port::adapter::resource::{mesh_resource, stl_resource};
 use geometry_server::port::adapter::model::mesh_model::MeshModel;
-use geometry_server::port::adapter::command::perform_command::PerformCommand;
-use geometry_server::port::adapter::command::extract_mesh_command::ExtractMeshCommand;
+use geometry_server::port::adapter::command::{perform_command, extract_mesh_command};
 
 
 // /api/mesh
 #[post("/extract", format = "application/json", data = "<cmd>")]
-fn extract_mesh_wrapper(cmd: Json<ExtractMeshCommand>) -> Json<MeshModel> {
+fn extract_mesh_wrapper(cmd: Json<extract_mesh_command::ExtractMeshCommand>) -> Json<MeshModel> {
     mesh_resource::extract_mesh_from_stl(cmd)
 }
 
@@ -28,12 +27,12 @@ fn mesh_stub_wrapper() -> Json<MeshModel> {
 // /api/stl
 #[post("/create", format = "application/json", data = "<cmd>")]
 fn create_stl_wrapper(cmd: Data) -> String {
-    mesh_resource::create_stl_from_mesh(cmd)
+    stl_resource::create_stl_from_mesh(cmd)
 }
 
 #[post("/perform", format = "application/json", data = "<cmd>")]
-fn bool_op_wrapper(cmd: Json<PerformCommand>) -> Json<MeshModel> {
-    mesh_resource::perform_bool_operation(cmd)
+fn bool_op_wrapper(cmd: Json<perform_command::PerformCommand>) -> Json<MeshModel> {
+    stl_resource::perform_bool_operation(cmd)
 }
 
 

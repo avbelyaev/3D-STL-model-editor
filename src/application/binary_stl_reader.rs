@@ -1,15 +1,8 @@
 use domain::model::mesh::Mesh;
 use domain::model::triangle::{Triangle, TriangleFactory};
-use domain::model::point::Point;
-use application::abstract_stl_reader::AbstractStlReader;
 
-use regex::Regex;
-use rocket::Data;
-use std::env;
-use std::fs::File;
-use std::io::prelude::*;
 use std::io::Cursor;
-use base64::{encode, decode};
+use base64::decode;
 use std::str;
 use byteorder::{LittleEndian, ReadBytesExt};
 
