@@ -6,3 +6,6 @@ rustup default nightly-2017-12-21
 
 # back to stable
 rustup default stable
+
+# this lib can be omitted on Mac
+brew install gmp

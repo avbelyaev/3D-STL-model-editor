@@ -1,6 +1,6 @@
 use domain::model::mesh::Mesh;
 use domain::model::triangle::Triangle;
-use port::adapter::model::triangle_model::{TriangleModel, TriangleModelFactory};
+use port::adapter::model::triangle_model::TriangleModel;
 
 
 #[derive(Serialize, Deserialize)]
@@ -9,27 +9,19 @@ pub struct MeshModel {
     pub triangles: Vec<TriangleModel>
 }
 
-pub trait MeshModelFactory {
-    fn from_mesh(mesh: Mesh) -> Self;
-
-    fn from_triangles(triangles: Vec<Triangle>) -> Self;
-
-    fn from_triangle_models(triangle_models: Vec<TriangleModel>) -> Self;
-}
-
-impl MeshModelFactory for MeshModel {
-    fn from_mesh(mesh: Mesh) -> Self {
-        MeshModelFactory::from_triangles(mesh.triangles)
+impl MeshModel {
+    pub fn from_mesh(mesh: Mesh) -> Self {
+        MeshModel::from_triangles(mesh.triangles)
     }
 
-    fn from_triangles(triangles: Vec<Triangle>) -> Self {
+    pub fn from_triangles(triangles: Vec<Triangle>) -> Self {
         let models: Vec<TriangleModel> = triangles.iter()
             .map(|triangle| TriangleModelFactory::from_triangle(*triangle))
             .collect();
-        MeshModelFactory::from_triangle_models(models)
+        MeshModel::from_triangle_models(models)
     }
 
-    fn from_triangle_models(triangle_models: Vec<TriangleModel>) -> Self {
+    pub fn from_triangle_models(triangle_models: Vec<TriangleModel>) -> Self {
         MeshModel{ len: triangle_models.len() as u32, triangles: triangle_models }
     }
 }
@@ -50,5 +42,5 @@ pub fn mesh_stub() -> MeshModel {
     models.push(t2);
     models.push(t3);
 
-    MeshModelFactory::from_triangle_models(models)
+    MeshModel::from_triangle_models(models)
 }

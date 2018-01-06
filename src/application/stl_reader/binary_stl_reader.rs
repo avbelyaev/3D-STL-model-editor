@@ -7,9 +7,9 @@ use std::str;
 use byteorder::{LittleEndian, ReadBytesExt};
 
 
-pub fn mesh_from_binary_stl(stl: &str) -> Mesh {
+pub fn mesh_from_binary_stl(stl_content: &str) -> Mesh {
 
-    let bytes = convert_base64_string_to_bytes(stl);
+    let bytes = convert_base64_string_to_bytes(stl_content);
     let mut cursor = Cursor::new(bytes);
 
     let h = read_header(&mut cursor);

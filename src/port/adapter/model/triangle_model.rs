@@ -9,12 +9,8 @@ pub struct TriangleModel {
     pub n: [f32; 3]
 }
 
-pub trait TriangleModelFactory {
-    fn from_triangle(triangle: Triangle) -> Self;
-}
-
-impl TriangleModelFactory for TriangleModel {
-    fn from_triangle(triangle: Triangle) -> Self {
+impl TriangleModel {
+    pub fn from_triangle(triangle: Triangle) -> Self {
         TriangleModel{
             a: [triangle.a.x, triangle.a.y, triangle.a.z],
             b: [triangle.b.x, triangle.b.y, triangle.b.z],

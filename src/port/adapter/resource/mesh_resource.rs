@@ -1,4 +1,4 @@
-use port::adapter::model::mesh_model::{MeshModel, MeshModelFactory};
+use port::adapter::model::mesh_model::MeshModel;
 use port::adapter::model::mesh_model::mesh_stub;
 use port::adapter::command::extract_mesh_command::ExtractMeshCommand;
 use port::adapter::command::perform_on_mesh_command::PerformOnMeshCommand;
@@ -9,7 +9,7 @@ use rocket_contrib::Json;
 pub fn extract_mesh_from_stl(cmd: Json<ExtractMeshCommand>) -> Json<MeshModel> {
     let mesh = mesh_from_binary_stl(&cmd.binary_stl);
 
-    Json(MeshModelFactory::from_mesh(mesh))
+    Json(MeshModel::from_mesh(mesh))
 }
 
 
