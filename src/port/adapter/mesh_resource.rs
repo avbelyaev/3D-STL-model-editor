@@ -1,5 +1,5 @@
-use port::adapter::mesh_model::{MeshModel, MeshModelFactory};
-use port::adapter::triangle_model::TriangleModel;
+use port::adapter::model::mesh_model::{MeshModel, MeshModelFactory};
+use port::adapter::model::triangle_model::TriangleModel;
 use port::adapter::command::perform_command::PerformCommand;
 use port::adapter::command::extract_mesh_command::ExtractMeshCommand;
 use application::binary_stl_reader::mesh_from_binary_stl;

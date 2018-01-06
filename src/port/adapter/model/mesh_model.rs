@@ -1,7 +1,6 @@
 use domain::model::mesh::Mesh;
 use domain::model::triangle::Triangle;
-use port::adapter::triangle_model::TriangleModel;
-use port::adapter::triangle_model::TriangleModelFactory;
+use port::adapter::model::triangle_model::{TriangleModel, TriangleModelFactory};
 
 
 #[derive(Serialize)]

@@ -8,11 +8,12 @@ extern crate rocket_contrib;
 use rocket::{Rocket, Data};
 use rocket_contrib::Json;
 use geometry_server::port::adapter::mesh_resource;
-use geometry_server::port::adapter::mesh_model::MeshModel;
+use geometry_server::port::adapter::model::mesh_model::MeshModel;
 use geometry_server::port::adapter::command::perform_command::PerformCommand;
 use geometry_server::port::adapter::command::extract_mesh_command::ExtractMeshCommand;
 
 
+// /api/mesh
 #[post("/extract", format = "application/json", data = "<cmd>")]
 fn extract_mesh_wrapper(cmd: Json<ExtractMeshCommand>) -> Json<MeshModel> {
     mesh_resource::extract_mesh_from_stl(cmd)
@@ -24,6 +25,7 @@ fn mesh_stub_wrapper() -> Json<MeshModel> {
 }
 
 
+// /api/stl
 #[post("/create", format = "application/json", data = "<cmd>")]
 fn create_stl_wrapper(cmd: Data) -> String {
     mesh_resource::create_stl_from_mesh(cmd)
