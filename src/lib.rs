@@ -4,8 +4,6 @@
 extern crate base64;
 extern crate byteorder;
 extern crate geometry_kernel;
-//#[macro_use] extern crate log;
-//extern crate env_logger;
 extern crate regex;
 
 extern crate rocket;

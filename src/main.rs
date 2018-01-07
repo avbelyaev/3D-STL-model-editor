@@ -22,7 +22,7 @@ fn extract_mesh_wrapper(cmd: Json<extract_mesh_command::ExtractMeshCommand>) -> 
 
 #[post("/perform", format = "application/json", data = "<cmd>")]
 fn mesh_performer_wrapper(cmd: Json<perform_on_mesh_command::PerformOnMeshCommand>) -> Json<MeshModel> {
-    mesh_resource::perform_bool_op_on_mesh(cmd)
+    mesh_resource::perform_bool_op_on_meshes(cmd)
 }
 
 #[get("/stub")]
