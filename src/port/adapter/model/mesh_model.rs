@@ -16,7 +16,7 @@ impl MeshModel {
 
     pub fn from_triangles(triangles: Vec<Triangle>) -> Self {
         let models: Vec<TriangleModel> = triangles.iter()
-            .map(|triangle| TriangleModelFactory::from_triangle(*triangle))
+            .map(|triangle| TriangleModel::from_triangle(*triangle))
             .collect();
         MeshModel::from_triangle_models(models)
     }

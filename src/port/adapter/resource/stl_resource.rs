@@ -1,4 +1,4 @@
-use port::adapter::model::mesh_model::{MeshModel, MeshModelFactory};
+use port::adapter::model::mesh_model::MeshModel;
 use port::adapter::model::mesh_model::mesh_stub;
 use port::adapter::command::perform_on_stl_command::PerformOnStlCommand;
 use application::operation_performer::bool_op_performer::perform_on_stls;

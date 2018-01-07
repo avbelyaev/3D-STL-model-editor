@@ -8,12 +8,8 @@ pub struct Point {
     pub z: f32
 }
 
-pub trait PointFactory {
-    fn from_slice(points: &[f32]) -> Self;
-}
-
-impl PointFactory for Point {
-    fn from_slice(points: &[f32]) -> Self {
+impl Point {
+    pub fn from_slice(points: &[f32]) -> Self {
         if POINT_COUNT != points.len() as i32 {
             panic!("Cannot compose Point from slice not of size 3")
         }
