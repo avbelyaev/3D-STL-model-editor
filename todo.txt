@@ -1,0 +1,3 @@
+#TODO handle resize of menu block on right
+https://webglfundamentals.org/webgl/lessons/webgl-anti-patterns.html
+
