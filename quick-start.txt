@@ -9,3 +9,8 @@ rustup default stable
 
 # this lib can be omitted on Mac
 brew install gmp
+
+
+# web client
+# allow Chrome to open local files on OSX
+open /Applications/Google\ Chrome.app --args --allow-file-access-from-files

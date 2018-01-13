@@ -11,8 +11,26 @@ const vsSource = `
     
     varying vec3 fragColor;
     
+    uniform float stageWidth;
+    uniform float stageHeight;
+    
+    
+    vec3 normalizeCoords(vec2 position) {
+        float x = position[0];
+        float y = position[1];
+        float z = 1.0;
+        
+        // [0..w]/w -> [0..1]*2 -> [0..2]-1 -> [-1;1]
+        float normalized_x = (x / stageWidth) * 2.0;    // -1.0
+        float normalized_y = (y / stageHeight) * 2.0;   // -1.0
+        
+        return vec3(normalized_x, normalized_y, z);
+    }
+    
     void main() {
-      gl_Position = vec4(aPosition.xy, 1, 1);
+      gl_Position = vec4(normalizeCoords(aPosition).xyz, 1.0);
+      
+      // pass color to fragment shader
       fragColor = aColor;
     }
   `;
@@ -33,9 +51,9 @@ function initBuffer(gl) {
     const positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     const positions = [
-        -0.5, 0.0,
-        0.0, 1.0,
-        0.0, 0.0
+        0, 0,
+        0, 100.0,
+        300.0, 0
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
@@ -174,6 +192,10 @@ function drawScene(gl, programInfo, buffers) {
     // gl.uniformMatrix4fv(programInfo.uniformLocations.resolutionMatrix, false, matrices.resolutionMatrix);
     // gl.uniform4f(programInfo.uniformLocations.offset, 0.5, 0.0, 0.0, 0.0);
 
+    logr("w: " + gl.canvas.clientWidth + " h: " + gl.canvas.clientHeight);
+
+    gl.uniform1f(programInfo.uniformLocations.stageWidth, gl.canvas.clientWidth);
+    gl.uniform1f(programInfo.uniformLocations.stageHeight, gl.canvas.clientHeight);
 
     {
         const offset = 0;
@@ -224,7 +246,8 @@ function main() {
         uniformLocations: {
             projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
             modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
-            resolutionMatrix: gl.getUniformLocation(shaderProgram, 'uResolution'),
+            stageWidth: gl.getUniformLocation(shaderProgram, 'stageWidth'),
+            stageHeight: gl.getUniformLocation(shaderProgram, 'stageHeight'),
             offset: gl.getUniformLocation(shaderProgram, 'uOffset')
         },
     };
