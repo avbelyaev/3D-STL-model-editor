@@ -1,9 +1,59 @@
 
+
+let gl, programInfo, buffers;
+
+
 const logr = (text) => {
     const log = document.getElementById("logr");
-    log.textContent += (text + "\n");
+    //log.textContent += (text + "\n");
 };
 
+let mouseDown = false;
+let lastMouseX = 0;
+let lastMouseY = 0;
+
+
+const normalizeX = (posX) => {
+    return (posX - gl.canvas.clientWidth / 2);
+};
+
+const normalizeY = (posY) => {
+    return (posY - gl.canvas.clientHeight / 2);
+};
+
+const handleMouseDown = (event) => {
+    console.log("Down");
+
+    mouseDown = true;
+    lastMouseX = normalizeX(event.clientX);
+    lastMouseY = normalizeY(event.clientY);
+};
+
+const handleMouseUp = (event) => {
+    console.log("Up");
+
+    mouseDown = false;
+    console.log("lastX: " + lastMouseX + " lastY: " + lastMouseY);
+};
+
+const handleMouseMove = (event) => {
+    console.log("Move");
+
+    if (!mouseDown) {
+        return;
+    }
+    const newX = normalizeX(event.clientX);
+    const newY = normalizeY(event.clientY);
+
+    // const deltaX = newX - lastMouseX;
+    // const deltaY = newY - lastMouseY;
+    //
+    // logr("dx: " + deltaX + " dy: " + deltaY);
+    // console.log("dx: " + deltaX + " dy: " + deltaY);
+
+    lastMouseX = newX;
+    lastMouseY = newY;
+};
 
 const vsSource = `
     attribute vec2 aPosition;
@@ -14,6 +64,8 @@ const vsSource = `
     uniform float stageWidth;
     uniform float stageHeight;
     
+    uniform float moveX;
+    uniform float moveY;
     
     vec3 normalizeCoords(vec2 position) {
         float x = position[0];
@@ -21,8 +73,8 @@ const vsSource = `
         float z = 1.0;
         
         // [0..w]/w -> [0..1]*2 -> [0..2]-1 -> [-1;1]
-        float normalized_x = (x / stageWidth) * 2.0;    // -1.0
-        float normalized_y = (y / stageHeight) * 2.0;   // -1.0
+        float normalized_x = ((x + moveX) / stageWidth) * 2.0;    // -1.0
+        float normalized_y = ((y + moveY) / stageHeight) * 2.0;   // -1.0
         
         return vec3(normalized_x, normalized_y, z);
     }
@@ -53,7 +105,10 @@ function initBuffer(gl) {
     const positions = [
         0, 0,
         0, 100.0,
-        300.0, 0
+        300.0, 0,
+        // 300, -300,
+        // 0, -300,
+        // -100, -100
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
@@ -61,10 +116,12 @@ function initBuffer(gl) {
     const colorBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     const colors = [
-        // 1.0,  1.0,  1.0,
         1.0,  0.0,  0.0,
         0.0,  1.0,  0.0,
         0.0,  0.0,  1.0,
+        // 1.0,  0.0,  1.0,
+        // 1.0,  0.0,  1.0,
+        // 1.0,  1.0,  1.0
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 
@@ -136,10 +193,13 @@ function initMatrices(gl) {
 }
 
 
-function drawScene(gl, programInfo, buffers) {
+function drawScene() {
     logr("drawing");
 
-    const matrices = initMatrices(gl);
+    gl.clearColor(0.3, 0.3, 0.3, 1.0);  // Clear to black, fully opaque
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // const matrices = initMatrices(gl);
 
     // Tell WebGL how to pull out the positions from the position
     // buffer into the vertexPosition attribute.
@@ -190,18 +250,22 @@ function drawScene(gl, programInfo, buffers) {
     // gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, matrices.projectionMatrix);
     // gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, matrices.modelViewMatrix);
     // gl.uniformMatrix4fv(programInfo.uniformLocations.resolutionMatrix, false, matrices.resolutionMatrix);
-    // gl.uniform4f(programInfo.uniformLocations.offset, 0.5, 0.0, 0.0, 0.0);
 
     logr("w: " + gl.canvas.clientWidth + " h: " + gl.canvas.clientHeight);
 
     gl.uniform1f(programInfo.uniformLocations.stageWidth, gl.canvas.clientWidth);
     gl.uniform1f(programInfo.uniformLocations.stageHeight, gl.canvas.clientHeight);
 
+    gl.uniform1f(programInfo.uniformLocations.moveX, lastMouseX);
+    gl.uniform1f(programInfo.uniformLocations.moveY, -lastMouseY);
+
     {
         const offset = 0;
         const vertexCount = 3;
         gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
     }
+
+    requestAnimationFrame(drawScene);
 }
 
 
@@ -210,13 +274,14 @@ function initGL() {
     canvas.width = 1024;
     canvas.height = 700;
 
-    // Initialize the GL context
     const gl = canvas.getContext("webgl");
 
-    // Only continue if WebGL is available and working
+    canvas.onmousedown = handleMouseDown;
+    document.onmouseup = handleMouseUp;
+    document.onmousemove = handleMouseMove;
+
     if (!gl) {
-        alert("Unable to initialize WebGL. Your browser or machine may not support it.");
-        return null;
+        throw new Error("Unable to initialize WebGL. Your browser or machine may not support it.");
 
     } else {
         return gl;
@@ -225,7 +290,7 @@ function initGL() {
 
 
 function main() {
-    const gl = initGL();
+    gl = initGL();
 
     // Set clear color to black, fully opaque
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -233,11 +298,11 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
 
-    const buffers =  initBuffer(gl);
+    buffers = initBuffer(gl);
 
     const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
 
-    const programInfo = {
+    programInfo = {
         program: shaderProgram,
         attribLocations: {
             vertexPosition: gl.getAttribLocation(shaderProgram, 'aPosition'),
@@ -248,17 +313,22 @@ function main() {
             modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
             stageWidth: gl.getUniformLocation(shaderProgram, 'stageWidth'),
             stageHeight: gl.getUniformLocation(shaderProgram, 'stageHeight'),
-            offset: gl.getUniformLocation(shaderProgram, 'uOffset')
+            moveX: gl.getUniformLocation(shaderProgram, 'moveX'),
+            moveY: gl.getUniformLocation(shaderProgram, 'moveY'),
         },
     };
 
-    drawScene(gl, programInfo, buffers);
+    requestAnimationFrame(drawScene);
 }
 
-window.addEventListener("DOMContentLoaded", function () {
+window.addEventListener("DOMContentLoaded", () => {
     logr("DOM content loaded");
+    try {
+        main();
 
-    main();
+    } catch (e) {
+        logr('Error: ' + e.message);
+    }
 }, false);
 
 
