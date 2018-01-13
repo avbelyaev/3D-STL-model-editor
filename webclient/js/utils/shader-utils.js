@@ -7,14 +7,15 @@ function loadShader(gl, type, source, typeString) {
     gl.shaderSource(shader, source);
     gl.compileShader(shader);
 
-    // See if it compiled successfully
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
         const errMsg = 'An error occurred while compiling ' + typeString + ' shader: ' + gl.getShaderInfoLog(shader);
         gl.deleteShader(shader);
 
         throw Error(errMsg);
+
+    } else {
+        return shader;
     }
-    return shader;
 }
 
 
@@ -28,11 +29,11 @@ function initShaderProgram(gl, vsSource, fsSource) {
     gl.attachShader(shaderProgram, fragmentShader);
     gl.linkProgram(shaderProgram);
 
-    // If creating the shader program failed, alert
     if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
         const errMsg = 'Unable to initialize the shader program: ' + gl.getProgramInfoLog(shaderProgram);
-
         throw Error(errMsg);
+
+    } else {
+        return shaderProgram;
     }
-    return shaderProgram;
 }

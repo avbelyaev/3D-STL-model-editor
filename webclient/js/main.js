@@ -1,11 +1,12 @@
 
 
-let gl, programInfo, buffers;
+let gl, figures;
 
 
 const logr = (text) => {
     const log = document.getElementById("logr");
-    //log.textContent += (text + "\n");
+    log.textContent += (text + "\n");
+    console.log(text);
 };
 
 let mouseDown = false;
@@ -18,7 +19,7 @@ const normalizeX = (posX) => {
 };
 
 const normalizeY = (posY) => {
-    return (posY - gl.canvas.clientHeight / 2);
+    return -(posY - gl.canvas.clientHeight / 2);
 };
 
 const handleMouseDown = (event) => {
@@ -27,6 +28,7 @@ const handleMouseDown = (event) => {
     mouseDown = true;
     lastMouseX = normalizeX(event.clientX);
     lastMouseY = normalizeY(event.clientY);
+    console.log("lastX: " + lastMouseX + " lastY: " + lastMouseY);
 };
 
 const handleMouseUp = (event) => {
@@ -47,13 +49,40 @@ const handleMouseMove = (event) => {
 
     // const deltaX = newX - lastMouseX;
     // const deltaY = newY - lastMouseY;
-    //
-    // logr("dx: " + deltaX + " dy: " + deltaY);
-    // console.log("dx: " + deltaX + " dy: " + deltaY);
 
     lastMouseX = newX;
     lastMouseY = newY;
 };
+
+const vsSourceAxis = `
+    attribute vec2 aPosition;
+    attribute vec3 aColor;
+    
+    varying vec3 fragColor;
+    
+    uniform float stageWidth;
+    uniform float stageHeight;
+
+    // TODO move normalize out from shader
+    vec3 normalizeCoords(vec2 position) {
+        float x = position[0];
+        float y = position[1];
+        float z = 1.0;
+        
+        // [0..w]/w -> [0..1]*2 -> [0..2]-1 -> [-1;1]
+        float normalized_x = (x / stageWidth) * 2.0;    // -1.0
+        float normalized_y = (y / stageHeight) * 2.0;   // -1.0
+        
+        return vec3(normalized_x, normalized_y, z);
+    }
+    
+    void main() {
+      gl_Position = vec4(normalizeCoords(aPosition).xyz, 1.0);
+      
+      // pass color to fragment shader
+      fragColor = aColor;
+    }
+`;
 
 const vsSource = `
     attribute vec2 aPosition;
@@ -67,6 +96,7 @@ const vsSource = `
     uniform float moveX;
     uniform float moveY;
     
+    // TODO move normalize out from shader
     vec3 normalizeCoords(vec2 position) {
         float x = position[0];
         float y = position[1];
@@ -94,43 +124,9 @@ const fsSource = `
 
     void main() {
       gl_FragColor = vec4(fragColor, 1.0);
+      //gl_FragColor = vec4(1.0, 0.0, 0, 0);
     }
   `;
-
-
-function initBuffer(gl) {
-
-    const positionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    const positions = [
-        0, 0,
-        0, 100.0,
-        300.0, 0,
-        // 300, -300,
-        // 0, -300,
-        // -100, -100
-    ];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-
-
-    const colorBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    const colors = [
-        1.0,  0.0,  0.0,
-        0.0,  1.0,  0.0,
-        0.0,  0.0,  1.0,
-        // 1.0,  0.0,  1.0,
-        // 1.0,  0.0,  1.0,
-        // 1.0,  1.0,  1.0
-    ];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-
-
-    return {
-        position: positionBuffer,
-        color: colorBuffer
-    };
-}
 
 
 function initMatrices(gl) {
@@ -194,129 +190,59 @@ function initMatrices(gl) {
 
 
 function drawScene() {
-    logr("drawing");
 
     gl.clearColor(0.3, 0.3, 0.3, 1.0);  // Clear to black, fully opaque
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // const matrices = initMatrices(gl);
 
-    // Tell WebGL how to pull out the positions from the position
-    // buffer into the vertexPosition attribute.
-    {
-        gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+    figures.forEach((buffer) => {
+        const programInfo = buffer.programInfo;
 
-        const numComponents = 2;  // pull out 2 values per iteration
-        const type = gl.FLOAT;    // the data in the buffer is 32bit floats
-        const normalize = false;  // don't normalize
-        const stride = 0;         // how many bytes to get from one set of values to the next
-        const offset = 0;         // how many bytes inside the buffer to start from
+        bindBuffer(programInfo.attribLocations.vertexPosition, buffer.positionBufferInfo);
+        bindBuffer(programInfo.attribLocations.vertexColors, buffer.colorBufferInfo);
 
-        gl.vertexAttribPointer(
-            programInfo.attribLocations.vertexPosition,
-            numComponents,
-            type,
-            normalize,
-            stride,
-            offset);
+        gl.useProgram(programInfo.program);
 
-    }
+        // Set the shader uniforms
+        // gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, matrices.projectionMatrix);
+        // gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, matrices.modelViewMatrix);
+        // gl.uniformMatrix4fv(programInfo.uniformLocations.resolutionMatrix, false, matrices.resolutionMatrix);
 
-    // colors
-    {
-        gl.enableVertexAttribArray(programInfo.attribLocations.vertexColors);
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
+        gl.uniform1f(programInfo.uniformLocations.stageWidth, gl.canvas.clientWidth);
+        gl.uniform1f(programInfo.uniformLocations.stageHeight, gl.canvas.clientHeight);
 
-        const numComponents = 3;  // pull out 2 values per iteration
-        const type = gl.FLOAT;    // the data in the buffer is 32bit floats
-        const normalize = true;  // don't normalize
-        const stride = 0;         // how many bytes to get from one set of values to the next
-        const offset = 0;         // how many bytes inside the buffer to start from
+        gl.uniform1f(programInfo.uniformLocations.moveX, lastMouseX);
+        gl.uniform1f(programInfo.uniformLocations.moveY, lastMouseY);
 
-        gl.vertexAttribPointer(
-            programInfo.attribLocations.vertexColors,
-            numComponents,
-            type,
-            normalize,
-            stride,
-            offset);
-    }
 
-    // Tell WebGL to use our program when drawing
-    gl.useProgram(programInfo.program);
-
-    // Set the shader uniforms
-    // gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, matrices.projectionMatrix);
-    // gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, matrices.modelViewMatrix);
-    // gl.uniformMatrix4fv(programInfo.uniformLocations.resolutionMatrix, false, matrices.resolutionMatrix);
-
-    logr("w: " + gl.canvas.clientWidth + " h: " + gl.canvas.clientHeight);
-
-    gl.uniform1f(programInfo.uniformLocations.stageWidth, gl.canvas.clientWidth);
-    gl.uniform1f(programInfo.uniformLocations.stageHeight, gl.canvas.clientHeight);
-
-    gl.uniform1f(programInfo.uniformLocations.moveX, lastMouseX);
-    gl.uniform1f(programInfo.uniformLocations.moveY, -lastMouseY);
-
-    {
         const offset = 0;
-        const vertexCount = 3;
-        gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
-    }
+        const vertexCount = buffer.numElements;
+        gl.drawArrays(gl.LINE_LOOP, offset, vertexCount);
+
+    });
 
     requestAnimationFrame(drawScene);
-}
-
-
-function initGL() {
-    const canvas = document.getElementById("glCanvas");
-    canvas.width = 1024;
-    canvas.height = 700;
-
-    const gl = canvas.getContext("webgl");
-
-    canvas.onmousedown = handleMouseDown;
-    document.onmouseup = handleMouseUp;
-    document.onmousemove = handleMouseMove;
-
-    if (!gl) {
-        throw new Error("Unable to initialize WebGL. Your browser or machine may not support it.");
-
-    } else {
-        return gl;
-    }
 }
 
 
 function main() {
     gl = initGL();
 
-    // Set clear color to black, fully opaque
+    // use black scene as fallback
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    // Clear the color buffer with specified clear color
     gl.clear(gl.COLOR_BUFFER_BIT);
 
+    figures = [];
 
-    buffers = initBuffer(gl);
+    const triangle = new Triangle();
+    const triangleBuffer = triangle.initBuffers(gl, vsSource, fsSource);
+    figures.push(triangleBuffer);
 
-    const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
+    const axis = new Axis();
+    const axisBuffer = axis.initBuffer(gl, vsSourceAxis, fsSource);
+    figures.push(axisBuffer);
 
-    programInfo = {
-        program: shaderProgram,
-        attribLocations: {
-            vertexPosition: gl.getAttribLocation(shaderProgram, 'aPosition'),
-            vertexColors: gl.getAttribLocation(shaderProgram, 'aColor')
-        },
-        uniformLocations: {
-            projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
-            modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
-            stageWidth: gl.getUniformLocation(shaderProgram, 'stageWidth'),
-            stageHeight: gl.getUniformLocation(shaderProgram, 'stageHeight'),
-            moveX: gl.getUniformLocation(shaderProgram, 'moveX'),
-            moveY: gl.getUniformLocation(shaderProgram, 'moveY'),
-        },
-    };
 
     requestAnimationFrame(drawScene);
 }
@@ -327,7 +253,7 @@ window.addEventListener("DOMContentLoaded", () => {
         main();
 
     } catch (e) {
-        logr('Error: ' + e.message);
+        logr('Error: ' + e.message + '\n' + e.stack);
     }
 }, false);
 
