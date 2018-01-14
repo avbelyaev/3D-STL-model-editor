@@ -14,3 +14,6 @@ brew install gmp
 # web client
 # allow Chrome to open local files on OSX
 open /Applications/Google\ Chrome.app --args --allow-file-access-from-files
+
+# gl-matrix lib should be downloaded, compiled and placed at /webclient/js/lib/gl-matrix.js
+http://glmatrix.net/
