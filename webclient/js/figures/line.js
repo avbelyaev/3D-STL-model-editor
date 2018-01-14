@@ -2,7 +2,7 @@
  * Created by anthony on 13.01.2018.
  */
 
-class Axis {
+class Line {
     constructor(gl, startPointVec2, endPointVec2, colorVec3) {
         this.gl = gl;
         this.positions = startPointVec2.concat(endPointVec2);

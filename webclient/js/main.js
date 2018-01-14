@@ -100,7 +100,7 @@ const fsSource = `
 
 function drawScene() {
 
-    gl.clearColor(0.3, 0.3, 0.3, 1.0);  // Clear to black, fully opaque
+    gl.clearColor(0.3, 0.3, 0.3, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     figures.forEach((figure) => {
@@ -132,17 +132,16 @@ function drawScene() {
 function main() {
     gl = initGL();
 
-    // use black scene as fallback
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     figures = [];
 
-    const axisX = new Axis(gl, [-400, 0], [400, 0], [1, 0, 0]);
+    const axisX = new Line(gl, [-400, 0], [400, 0], [1, 0, 0]);
     axisX.setShaderSource(vsSource, fsSource);
     figures.push(axisX.initBuffer(vsSource, fsSource));
 
-    const axisY = new Axis(gl, [0, -400], [0, 400], [0, 0, 1]);
+    const axisY = new Line(gl, [0, -400], [0, 400], [0, 0, 1]);
     axisY.setShaderSource(vsSource, fsSource);
     figures.push(axisY.initBuffer(vsSource, fsSource));
 
