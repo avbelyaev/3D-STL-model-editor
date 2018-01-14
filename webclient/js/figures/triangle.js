@@ -17,28 +17,45 @@ class Triangle {
         const gl = this.gl;
         const posNumComponents = 2;
         const positions = [
-            100, 200,
-            800, 200,
-            100, 300,
-            100, 300,
-            800, 200,
-            800, 300,
+            // left column
+            0, 0,
+            30, 0,
+            0, 150,
+            0, 150,
+            30, 0,
+            30, 150,
+
+            // top rung
+            30, 0,
+            100, 0,
+            30, 30,
+            30, 30,
+            100, 0,
+            100, 30,
+
+            // middle rung
+            30, 60,
+            67, 60,
+            30, 90,
+            30, 90,
+            67, 60,
+            67, 90,
         ];
         const positionBufferInfo = createBufferInfo(gl, positions, posNumComponents);
 
 
-        const colors = [
-            1.0,  0.0,  0.0,
-            0.0,  1.0,  0.0,
-            0.0,  0.0,  1.0,
-            0.0,  1.0,  0.0,
-            1.0,  0.0,  0.0,
-            0.0,  1.0,  0.0
-        ];
-        const colorBufferInfo = createBufferInfo(gl, colors, 3);
+        // const colors = [
+        //     1.0,  0.0,  0.0,
+        //     0.0,  1.0,  0.0,
+        //     0.0,  0.0,  1.0,
+        //     0.0,  1.0,  0.0,
+        //     1.0,  0.0,  0.0,
+        //     0.0,  1.0,  0.0
+        // ];
+        // const colorBufferInfo = createBufferInfo(gl, colors, 3);
 
-        const numElements = countNumElem(positions, posNumComponents, colors);
-        checkAgainstColors(numElements, colors);
+        const numElements = countNumElem(positions, posNumComponents);
+        // checkAgainstColors(numElements, colors);
 
 
         const shaderProgram = this.shaderProgram;
@@ -49,16 +66,19 @@ class Triangle {
                 vertexColors: gl.getAttribLocation(shaderProgram, 'aColor')
             },
             uniformLocations: {
-                resolution: gl.getUniformLocation(shaderProgram, 'u_resolution')
+                resolution: gl.getUniformLocation(shaderProgram, 'u_resolution'),
+                translation: gl.getUniformLocation(shaderProgram, 'u_translation'),
+                sin: gl.getUniformLocation(shaderProgram, 'sina'),
+                cos: gl.getUniformLocation(shaderProgram, 'cosa'),
             },
         };
 
         this.figureInfo = {
             positionBufferInfo,
-            colorBufferInfo,
+            colorBufferInfo: [],
             numElements,
             programInfo,
-            drawMode: gl.TRIANGLE_STRIP,
+            drawMode: gl.TRIANGLES,
             type: TYPE_TRIANGLE
         };
     }

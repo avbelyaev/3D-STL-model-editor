@@ -3,3 +3,7 @@ https://webglfundamentals.org/webgl/lessons/webgl-anti-patterns.html
 
 #TODO reuse shaderProgram and buffers if possible
 https://webglfundamentals.org/webgl/lessons/webgl-drawing-multiple-things.html
+
+#TODO поворот фигуры мб можно реализовать передав курсор прямо в шейдер
+# и если он окажется на пикселе то применять перенос/поворот только к той фигуре
+# на пикселе которой он окажется

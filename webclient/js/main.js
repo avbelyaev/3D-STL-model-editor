@@ -61,51 +61,82 @@ const vsSource = `
     attribute vec3 aColor;
     
     uniform vec2 u_resolution;
+    uniform vec2 u_translation;
+    uniform float sina;
+    uniform float cosa;
     
-    
-    varying vec3 fragColor;
+    // varying vec3 fragColor;
     
     void main() {
-        vec2 normalized_xy = aPosition / u_resolution * 2.0 - 1.0;
-        gl_Position = vec4(normalized_xy.xy, 0.0, 1.0);
+        vec2 rotated = vec2(
+            aPosition.x * cosa + aPosition.y * sina,
+            aPosition.x * (-sina) + aPosition.y * cosa 
+        );
+        vec2 translated = rotated + u_translation;
+        vec2 normalized = translated / u_resolution * 2.0 - 1.0;
+        gl_Position = vec4(normalized.x, -normalized.y, 0.0, 1.0);
       
         // pass color to fragment shader
-        fragColor = aColor;
+        // fragColor = aColor;
     }
   `;
 
 const fsSource = `
     precision highp float;
     
-    varying vec3 fragColor;
+    // varying vec3 fragColor;
 
     void main() {
-      gl_FragColor = vec4(fragColor, 1.0);
-      //gl_FragColor = vec4(1.0, 0.0, 0, 0);
+      // gl_FragColor = vec4(fragColor, 1.0);
+      gl_FragColor = vec4(1.0, 0.0, 0, 0);
     }
   `;
 
+const translation = [100, 100];
+const rotation = [0, 1];
+
+const changeRange = () => {
+    const rngX = document.getElementById("rngX");
+    translation[0] = rngX.value;
+
+    const rngY = document.getElementById("rngY");
+    translation[1] = rngY.value;
+
+    const rngA = document.getElementById("rngA");
+    const angleInRadians = rngA.value * Math.PI / 180;
+    rotation[0] = Math.sin(angleInRadians);
+    rotation[1] = Math.cos(angleInRadians);
+};
 
 function drawScene() {
 
-    // gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
     gl.clearColor(0.3, 0.3, 0.3, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     figures.forEach((f) => {
         const figure = f.figureInfo;
+
         const programInfo = figure.programInfo;
-
-        bindBufferToAttribute(programInfo.attribLocations.vertexPosition, figure.positionBufferInfo);
-        bindBufferToAttribute(programInfo.attribLocations.vertexColors, figure.colorBufferInfo);
-
         gl.useProgram(programInfo.program);
+
+        // vertices
+        enableAndBindBuffer(programInfo.attribLocations.vertexPosition, figure.positionBufferInfo);
+        gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, 2, gl.FLOAT, false, 0, 0);
+
+
+        // colors
+        // bindBufferToAttribute(programInfo.attribLocations.vertexColors, figure.colorBufferInfo);
+
 
         //TODO set buffers and attribs
 
         // set uniforms
         gl.uniform2f(programInfo.uniformLocations.resolution, gl.canvas.width, gl.canvas.height);
+        gl.uniform2f(programInfo.uniformLocations.translation, translation[0], translation[1]);
+        gl.uniform1f(programInfo.uniformLocations.sin, rotation[0]);
+        gl.uniform1f(programInfo.uniformLocations.cos, rotation[1]);
         // gl.uniform1f(programInfo.uniformLocations.stageWidth, gl.canvas.clientWidth);
         // gl.uniform1f(programInfo.uniformLocations.stageHeight, gl.canvas.clientHeight);
 
@@ -127,15 +158,15 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
 
-    const axisX = new Line(gl, [-400, 0], [400, 0], [1, 0, 0]);
-    axisX.setShaderSource(vsSource, fsSource);
-    axisX.initBuffer();
-    figures.push(axisX);
-
-    const axisY = new Line(gl, [0, -400], [0, 400], [0, 0, 1]);
-    axisY.setShaderSource(vsSource, fsSource);
-    axisY.initBuffer();
-    figures.push(axisY);
+    // const axisX = new Line(gl, [-400, 0], [400, 0], [1, 0, 0]);
+    // axisX.setShaderSource(vsSource, fsSource);
+    // axisX.initBuffer();
+    // figures.push(axisX);
+    //
+    // const axisY = new Line(gl, [0, -400], [0, 400], [0, 0, 1]);
+    // axisY.setShaderSource(vsSource, fsSource);
+    // axisY.initBuffer();
+    // figures.push(axisY);
 
     const triangle = new Triangle(gl);
     triangle.setShaderSource(vsSource, fsSource);
