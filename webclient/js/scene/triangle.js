@@ -3,40 +3,34 @@
  */
 
 class Triangle {
-    constructor() {
-        // empty
+    constructor(gl) {
+        this.gl = gl
     }
 
-    initBuffers(gl, vsSource, fsSource) {
-        const positionBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    setShaderSource(vertexShaderSource, fragmentShaderSource) {
+        this.shaderProgram = initShaderProgram(this.gl, vertexShaderSource, fragmentShaderSource);
+    }
+
+    initBuffer() {
+        const gl = this.gl;
+        const posNumComponents = 2;
         const positions = [
             0, 0,
             0, 100.0,
-            300.0, 0,
-            // 0, 0,
-            // 0, -300,
-            // -400, 0
+            300.0, 0
         ];
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-        const posNumComponents = 2;
+        const positionBufferInfo = createBufferInfo(gl, positions, posNumComponents);
 
 
-        const colorBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
         const colors = [
             1.0,  0.0,  0.0,
             0.0,  1.0,  0.0,
             0.0,  0.0,  1.0
-            // 1.0,  0.0,  0.0,
-            // 0.0,  0.0,  1.0,
-            // 1.0,  1.0,  1.0
         ];
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+        const colorBufferInfo = createBufferInfo(gl, colors, 3);
 
 
-        const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
-
+        const shaderProgram = this.shaderProgram;
         const programInfo = {
             program: shaderProgram,
             attribLocations: {
@@ -52,16 +46,11 @@ class Triangle {
         };
 
         return {
-            positionBufferInfo: {
-                buffer: positionBuffer,
-                numComponents: posNumComponents
-            },
-            colorBufferInfo: {
-                buffer: colorBuffer,
-                numComponents: 3
-            },
-            numElements: countElem(positions.length, posNumComponents),
-            programInfo: programInfo
+            positionBufferInfo,
+            colorBufferInfo,
+            numElements: countNumElem(positions.length, posNumComponents),
+            programInfo,
+            drawMode: gl.TRIANGLE_STRIP
         };
     }
 }

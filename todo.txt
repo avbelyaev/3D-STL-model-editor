@@ -1,3 +1,5 @@
 #TODO handle resize of menu block on right
 https://webglfundamentals.org/webgl/lessons/webgl-anti-patterns.html
 
+#TODO reuse shaderProgram and buffers if possible
+https://webglfundamentals.org/webgl/lessons/webgl-drawing-multiple-things.html

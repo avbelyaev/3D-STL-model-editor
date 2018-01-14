@@ -2,7 +2,7 @@
  * Created by anthony on 14.01.2018.
  */
 
-const countElem = (arrLength, numComponents) => {
+const countNumElem = (arrLength, numComponents) => {
     let numElem = arrLength / numComponents;
 
     if (Math.floor(numElem) !== Math.ceil(numElem)) {
@@ -15,8 +15,8 @@ const countElem = (arrLength, numComponents) => {
 };
 
 
-const bindBuffer = (vertexAttribInfo, bufferInfo) => {
-    gl.enableVertexAttribArray(vertexAttribInfo);
+const bindBufferInfo = (attribArray, bufferInfo) => {
+    gl.enableVertexAttribArray(attribArray);
     gl.bindBuffer(gl.ARRAY_BUFFER, bufferInfo.buffer);
 
     const numComponents = bufferInfo.numComponents;
@@ -26,10 +26,22 @@ const bindBuffer = (vertexAttribInfo, bufferInfo) => {
     const offset = 0;
 
     gl.vertexAttribPointer(
-        vertexAttribInfo,
+        attribArray,
         numComponents,
         type,
         normalize,
         stride,
         offset);
+};
+
+
+const createBufferInfo = (gl, array, numComponents) => {
+    const buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(array), gl.STATIC_DRAW);
+
+    return {
+        buffer,
+        numComponents
+    }
 };

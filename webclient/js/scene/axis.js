@@ -3,32 +3,25 @@
  */
 
 class Axis {
-    constructor() {
+    constructor(gl, startPointVec2, endPointVec2, colorVec3) {
+        this.gl = gl;
+        this.positions = startPointVec2.concat(endPointVec2);
+        this.colors = colorVec3.concat(colorVec3);
 
+        logr("Axis: pos: [" + this.positions + "] col: [" + this.colors + "]");
     }
 
-    initBuffer(gl, vsSource, fsSource) {
-        const positionBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-        const positions = [
-            0, 0,
-            400.0, 0
-        ];
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+    setShaderSource(vertexShaderSource, fragmentShaderSource) {
+        this.shaderProgram = initShaderProgram(this.gl, vertexShaderSource, fragmentShaderSource);
+    }
+
+    initBuffer() {
+        const gl = this.gl;
         const posNumComponents = 2;
+        const positionBufferInfo = createBufferInfo(gl, this.positions, posNumComponents);
+        const colorBufferInfo = createBufferInfo(gl, this.colors, 3);
 
-
-        const colorBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-        const colors = [
-            1.0,  0.0,  0.0,
-            1.0,  0.0,  0.0
-        ];
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-
-
-        const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
-
+        const shaderProgram = this.shaderProgram;
         const programInfo = {
             program: shaderProgram,
             attribLocations: {
@@ -37,21 +30,16 @@ class Axis {
             },
             uniformLocations: {
                 stageWidth: gl.getUniformLocation(shaderProgram, 'stageWidth'),
-                stageHeight: gl.getUniformLocation(shaderProgram, 'stageHeight'),
+                stageHeight: gl.getUniformLocation(shaderProgram, 'stageHeight')
             },
         };
 
         return {
-            positionBufferInfo: {
-                buffer: positionBuffer,
-                numComponents: posNumComponents
-            },
-            colorBufferInfo: {
-                buffer: colorBuffer,
-                numComponents: 3
-            },
-            numElements: countElem(positions.length, posNumComponents),
-            programInfo: programInfo
+            positionBufferInfo,
+            colorBufferInfo,
+            numElements: countNumElem(this.positions.length, posNumComponents),
+            programInfo,
+            drawMode: gl.LINE_LOOP
         }
     };
 }
