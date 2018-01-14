@@ -1,5 +1,8 @@
 
-let gl, figures;
+const TYPE_TRIANGLE = 'triangle';
+const TYPE_LINE = 'line';
+
+let gl, figures = [];
 
 
 const logr = (text) => {
@@ -57,32 +60,17 @@ const vsSource = `
     attribute vec2 aPosition;
     attribute vec3 aColor;
     
+    uniform vec2 u_resolution;
+    
+    
     varying vec3 fragColor;
     
-    uniform float stageWidth;
-    uniform float stageHeight;
-    
-    uniform float moveX;
-    uniform float moveY;
-    
-    // TODO move normalize out from shader
-    vec3 normalizeCoords(vec2 position) {
-        float x = position[0];
-        float y = position[1];
-        float z = 1.0;
-        
-        // [0..w]/w -> [0..1]*2 -> [0..2]-1 -> [-1;1]
-        float normalized_x = ((x + moveX) / stageWidth) * 2.0;    // -1.0
-        float normalized_y = ((y + moveY) / stageHeight) * 2.0;   // -1.0
-        
-        return vec3(normalized_x, normalized_y, z);
-    }
-    
     void main() {
-      gl_Position = vec4(normalizeCoords(aPosition).xyz, 1.0);
+        vec2 normalized_xy = aPosition / u_resolution * 2.0 - 1.0;
+        gl_Position = vec4(normalized_xy.xy, 0.0, 1.0);
       
-      // pass color to fragment shader
-      fragColor = aColor;
+        // pass color to fragment shader
+        fragColor = aColor;
     }
   `;
 
@@ -100,29 +88,32 @@ const fsSource = `
 
 function drawScene() {
 
+    // gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
     gl.clearColor(0.3, 0.3, 0.3, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    figures.forEach((figure) => {
+    figures.forEach((f) => {
+        const figure = f.figureInfo;
         const programInfo = figure.programInfo;
 
-        bindBufferInfo(programInfo.attribLocations.vertexPosition, figure.positionBufferInfo);
-        bindBufferInfo(programInfo.attribLocations.vertexColors, figure.colorBufferInfo);
+        bindBufferToAttribute(programInfo.attribLocations.vertexPosition, figure.positionBufferInfo);
+        bindBufferToAttribute(programInfo.attribLocations.vertexColors, figure.colorBufferInfo);
 
         gl.useProgram(programInfo.program);
 
         //TODO set buffers and attribs
 
         // set uniforms
-        gl.uniform1f(programInfo.uniformLocations.stageWidth, gl.canvas.clientWidth);
-        gl.uniform1f(programInfo.uniformLocations.stageHeight, gl.canvas.clientHeight);
+        gl.uniform2f(programInfo.uniformLocations.resolution, gl.canvas.width, gl.canvas.height);
+        // gl.uniform1f(programInfo.uniformLocations.stageWidth, gl.canvas.clientWidth);
+        // gl.uniform1f(programInfo.uniformLocations.stageHeight, gl.canvas.clientHeight);
 
-        gl.uniform1f(programInfo.uniformLocations.moveX, lastMouseX);
-        gl.uniform1f(programInfo.uniformLocations.moveY, lastMouseY);
+        // gl.uniform2f(programInfo.uniformLocations.moveXY, lastMouseX);
+        // gl.uniform1f(programInfo.uniformLocations.moveY, lastMouseY);
 
 
         gl.drawArrays(figure.drawMode, 0, figure.numElements);
-
     });
 
     requestAnimationFrame(drawScene);
@@ -135,20 +126,21 @@ function main() {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    figures = [];
 
     const axisX = new Line(gl, [-400, 0], [400, 0], [1, 0, 0]);
     axisX.setShaderSource(vsSource, fsSource);
-    figures.push(axisX.initBuffer(vsSource, fsSource));
+    axisX.initBuffer();
+    figures.push(axisX);
 
     const axisY = new Line(gl, [0, -400], [0, 400], [0, 0, 1]);
     axisY.setShaderSource(vsSource, fsSource);
-    figures.push(axisY.initBuffer(vsSource, fsSource));
-
+    axisY.initBuffer();
+    figures.push(axisY);
 
     const triangle = new Triangle(gl);
     triangle.setShaderSource(vsSource, fsSource);
-    figures.push(triangle.initBuffer(vsSource, fsSource));
+    triangle.initBuffer();
+    figures.push(triangle);
 
 
     requestAnimationFrame(drawScene);

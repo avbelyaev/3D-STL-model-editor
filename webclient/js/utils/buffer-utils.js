@@ -2,8 +2,8 @@
  * Created by anthony on 14.01.2018.
  */
 
-const countNumElem = (arrLength, numComponents) => {
-    let numElem = arrLength / numComponents;
+const countNumElem = (positionsArray, numComponents) => {
+    let numElem = positionsArray.length / numComponents;
 
     if (Math.floor(numElem) !== Math.ceil(numElem)) {
         throw new Error('Error occurred while evaluating element num');
@@ -15,7 +15,17 @@ const countNumElem = (arrLength, numComponents) => {
 };
 
 
-const bindBufferInfo = (attribArray, bufferInfo) => {
+const checkAgainstColors = (numElementsByPositions, colorsArray) => {
+    const colorNumComponents = 3;
+    let numElemByColors = countNumElem(colorsArray, colorNumComponents);
+
+    if (numElementsByPositions !== numElemByColors) {
+        throw new Error('Not all vertices have colors (vec3)!');
+    }
+};
+
+
+const bindBufferToAttribute = (attribArray, bufferInfo) => {
     gl.enableVertexAttribArray(attribArray);
     gl.bindBuffer(gl.ARRAY_BUFFER, bufferInfo.buffer);
 
@@ -25,6 +35,7 @@ const bindBufferInfo = (attribArray, bufferInfo) => {
     const stride = 0;
     const offset = 0;
 
+    // binds current ARRAY_BUFFER (nearest one) to attribute
     gl.vertexAttribPointer(
         attribArray,
         numComponents,

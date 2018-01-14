@@ -4,7 +4,9 @@
 
 class Triangle {
     constructor(gl) {
-        this.gl = gl
+        this.gl = gl;
+
+        logr("Triangle");
     }
 
     setShaderSource(vertexShaderSource, fragmentShaderSource) {
@@ -15,9 +17,12 @@ class Triangle {
         const gl = this.gl;
         const posNumComponents = 2;
         const positions = [
-            0, 0,
-            0, 100.0,
-            300.0, 0
+            100, 200,
+            800, 200,
+            100, 300,
+            100, 300,
+            800, 200,
+            800, 300,
         ];
         const positionBufferInfo = createBufferInfo(gl, positions, posNumComponents);
 
@@ -25,9 +30,15 @@ class Triangle {
         const colors = [
             1.0,  0.0,  0.0,
             0.0,  1.0,  0.0,
-            0.0,  0.0,  1.0
+            0.0,  0.0,  1.0,
+            0.0,  1.0,  0.0,
+            1.0,  0.0,  0.0,
+            0.0,  1.0,  0.0
         ];
         const colorBufferInfo = createBufferInfo(gl, colors, 3);
+
+        const numElements = countNumElem(positions, posNumComponents, colors);
+        checkAgainstColors(numElements, colors);
 
 
         const shaderProgram = this.shaderProgram;
@@ -38,19 +49,17 @@ class Triangle {
                 vertexColors: gl.getAttribLocation(shaderProgram, 'aColor')
             },
             uniformLocations: {
-                stageWidth: gl.getUniformLocation(shaderProgram, 'stageWidth'),
-                stageHeight: gl.getUniformLocation(shaderProgram, 'stageHeight'),
-                moveX: gl.getUniformLocation(shaderProgram, 'moveX'),
-                moveY: gl.getUniformLocation(shaderProgram, 'moveY'),
+                resolution: gl.getUniformLocation(shaderProgram, 'u_resolution')
             },
         };
 
-        return {
+        this.figureInfo = {
             positionBufferInfo,
             colorBufferInfo,
-            numElements: countNumElem(positions.length, posNumComponents),
+            numElements,
             programInfo,
-            drawMode: gl.TRIANGLE_STRIP
+            drawMode: gl.TRIANGLE_STRIP,
+            type: TYPE_TRIANGLE
         };
     }
 }

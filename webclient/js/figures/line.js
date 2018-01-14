@@ -19,7 +19,12 @@ class Line {
         const gl = this.gl;
         const posNumComponents = 2;
         const positionBufferInfo = createBufferInfo(gl, this.positions, posNumComponents);
+
         const colorBufferInfo = createBufferInfo(gl, this.colors, 3);
+
+        const numElements = countNumElem(this.positions, posNumComponents);
+        checkAgainstColors(numElements, this.colors);
+
 
         const shaderProgram = this.shaderProgram;
         const programInfo = {
@@ -29,17 +34,17 @@ class Line {
                 vertexColors: gl.getAttribLocation(shaderProgram, 'aColor')
             },
             uniformLocations: {
-                stageWidth: gl.getUniformLocation(shaderProgram, 'stageWidth'),
-                stageHeight: gl.getUniformLocation(shaderProgram, 'stageHeight')
+                resolution: gl.getUniformLocation(shaderProgram, 'u_resolution')
             },
         };
 
-        return {
+        this.figureInfo = {
             positionBufferInfo,
             colorBufferInfo,
-            numElements: countNumElem(this.positions.length, posNumComponents),
+            numElements,
             programInfo,
-            drawMode: gl.LINE_LOOP
+            drawMode: gl.LINE_LOOP,
+            type: TYPE_LINE
         }
     };
 }

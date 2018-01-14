@@ -4,7 +4,7 @@
 
 const initGL = () => {
     const canvas = document.getElementById("glCanvas");
-    canvas.width = 1024;
+    canvas.width = 1000;
     canvas.height = 700;
 
     const gl = canvas.getContext("webgl");

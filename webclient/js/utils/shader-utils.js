@@ -11,7 +11,8 @@ function loadShader(gl, type, source) {
         const typeStr = gl.VERTEX_SHADER === type
             ? 'VERTEX'
             : gl.FRAGMENT_SHADER === type ? 'FRAGMENT' : '?UNKNOWN?';
-        const errMsg = typeStr + ' shader compilation error: ' + gl.getShaderInfoLog(shader);
+        let errMsg = typeStr + ' shader compilation error: ' + gl.getShaderInfoLog(shader);
+        errMsg += guessError(errMsg);
 
         gl.deleteShader(shader);
         throw Error(errMsg);
@@ -38,3 +39,12 @@ function initShaderProgram(gl, vsSource, fsSource) {
         return shaderProgram;
     }
 }
+
+
+const guessError = (errorMsg) => {
+    if (-1 !== errorMsg.toLowerCase().indexOf('syntax error')) {
+        let guess = 'GUESS: check semicolons ";" at the end of strings\n';
+        return guess;
+    }
+    return '';
+};
