@@ -60,21 +60,12 @@ const vsSource = `
     attribute vec2 aPosition;
     attribute vec3 aColor;
     
-    uniform vec2 u_resolution;
-    uniform vec2 u_translation;
-    uniform float sina;
-    uniform float cosa;
+    uniform mat3 uMatrix;
     
     // varying vec3 fragColor;
     
     void main() {
-        vec2 rotated = vec2(
-            aPosition.x * cosa + aPosition.y * sina,
-            aPosition.x * (-sina) + aPosition.y * cosa 
-        );
-        vec2 translated = rotated + u_translation;
-        vec2 normalized = translated / u_resolution * 2.0 - 1.0;
-        gl_Position = vec4(normalized.x, -normalized.y, 0.0, 1.0);
+        gl_Position = vec4((uMatrix * vec3(aPosition, 1.0)).xy, 0, 1);
       
         // pass color to fragment shader
         // fragColor = aColor;
@@ -94,6 +85,8 @@ const fsSource = `
 
 const translation = [100, 100];
 const rotation = [0, 1];
+let angleInRadians = 0;
+let scale = 1;
 
 const changeRange = () => {
     const rngX = document.getElementById("rngX");
@@ -103,14 +96,48 @@ const changeRange = () => {
     translation[1] = rngY.value;
 
     const rngA = document.getElementById("rngA");
-    const angleInRadians = rngA.value * Math.PI / 180;
+    angleInRadians = rngA.value * Math.PI / 180;
     rotation[0] = Math.sin(angleInRadians);
     rotation[1] = Math.cos(angleInRadians);
+
+    const rngS = document.getElementById("rngS");
+    scale = rngS.value;
 };
+
+function initMatrices(width, height) {
+    // const m3 = {
+    //     projection: function (width, height) {
+    //         return [
+    //             2 / width, 0, 0,
+    //             0, -2 / height, 0,
+    //             -1, 1, 1
+    //         ];
+    //     },
+    //     translation: function (x, y) {
+    //         return [
+    //             1, 0, 0,
+    //             0, 1, 0,
+    //             x, y, 1
+    //         ];
+    //     }
+    // };
+    const identity = mat3.create();
+    const projection = mat3.projection(identity, width, height);
+    const translated = mat3.translate(projection, projection, [translation[0], translation[1]]);
+    const rotated = mat3.rotate(translated, translated, -angleInRadians);
+    const scaled = mat3.scale(rotated, rotated, [scale, scale]);
+
+    return scaled;
+}
 
 function drawScene() {
 
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    const w = gl.canvas.width;
+    const h = gl.canvas.height;
+
+    const matrix = initMatrices(w, h);
+
+    // gl.viewport(0, 0, w, h);
 
     gl.clearColor(0.3, 0.3, 0.3, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -133,16 +160,7 @@ function drawScene() {
         //TODO set buffers and attribs
 
         // set uniforms
-        gl.uniform2f(programInfo.uniformLocations.resolution, gl.canvas.width, gl.canvas.height);
-        gl.uniform2f(programInfo.uniformLocations.translation, translation[0], translation[1]);
-        gl.uniform1f(programInfo.uniformLocations.sin, rotation[0]);
-        gl.uniform1f(programInfo.uniformLocations.cos, rotation[1]);
-        // gl.uniform1f(programInfo.uniformLocations.stageWidth, gl.canvas.clientWidth);
-        // gl.uniform1f(programInfo.uniformLocations.stageHeight, gl.canvas.clientHeight);
-
-        // gl.uniform2f(programInfo.uniformLocations.moveXY, lastMouseX);
-        // gl.uniform1f(programInfo.uniformLocations.moveY, lastMouseY);
-
+        gl.uniformMatrix3fv(programInfo.uniformLocations.uMatrix, false, matrix);
 
         gl.drawArrays(figure.drawMode, 0, figure.numElements);
     });

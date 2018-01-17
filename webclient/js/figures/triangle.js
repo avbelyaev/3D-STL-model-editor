@@ -66,10 +66,7 @@ class Triangle {
                 vertexColors: gl.getAttribLocation(shaderProgram, 'aColor')
             },
             uniformLocations: {
-                resolution: gl.getUniformLocation(shaderProgram, 'u_resolution'),
-                translation: gl.getUniformLocation(shaderProgram, 'u_translation'),
-                sin: gl.getUniformLocation(shaderProgram, 'sina'),
-                cos: gl.getUniformLocation(shaderProgram, 'cosa'),
+                uMatrix: gl.getUniformLocation(shaderProgram, 'uMatrix')
             },
         };
 
