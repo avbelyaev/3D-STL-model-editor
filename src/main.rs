@@ -7,7 +7,7 @@ extern crate rocket_contrib;
 
 use rocket::{Rocket, Data};
 use rocket_contrib::Json;
-use geometry_server::port::adapter::resource::{mesh_resource, stl_resource};
+use geometry_server::resource::{mesh_resource, stl_resource};
 use geometry_server::port::adapter::model::mesh_model::MeshModel;
 use geometry_server::port::adapter::command::{perform_on_mesh_command,
                                               perform_on_stl_command,

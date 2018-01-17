@@ -14,3 +14,4 @@ extern crate rocket;
 pub mod domain;
 pub mod application;
 pub mod port;
+pub mod resource;

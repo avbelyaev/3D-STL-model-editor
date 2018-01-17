@@ -1,5 +1,5 @@
 use port::adapter::model::mesh_model::MeshModel;
-use port::adapter::resource::mesh_resource::convert_base64_to_bytes;
+use resource::mesh_resource::convert_base64_to_bytes;
 use port::adapter::command::perform_on_stl_command::PerformOnStlCommand;
 use application::operation_performer::bool_op_performer::perform_on_stls;
 use rocket_contrib::Json;
