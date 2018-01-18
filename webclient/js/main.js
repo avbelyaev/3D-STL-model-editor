@@ -152,6 +152,11 @@ function drawScene() {
     gl.clearColor(0.3, 0.3, 0.3, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    // gl.enable(gl.CULL_FACE); // dont draw back-facing (clockwise) triangles
+    gl.enable(gl.DEPTH_TEST); // check z-buffer for each pixel before rasterizing
+    gl.depthFunc(gl.LEQUAL);
+
+
     figures.forEach((f) => {
         const figure = f.figureInfo;
 
