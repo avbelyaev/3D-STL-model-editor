@@ -57,33 +57,32 @@ const handleMouseMove = (event) => {
 };
 
 const vsSource = `
-    attribute vec2 aPosition;
+    attribute vec3 aPosition;
     attribute vec3 aColor;
     
-    uniform mat3 uMatrix;
+    uniform mat4 uMatrix;
     
-    // varying vec3 fragColor;
+    varying vec3 fragColor;
     
     void main() {
-        gl_Position = vec4((uMatrix * vec3(aPosition, 1.0)).xy, 0, 1);
+        gl_Position = uMatrix * vec4(aPosition, 1);
       
-        // pass color to fragment shader
-        // fragColor = aColor;
+        fragColor = aColor;
     }
   `;
 
 const fsSource = `
     precision highp float;
     
-    // varying vec3 fragColor;
+    varying vec3 fragColor;
 
     void main() {
-      // gl_FragColor = vec4(fragColor, 1.0);
-      gl_FragColor = vec4(1.0, 0.0, 0, 0);
+      gl_FragColor = vec4(fragColor, 1.0);
+      // gl_FragColor = vec4(1.0, 0.0, 0, 0);
     }
   `;
 
-const translation = [100, 100];
+const translation = [100, 100, 100];
 const rotation = [0, 1];
 let angleInRadians = 0;
 let scale = 1;
@@ -95,6 +94,9 @@ const changeRange = () => {
     const rngY = document.getElementById("rngY");
     translation[1] = rngY.value;
 
+    const rngZ = document.getElementById("rngZ");
+    translation[2] = rngZ.value;
+
     const rngA = document.getElementById("rngA");
     angleInRadians = rngA.value * Math.PI / 180;
     rotation[0] = Math.sin(angleInRadians);
@@ -104,7 +106,7 @@ const changeRange = () => {
     scale = rngS.value;
 };
 
-function initMatrices(width, height) {
+function initMatrices(width, height, depth) {
     // const m3 = {
     //     projection: function (width, height) {
     //         return [
@@ -121,11 +123,19 @@ function initMatrices(width, height) {
     //         ];
     //     }
     // };
-    const identity = mat3.create();
-    const projection = mat3.projection(identity, width, height);
-    const translated = mat3.translate(projection, projection, [translation[0], translation[1]]);
-    const rotated = mat3.rotate(translated, translated, -angleInRadians);
-    const scaled = mat3.scale(rotated, rotated, [scale, scale]);
+    const identity = mat4.create();
+    // const projection = mat4.projection();
+    const projection = [
+        2 / width, 0, 0, 0,
+        0, -2 / height, 0, 0,
+        0, 0, -2 / depth, 0,
+        -1, 1, 0, 1,
+    ];
+    const translated = mat4.translate(projection, projection, [translation[0], translation[1], translation[2]]);
+    let rotated = mat4.rotateX(translated, translated, 0);
+    rotated = mat4.rotateY(rotated, rotated, -angleInRadians);
+    rotated = mat4.rotateZ(rotated, rotated, -angleInRadians);
+    const scaled = mat4.scale(rotated, rotated, [scale, scale, scale]);
 
     return scaled;
 }
@@ -135,9 +145,9 @@ function drawScene() {
     const w = gl.canvas.width;
     const h = gl.canvas.height;
 
-    const matrix = initMatrices(w, h);
+    const matrix = initMatrices(w, h, 400);
 
-    // gl.viewport(0, 0, w, h);
+    gl.viewport(0, 0, w, h);
 
     gl.clearColor(0.3, 0.3, 0.3, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -150,17 +160,18 @@ function drawScene() {
 
         // vertices
         enableAndBindBuffer(programInfo.attribLocations.vertexPosition, figure.positionBufferInfo);
-        gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, 2, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition,
+            figure.positionBufferInfo.numComponents, gl.FLOAT, false, 0, 0);
 
 
         // colors
-        // bindBufferToAttribute(programInfo.attribLocations.vertexColors, figure.colorBufferInfo);
+        bindBufferToAttribute(programInfo.attribLocations.vertexColors, figure.colorBufferInfo);
 
 
         //TODO set buffers and attribs
 
         // set uniforms
-        gl.uniformMatrix3fv(programInfo.uniformLocations.uMatrix, false, matrix);
+        gl.uniformMatrix4fv(programInfo.uniformLocations.uMatrix, false, matrix);
 
         gl.drawArrays(figure.drawMode, 0, figure.numElements);
     });
