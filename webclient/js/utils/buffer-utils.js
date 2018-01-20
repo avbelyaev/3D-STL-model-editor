@@ -19,7 +19,7 @@ const checkAgainstColors = (numElementsByPositions, colorsArray) => {
     const colorNumComponents = 3;
     let numElemByColors = countNumElem(colorsArray, colorNumComponents);
 
-    if (numElementsByPositions !== numElemByColors) {
+    if (numElementsByPositions > numElemByColors) {
         throw new Error('Not all vertices have colors (vec3)!');
     }
 };

@@ -30,11 +30,11 @@
                     <!-- reload(true) forces reload from server -->
                     <input type="button" value="Refresh" onClick="window.location.reload(true)">
 
-                    <p>X:<input id="rngX" type="range" min="0" max="1000" step="10" value="100" oninput="changeRange()"></p>
-                    <p>Y:<input id="rngY" type="range" min="0" max="700" step="10" value="100" oninput="changeRange()"></p>
-                    <p>Z:<input id="rngZ" type="range" min="0" max="100" step="10" value="1" oninput="changeRange()"></p>
+                    <p>X:<input id="rngX" type="range" min="-500" max="500" step="10" value="0" oninput="changeRange()"></p>
+                    <p>Y:<input id="rngY" type="range" min="-300" max="300" step="10" value="0" oninput="changeRange()"></p>
+                    <p>Z:<input id="rngZ" type="range" min="-800" max="0" step="15" value="-300" oninput="changeRange()"></p>
                     <p>A:<input id="rngA" type="range" min="0" max="360" step="10" value="0" oninput="changeRange()"></p>
-                    <p>S:<input id="rngS" type="range" min="0" max="10" step="0.5" value="1" oninput="changeRange()"></p>
+                    <p>S:<input id="rngS" type="range" min="0" max="10" step="0.1" value="1" oninput="changeRange()"></p>
                     <br>
 
                     <label id="logr"></label>

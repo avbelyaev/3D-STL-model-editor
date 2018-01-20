@@ -82,7 +82,7 @@ const fsSource = `
     }
   `;
 
-const translation = [100, 100, 100];
+const translation = [0, 0, -300];
 const rotation = [0, 1];
 let angleInRadians = 0;
 let scale = 1;
@@ -107,31 +107,20 @@ const changeRange = () => {
 };
 
 function initMatrices(width, height, depth) {
-    // const m3 = {
-    //     projection: function (width, height) {
-    //         return [
-    //             2 / width, 0, 0,
-    //             0, -2 / height, 0,
-    //             -1, 1, 1
-    //         ];
-    //     },
-    //     translation: function (x, y) {
-    //         return [
-    //             1, 0, 0,
-    //             0, 1, 0,
-    //             x, y, 1
-    //         ];
-    //     }
-    // };
-    const identity = mat4.create();
-    // const projection = mat4.projection();
+    const perspective = mat4.create();
     const projection = [
         2 / width, 0, 0, 0,
         0, -2 / height, 0, 0,
         0, 0, -2 / depth, 0,
         -1, 1, 0, 1,
     ];
-    const translated = mat4.translate(projection, projection, [translation[0], translation[1], translation[2]]);
+    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    const zNear = 1;
+    const zFar = 1000;
+    const fieldOfViewRadians = Math.PI / 3;
+    mat4.perspective(perspective, fieldOfViewRadians, aspect, zNear, zFar);
+
+    const translated = mat4.translate(perspective, perspective, [translation[0], translation[1], translation[2]]);
     let rotated = mat4.rotateX(translated, translated, 0);
     rotated = mat4.rotateY(rotated, rotated, -angleInRadians);
     rotated = mat4.rotateZ(rotated, rotated, -angleInRadians);
@@ -151,10 +140,6 @@ function drawScene() {
 
     gl.clearColor(0.3, 0.3, 0.3, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-    // gl.enable(gl.CULL_FACE); // dont draw back-facing (clockwise) triangles
-    gl.enable(gl.DEPTH_TEST); // check z-buffer for each pixel before rasterizing
-    gl.depthFunc(gl.LEQUAL);
 
 
     figures.forEach((f) => {
@@ -191,6 +176,8 @@ function main() {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
+    gl.enable(gl.DEPTH_TEST); // check z-buffer for each pixel before rasterizing
+    gl.depthFunc(gl.LEQUAL);
 
     // const axisX = new Line(gl, [-400, 0], [400, 0], [1, 0, 0]);
     // axisX.setShaderSource(vsSource, fsSource);
