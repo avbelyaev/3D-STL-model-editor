@@ -302,7 +302,7 @@ class Triangle {
             numElements,
             programInfo,
             drawMode: gl.TRIANGLES,
-            type: TYPE_TRIANGLE
+            movable: true
         };
     }
 }

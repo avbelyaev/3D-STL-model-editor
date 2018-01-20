@@ -1,7 +1,4 @@
 
-const TYPE_TRIANGLE = 'triangle';
-const TYPE_LINE = 'line';
-
 let gl, figures = [];
 
 
@@ -82,10 +79,12 @@ const fsSource = `
     }
   `;
 
-const translation = [0, 0, -300];
+const translation = [0, 0, 300];
 const rotation = [0, 1];
 let angleInRadians = 0;
+let camAngleRadians = 0;
 let scale = 1;
+const figureTranslation = [0, 0, 0];
 
 const changeRange = () => {
     const rngX = document.getElementById("rngX");
@@ -104,37 +103,56 @@ const changeRange = () => {
 
     const rngS = document.getElementById("rngS");
     scale = rngS.value;
+
+    const rngCam = document.getElementById("rngCam");
+    camAngleRadians = rngCam.value * Math.PI / 180;
 };
 
-function initMatrices(width, height, depth) {
-    const perspective = mat4.create();
-    const projection = [
-        2 / width, 0, 0, 0,
-        0, -2 / height, 0, 0,
-        0, 0, -2 / depth, 0,
-        -1, 1, 0, 1,
-    ];
+const moveFigure = () => {
+    const rngX = document.getElementById("fX");
+    figureTranslation[0] = rngX.value;
+
+    const rngY = document.getElementById("fY");
+    figureTranslation[1] = rngY.value;
+
+    const rngZ = document.getElementById("fZ");
+    figureTranslation[2] = rngZ.value;
+};
+
+function initMatrices(isMovable) {
+    let perspective = mat4.create();
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     const zNear = 1;
     const zFar = 1000;
     const fieldOfViewRadians = Math.PI / 3;
-    mat4.perspective(perspective, fieldOfViewRadians, aspect, zNear, zFar);
+    perspective = mat4.perspective(perspective, fieldOfViewRadians, aspect, zNear, zFar);
 
-    const translated = mat4.translate(perspective, perspective, [translation[0], translation[1], translation[2]]);
+    // const translated = mat4.translate(perspective, perspective, [0, 0, -300]);
+    const move = isMovable ? figureTranslation : [0, 0, 0];
+    const translated = mat4.translate(perspective, perspective, move); // place objects at center
     let rotated = mat4.rotateX(translated, translated, 0);
     rotated = mat4.rotateY(rotated, rotated, -angleInRadians);
     rotated = mat4.rotateZ(rotated, rotated, -angleInRadians);
     const scaled = mat4.scale(rotated, rotated, [scale, scale, scale]);
 
-    return scaled;
+
+    let cameraMatrix = mat4.create();
+    cameraMatrix = mat4.rotateY(cameraMatrix, cameraMatrix, camAngleRadians);
+    cameraMatrix = mat4.translate(cameraMatrix, cameraMatrix, [translation[0], translation[1], translation[2]]);
+    const viewMatrix = mat4.invert(cameraMatrix, cameraMatrix);
+    //
+    // cameraMatrix = mat4.lookAt(perspective, [1, 1, 1], [0, 0, -300], [0, 1, 0]);
+    // const viewMatrix = mat4.invert(cameraMatrix, cameraMatrix);
+
+    const viewProjectionMatrix = mat4.multiply(scaled, scaled, viewMatrix);
+
+    return viewProjectionMatrix;
 }
 
 function drawScene() {
 
     const w = gl.canvas.width;
     const h = gl.canvas.height;
-
-    const matrix = initMatrices(w, h, 400);
 
     gl.viewport(0, 0, w, h);
 
@@ -160,6 +178,7 @@ function drawScene() {
 
         //TODO set buffers and attribs
 
+        const matrix = initMatrices(figure.movable);
         // set uniforms
         gl.uniformMatrix4fv(programInfo.uniformLocations.uMatrix, false, matrix);
 
@@ -173,21 +192,27 @@ function drawScene() {
 function main() {
     gl = initGL();
 
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clearColor(0.3, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     gl.enable(gl.DEPTH_TEST); // check z-buffer for each pixel before rasterizing
     gl.depthFunc(gl.LEQUAL);
 
-    // const axisX = new Line(gl, [-400, 0], [400, 0], [1, 0, 0]);
-    // axisX.setShaderSource(vsSource, fsSource);
-    // axisX.initBuffer();
-    // figures.push(axisX);
-    //
-    // const axisY = new Line(gl, [0, -400], [0, 400], [0, 0, 1]);
-    // axisY.setShaderSource(vsSource, fsSource);
-    // axisY.initBuffer();
-    // figures.push(axisY);
+
+    const axisX = new Line(gl, [-400, 0, 0], [400, 0, 0], [255, 0, 0]);
+    axisX.setShaderSource(vsSource, fsSource);
+    axisX.initBuffer();
+    figures.push(axisX);
+
+    const axisY = new Line(gl, [0, -400, 0], [0, 400, 0], [0, 255, 0]);
+    axisY.setShaderSource(vsSource, fsSource);
+    axisY.initBuffer();
+    figures.push(axisY);
+
+    const axisZ = new Line(gl, [0, 0, -400], [0, 0, 400], [0, 0, 255]);
+    axisZ.setShaderSource(vsSource, fsSource);
+    axisZ.initBuffer();
+    figures.push(axisZ);
 
     const triangle = new Triangle(gl);
     triangle.setShaderSource(vsSource, fsSource);
