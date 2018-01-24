@@ -1,2 +1,5 @@
 # error: glDrawArrays: attempt to access out of range vertices in attribute 1
 # solve: attr1 == aColor. vec3-color-values probably not set for vertices (positions.len > colors.len)
+
+# check in which fields uniform-locations and attribute-pointers are located
+# since if matrix is draws nothing
