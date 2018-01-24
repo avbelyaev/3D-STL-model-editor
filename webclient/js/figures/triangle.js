@@ -10,13 +10,35 @@ class Triangle {
     }
 
     setShaderSource(vertexShaderSource, fragmentShaderSource) {
-        this.shaderProgram = initShaderProgram(this.gl, vertexShaderSource, fragmentShaderSource);
+        this.program = initShaderProgram(this.gl, vertexShaderSource, fragmentShaderSource);
     }
 
-    initBuffer() {
-        const gl = this.gl;
+    initFigure() {
+        const posNumComponents = 3;
+        this.positionBufferInfo = this.initVertexBuffer(this.gl, posNumComponents);
 
-        const positions = [
+        this.colorBufferInfo = this.initColorBuffer(this.gl, 3);
+
+
+        const numElements = countNumElem(this.positions, posNumComponents);
+        checkAgainstColors(numElements, this.colors);
+        this.numElements = numElements;
+
+
+        this.attribLocations = {
+            vertexPosition: gl.getAttribLocation(this.program, 'aPosition'),
+            vertexColor: gl.getAttribLocation(this.program, 'aColor')
+        };
+        this.uniformLocations = {
+            uMatrix: gl.getUniformLocation(this.program, 'uMatrix')
+        };
+
+        this.drawMode = gl.TRIANGLES;
+        this.movable = true;
+    }
+
+    initVertexBuffer(gl, numComponents) {
+        this.positions = [
             // left column front
             0,   0,  0,
             0, 150,  0,
@@ -145,11 +167,11 @@ class Triangle {
             0, 150,  30,
             0, 150,   0
         ];
-        const posNumComponents = 3;
-        const positionBufferInfo = createBufferInfo(gl, positions, posNumComponents, 'float');
+        return createBufferInfo(gl, this.positions, numComponents, 'float');
+    }
 
-
-        const colors = [
+    initColorBuffer(gl, numComponents) {
+        this.colors = [
             // left column front
             200,  70, 120,
             200,  70, 120,
@@ -278,31 +300,6 @@ class Triangle {
             160, 160, 220,
             160, 160, 220
         ];
-        const colorBufferInfo = createBufferInfo(gl, colors, 3, 'uint');
-
-        const numElements = countNumElem(positions, posNumComponents);
-        checkAgainstColors(numElements, colors);
-
-
-        const shaderProgram = this.shaderProgram;
-        const programInfo = {
-            program: shaderProgram,
-            attribLocations: {
-                vertexPosition: gl.getAttribLocation(shaderProgram, 'aPosition'),
-                vertexColors: gl.getAttribLocation(shaderProgram, 'aColor')
-            },
-            uniformLocations: {
-                uMatrix: gl.getUniformLocation(shaderProgram, 'uMatrix')
-            },
-        };
-
-        this.figureInfo = {
-            positionBufferInfo,
-            colorBufferInfo,
-            numElements,
-            programInfo,
-            drawMode: gl.TRIANGLES,
-            movable: true
-        };
+        return createBufferInfo(gl, this.colors, numComponents, 'uint');
     }
 }
