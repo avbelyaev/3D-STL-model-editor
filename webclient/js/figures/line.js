@@ -17,9 +17,11 @@ class Line {
 
     initFigure() {
         const posNumComponents = 3;
-        this.positionBufferInfo = createBufferInfo(this.gl, this.positions, posNumComponents, 'float');
+        this.positionBufferInfo = createBufferInfo(this.gl,
+            new Float32Array(this.positions), posNumComponents, gl.FLOAT, false);
 
-        this.colorBufferInfo = createBufferInfo(this.gl, this.colors, 3, 'uint');
+        this.colorBufferInfo = createBufferInfo(this.gl,
+            new Uint8Array(this.colors), 3, gl.UNSIGNED_BYTE, true);
 
         const numElements = countNumElem(this.positions, posNumComponents);
         checkAgainstColors(numElements, this.colors);

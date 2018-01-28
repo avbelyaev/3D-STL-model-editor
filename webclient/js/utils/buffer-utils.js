@@ -51,20 +51,15 @@ const enableAndBindBuffer = (attribArray, bufferInfo) => {
 };
 
 
-//TODO shitcode!!!!
-const createBufferInfo = (gl, array, numComponents, componentType) => {
-    const arr = 'float' === componentType
-        ? new Float32Array(array)
-        : new Uint8Array(array);
-
+const createBufferInfo = (gl, array, numComponents, componentType, normalize) => {
     const buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, arr, gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, array, gl.STATIC_DRAW);
 
     return {
         buffer,
         numComponents,
-        componentType: 'float' === componentType ? gl.FLOAT : gl.UNSIGNED_BYTE,
-        normalize: 'float' !== componentType
+        componentType,
+        normalize,
     }
 };

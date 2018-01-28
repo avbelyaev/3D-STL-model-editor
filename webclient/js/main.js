@@ -13,20 +13,20 @@ let lastMouseX = 0;
 let lastMouseY = 0;
 
 
-const normalizeX = (posX) => {
-    return (posX - gl.canvas.clientWidth / 2);
-};
-
-const normalizeY = (posY) => {
-    return -(posY - gl.canvas.clientHeight / 2);
-};
+// const normalizeX = (posX) => {
+//     return (posX - gl.canvas.clientWidth / 2);
+// };
+//
+// const normalizeY = (posY) => {
+//     return -(posY - gl.canvas.clientHeight / 2);
+// };
 
 const handleMouseDown = (event) => {
     console.log("Down");
 
     mouseDown = true;
-    lastMouseX = normalizeX(event.clientX);
-    lastMouseY = normalizeY(event.clientY);
+    lastMouseX = event.clientX;
+    lastMouseY = event.clientY;
     console.log("lastX: " + lastMouseX + " lastY: " + lastMouseY);
 };
 
@@ -41,8 +41,11 @@ const handleMouseMove = (event) => {
     if (!mouseDown) {
         return;
     }
-    const newX = normalizeX(event.clientX);
-    const newY = normalizeY(event.clientY);
+    const newX = event.clientX;
+    const newY = event.clientY;
+
+    figureTranslation[0] = newX / gl.canvas.clientWidth * 800 - 400;
+    figureTranslation[1] = -1 * (newY / gl.canvas.clientHeight * 600 - 300);
 
     // const deltaX = newX - lastMouseX;
     // const deltaY = newY - lastMouseY;
@@ -77,7 +80,7 @@ const fsSource = `
     }
   `;
 
-const translation = [0, 0, 300];
+const translation = [100, 100, 300];
 const rotation = [0, 1];
 let figureAngleInRadians = 0;
 let camAngleRadians = 0;
@@ -177,6 +180,8 @@ function initMatrices(isMovable) {
     return modelViewProjection;
 }
 
+let poly;
+
 function drawScene() {
 
     const w = gl.canvas.width;
@@ -186,6 +191,15 @@ function drawScene() {
 
     gl.clearColor(0.3, 0.3, 0.3, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+
+    const tmpModel = makeModel(poly.movable);
+    mat4.translate(tmpModel, tmpModel, [-100, 0, 100]);
+    const tmpView = makeView();
+    const tmpProj = makeProjection();
+    const modelView = mat4.multiply(mat4.create(), tmpView, tmpModel);
+    const modelViewProjection = mat4.multiply(mat4.create(), tmpProj, modelView);
+    poly.draw(modelViewProjection);
 
     figures.forEach((f) => {
 
@@ -204,6 +218,8 @@ function drawScene() {
         // draw
         gl.drawArrays(f.drawMode, 0, f.numElements);
     });
+
+
 
     requestAnimationFrame(drawScene);
 }
@@ -238,6 +254,20 @@ function main() {
     triangle.setShaderSource(vsSource, fsSource);
     triangle.initFigure();
     figures.push(triangle);
+
+    poly = new Polygon(gl);
+    poly.setVertices([
+        0, 0, 0,
+        100, 0, 0,
+        0, 200, 100
+    ]);
+    poly.setColors([
+        255, 0, 0,
+        0, 255, 0,
+        0, 0, 255
+    ]);
+    poly.setShaderSource(vsSource, fsSource);
+    poly.initFigure();
 
 
     requestAnimationFrame(drawScene);

@@ -167,7 +167,7 @@ class Triangle {
             0, 150,  30,
             0, 150,   0
         ];
-        return createBufferInfo(gl, this.positions, numComponents, 'float');
+        return createBufferInfo(gl, new Float32Array(this.positions), numComponents, gl.FLOAT, false);
     }
 
     initColorBuffer(gl, numComponents) {
@@ -300,6 +300,6 @@ class Triangle {
             160, 160, 220,
             160, 160, 220
         ];
-        return createBufferInfo(gl, this.colors, numComponents, 'uint');
+        return createBufferInfo(gl, new Uint8Array(this.colors), numComponents, gl.UNSIGNED_BYTE, true);
     }
 }
