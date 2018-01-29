@@ -13,14 +13,6 @@ let lastMouseX = 0;
 let lastMouseY = 0;
 
 
-// const normalizeX = (posX) => {
-//     return (posX - gl.canvas.clientWidth / 2);
-// };
-//
-// const normalizeY = (posY) => {
-//     return -(posY - gl.canvas.clientHeight / 2);
-// };
-
 const handleMouseDown = (event) => {
     console.log("Down");
 
@@ -37,6 +29,10 @@ const handleMouseUp = (event) => {
     console.log("lastX: " + lastMouseX + " lastY: " + lastMouseY);
 };
 
+let moonRotationMatrix;
+
+const degToRad = (x) => x * Math.PI / 180;
+
 const handleMouseMove = (event) => {
     if (!mouseDown) {
         return;
@@ -44,15 +40,39 @@ const handleMouseMove = (event) => {
     const newX = event.clientX;
     const newY = event.clientY;
 
-    figureTranslation[0] = newX / gl.canvas.clientWidth * 800 - 400;
-    figureTranslation[1] = -1 * (newY / gl.canvas.clientHeight * 600 - 300);
+    const deltaX = newX - lastMouseX;
+    const newRotationMatrix = mat4.create();
+    mat4.rotateY(newRotationMatrix, newRotationMatrix, degToRad(deltaX / 10));
 
-    // const deltaX = newX - lastMouseX;
-    // const deltaY = newY - lastMouseY;
+    const deltaY = newY - lastMouseY;
+    mat4.rotateX(newRotationMatrix, newRotationMatrix, degToRad(deltaY / 10));
+
+    mat4.multiply(moonRotationMatrix, newRotationMatrix, moonRotationMatrix);
+
+    // figureTranslation[0] = newX / gl.canvas.clientWidth * 800 - 400;
+    // figureTranslation[1] = -1 * (newY / gl.canvas.clientHeight * 600 - 300);
 
     lastMouseX = newX;
     lastMouseY = newY;
 };
+
+const vsCustomSource = `
+    attribute vec3 aPosition;
+    attribute vec3 aColor;
+    attribute vec2 aCursor;
+    
+    uniform mat4 uModel;
+    uniform mat4 uView;
+    uniform mat4 uProjection;
+    
+    varying vec3 fragColor;
+    
+    void main() {
+        gl_Position = uMatrix * vec4(aPosition, 1);
+      
+        fragColor = aColor;
+    }
+  `;
 
 const vsSource = `
     attribute vec3 aPosition;
@@ -152,6 +172,7 @@ function makeModel(isMovable) {
     let rotated = mat4.rotateX(translated, translated, 0);
     rotated = mat4.rotateY(rotated, rotated, -angle);
     rotated = mat4.rotateZ(rotated, rotated, 0);
+    mat4.multiply(rotated, moonRotationMatrix, rotated);
 
     return rotated;
 }
@@ -269,6 +290,8 @@ function main() {
     poly.setShaderSource(vsSource, fsSource);
     poly.initFigure();
 
+
+    moonRotationMatrix = mat4.create();
 
     requestAnimationFrame(drawScene);
 }
