@@ -8,16 +8,19 @@ const initGL = () => {
     canvas.height = 700;
 
     const gl = canvas.getContext("webgl");
+    if (!gl) {
+        throw new Error("Unable to initialize WebGL. Your browser or machine may not support it.");
+    }
 
     canvas.onmousedown = handleMouseDown;
     document.onmouseup = handleMouseUp;
     document.onmousemove = handleMouseMove;
     document.addEventListener('mousewheel', handleMouseWheel);
+    document.addEventListener('click', handleKeyboard);
+    document.oncontextmenu = function (e) {
+        //prevent context menu pop up
+        return false;
+    };
 
-    if (!gl) {
-        throw new Error("Unable to initialize WebGL. Your browser or machine may not support it.");
-
-    } else {
-        return gl;
-    }
+    return gl;
 };

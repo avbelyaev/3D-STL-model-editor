@@ -1,6 +1,7 @@
 
 let gl, figures = [];
 
+const BTN_LEFT = 0, BTN_RIGHT = 2;
 
 const logr = (text) => {
     const log = document.getElementById("logr");
@@ -27,7 +28,6 @@ const figureTranslation = [0, 0, 0];
 
 const handleMouseDown = (event) => {
     console.log("Down");
-
     mouseDown = true;
     lastMouseX = event.clientX;
     lastMouseY = event.clientY;
@@ -51,15 +51,26 @@ const handleMouseMove = (event) => {
     const newY = event.clientY;
 
     const deltaX = newX - lastMouseX;
-    camAngleDeg -= deltaX / 5;
-
     const deltaY = newY - lastMouseY;
-    camHeight += deltaY;
-    if (camHeight > 600) {
-        camHeight = 600;
-    }
-    if (camHeight < -600) {
-        camHeight = -600;
+
+    if (BTN_LEFT === event.button) {
+        if (event.shiftKey) {
+            figureTranslation[1] -= deltaY;
+
+        } else {
+            camAngleDeg -= deltaX / 5;
+
+            camHeight += deltaY;
+            if (camHeight > 600) {
+                camHeight = 600;
+            }
+            if (camHeight < -600) {
+                camHeight = -600;
+            }
+        }
+
+    } else if (BTN_RIGHT === event.button) {
+        console.log('right button');
     }
 
     lastMouseX = newX;
@@ -74,6 +85,16 @@ const handleMouseWheel = (e) => {
     }
     if (camDistance < 50) {
         camDistance = 50;
+    }
+};
+
+const handleKeyboard = (e) => {
+    if (e.shiftKey) {
+        logr('shift');
+
+
+    } else if (e.ctrlKey) {
+        logr('ctrl');
     }
 };
 
