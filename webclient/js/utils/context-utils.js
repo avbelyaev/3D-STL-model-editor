@@ -12,6 +12,7 @@ const initGL = () => {
     canvas.onmousedown = handleMouseDown;
     document.onmouseup = handleMouseUp;
     document.onmousemove = handleMouseMove;
+    document.addEventListener('mousewheel', handleMouseWheel);
 
     if (!gl) {
         throw new Error("Unable to initialize WebGL. Your browser or machine may not support it.");

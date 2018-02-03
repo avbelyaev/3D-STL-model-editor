@@ -13,6 +13,18 @@ let lastMouseX = 0;
 let lastMouseY = 0;
 
 
+let camDistance = 200;
+let camAngleDeg = 30;
+let camHeight = 200;
+const camPosition = [300, 200, 300];
+
+
+let figureAngleInRadians = 0;
+let figureScale = 1;
+const figureRotation = [0, 1];
+const figureTranslation = [0, 0, 0];
+
+
 const handleMouseDown = (event) => {
     console.log("Down");
 
@@ -29,8 +41,6 @@ const handleMouseUp = (event) => {
     console.log("lastX: " + lastMouseX + " lastY: " + lastMouseY);
 };
 
-let moonRotationMatrix;
-
 const degToRad = (x) => x * Math.PI / 180;
 
 const handleMouseMove = (event) => {
@@ -41,38 +51,31 @@ const handleMouseMove = (event) => {
     const newY = event.clientY;
 
     const deltaX = newX - lastMouseX;
-    const newRotationMatrix = mat4.create();
-    mat4.rotateY(newRotationMatrix, newRotationMatrix, degToRad(deltaX / 10));
+    camAngleDeg -= deltaX / 5;
 
     const deltaY = newY - lastMouseY;
-    mat4.rotateX(newRotationMatrix, newRotationMatrix, degToRad(deltaY / 10));
-
-    mat4.multiply(moonRotationMatrix, newRotationMatrix, moonRotationMatrix);
-
-    // figureTranslation[0] = newX / gl.canvas.clientWidth * 800 - 400;
-    // figureTranslation[1] = -1 * (newY / gl.canvas.clientHeight * 600 - 300);
+    camHeight += deltaY;
+    if (camHeight > 600) {
+        camHeight = 600;
+    }
+    if (camHeight < -600) {
+        camHeight = -600;
+    }
 
     lastMouseX = newX;
     lastMouseY = newY;
 };
 
-const vsCustomSource = `
-    attribute vec3 aPosition;
-    attribute vec3 aColor;
-    attribute vec2 aCursor;
-    
-    uniform mat4 uModel;
-    uniform mat4 uView;
-    uniform mat4 uProjection;
-    
-    varying vec3 fragColor;
-    
-    void main() {
-        gl_Position = uMatrix * vec4(aPosition, 1);
-      
-        fragColor = aColor;
+const handleMouseWheel = (e) => {
+    let delta = e.wheelDelta ? e.wheelDelta : -e.detail;
+    camDistance += parseInt(delta) / 10;
+    if (camDistance > 500) {
+        camDistance = 500;
     }
-  `;
+    if (camDistance < 50) {
+        camDistance = 50;
+    }
+};
 
 const vsSource = `
     attribute vec3 aPosition;
@@ -100,44 +103,34 @@ const fsSource = `
     }
   `;
 
-const translation = [100, 100, 300];
-const rotation = [0, 1];
-let figureAngleInRadians = 0;
-let camAngleRadians = 0;
-let scale = 1;
-const figureTranslation = [0, 0, -200];
-
 const changeRange = () => {
-    const rngX = document.getElementById("rngX");
-    translation[0] = rngX.value;
+    const camDistElem = document.getElementById("camDist");
+    camDistance = parseInt(camDistElem.value);
 
-    const rngY = document.getElementById("rngY");
-    translation[1] = rngY.value;
+    const camHeightElem = document.getElementById("camHeight");
+    camHeight = parseInt(camHeightElem.value);
 
-    const rngZ = document.getElementById("rngZ");
-    translation[2] = rngZ.value;
-
-    const rngA = document.getElementById("rngA");
-    figureAngleInRadians = rngA.value * Math.PI / 180;
-    rotation[0] = Math.sin(figureAngleInRadians);
-    rotation[1] = Math.cos(figureAngleInRadians);
-
-    const rngS = document.getElementById("rngS");
-    scale = rngS.value;
-
-    const rngCam = document.getElementById("rngCam");
-    camAngleRadians = rngCam.value * Math.PI / 180;
+    const camAngleElem = document.getElementById("camAngle");
+    camAngleDeg = parseInt(camAngleElem.value);
 };
 
 const moveFigure = () => {
-    const rngX = document.getElementById("fX");
-    figureTranslation[0] = rngX.value;
+    const figXElem = document.getElementById("figX");
+    figureTranslation[0] = figXElem.value;
 
-    const rngY = document.getElementById("fY");
-    figureTranslation[1] = rngY.value;
+    const figYElem = document.getElementById("figY");
+    figureTranslation[1] = figYElem.value;
 
-    const rngZ = document.getElementById("fZ");
-    figureTranslation[2] = rngZ.value;
+    const figZElem = document.getElementById("figZ");
+    figureTranslation[2] = figZElem.value;
+
+    const figAngleElem = document.getElementById("figAngle");
+    figureAngleInRadians = figAngleElem.value * Math.PI / 180;
+    figureRotation[0] = Math.sin(figureAngleInRadians);
+    figureRotation[1] = Math.cos(figureAngleInRadians);
+
+    const figScaleElem = document.getElementById("figScale");
+    figureScale = figScaleElem.value;
 };
 
 
@@ -166,13 +159,12 @@ function makeModel(isMovable) {
     const figureMove = isMovable ? figureTranslation : [0, 0, 0];
     const angle = isMovable ? figureAngleInRadians : 0;
 
-    const model = mat4.create();
-    const scaled = mat4.scale(model, model, [scale, scale, scale]);
+    const modelMatrix = mat4.create();
+    const scaled = mat4.scale(modelMatrix, modelMatrix, [figureScale, figureScale, figureScale]);
     const translated = mat4.translate(scaled, scaled, figureMove); // place objects at center
     let rotated = mat4.rotateX(translated, translated, 0);
     rotated = mat4.rotateY(rotated, rotated, -angle);
     rotated = mat4.rotateZ(rotated, rotated, 0);
-    mat4.multiply(rotated, moonRotationMatrix, rotated);
 
     return rotated;
 }
@@ -182,9 +174,17 @@ function makeModel(isMovable) {
  * @returns view matrix
  */
 function makeView() {
-    let cameraMatrix = mat4.rotateY(mat4.create(), mat4.create(), camAngleRadians);
-    cameraMatrix = mat4.translate(cameraMatrix, cameraMatrix, [translation[0], translation[1], translation[2]]);
-    let viewMatrix = mat4.invert(cameraMatrix, cameraMatrix);
+    let viewMatrix;
+    {
+        camPosition[0] = Math.sin(degToRad(camAngleDeg)) * camDistance;
+        camPosition[1] = camHeight;
+        camPosition[2] = Math.cos(degToRad(camAngleDeg)) * camDistance;
+    }
+
+    let eye = [camPosition[0], camPosition[1], camPosition[2]];
+    let lookAtPosition = [0, 3, 0];
+    viewMatrix = mat4.lookAt(mat4.create(), eye, lookAtPosition, [0, 1, 0]);
+
     return viewMatrix;
 }
 
@@ -252,7 +252,7 @@ function main() {
     gl.clearColor(0.3, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    gl.enable(gl.DEPTH_TEST); // check z-buffer for each pixel before rasterizing
+    gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
 
 
@@ -290,8 +290,6 @@ function main() {
     poly.setShaderSource(vsSource, fsSource);
     poly.initFigure();
 
-
-    moonRotationMatrix = mat4.create();
 
     requestAnimationFrame(drawScene);
 }

@@ -56,6 +56,7 @@ const createBufferInfo = (gl, array, numComponents, componentType, normalize) =>
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ARRAY_BUFFER, array, gl.STATIC_DRAW);
 
+
     return {
         buffer,
         numComponents,
