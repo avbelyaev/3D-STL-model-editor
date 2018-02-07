@@ -6,7 +6,7 @@ class Triangle {
     constructor(gl) {
         this.gl = gl;
 
-        logr("Triangle");
+        log("Triangle");
     }
 
     setShaderSource(vertexShaderSource, fragmentShaderSource) {

@@ -5,7 +5,7 @@
 class Polygon {
     constructor(gl) {
         this.gl = gl;
-        logr('Poly');
+        log('Poly');
     }
 
     initFigure() {

@@ -1,102 +1,19 @@
 
 let gl, figures = [];
 
-const BTN_LEFT = 0, BTN_RIGHT = 2;
-
-const logr = (text) => {
-    const log = document.getElementById("logr");
-    log.textContent += (text + "\n");
-    console.log(text);
-};
-
-let mouseDown = false;
-let lastMouseX = 0;
-let lastMouseY = 0;
-
-
 let camDistance = 200;
 let camAngleDeg = 30;
 let camHeight = 200;
 const camPosition = [300, 200, 300];
 
+const log = (text) => {
+    console.log(text);
+};
 
 let figureAngleInRadians = 0;
 let figureScale = 1;
-const figureRotation = [0, 1];
 const figureTranslation = [0, 0, 0];
 
-
-const handleMouseDown = (event) => {
-    console.log("Down");
-    mouseDown = true;
-    lastMouseX = event.clientX;
-    lastMouseY = event.clientY;
-    console.log("lastX: " + lastMouseX + " lastY: " + lastMouseY);
-};
-
-const handleMouseUp = (event) => {
-    console.log("Up");
-
-    mouseDown = false;
-    console.log("lastX: " + lastMouseX + " lastY: " + lastMouseY);
-};
-
-const degToRad = (x) => x * Math.PI / 180;
-
-const handleMouseMove = (event) => {
-    if (!mouseDown) {
-        return;
-    }
-    const newX = event.clientX;
-    const newY = event.clientY;
-
-    const deltaX = newX - lastMouseX;
-    const deltaY = newY - lastMouseY;
-
-    if (BTN_LEFT === event.button) {
-        if (event.shiftKey) {
-            figureTranslation[1] -= deltaY;
-
-        } else {
-            camAngleDeg -= deltaX / 5;
-
-            camHeight += deltaY;
-            if (camHeight > 600) {
-                camHeight = 600;
-            }
-            if (camHeight < -600) {
-                camHeight = -600;
-            }
-        }
-
-    } else if (BTN_RIGHT === event.button) {
-        console.log('right button');
-    }
-
-    lastMouseX = newX;
-    lastMouseY = newY;
-};
-
-const handleMouseWheel = (e) => {
-    let delta = e.wheelDelta ? e.wheelDelta : -e.detail;
-    camDistance += parseInt(delta) / 10;
-    if (camDistance > 500) {
-        camDistance = 500;
-    }
-    if (camDistance < 50) {
-        camDistance = 50;
-    }
-};
-
-const handleKeyboard = (e) => {
-    if (e.shiftKey) {
-        logr('shift');
-
-
-    } else if (e.ctrlKey) {
-        logr('ctrl');
-    }
-};
 
 const vsSource = `
     attribute vec3 aPosition;
@@ -146,9 +63,7 @@ const moveFigure = () => {
     figureTranslation[2] = figZElem.value;
 
     const figAngleElem = document.getElementById("figAngle");
-    figureAngleInRadians = figAngleElem.value * Math.PI / 180;
-    figureRotation[0] = Math.sin(figureAngleInRadians);
-    figureRotation[1] = Math.cos(figureAngleInRadians);
+    figureAngleInRadians = degToRad(parseInt(figAngleElem.value));
 
     const figScaleElem = document.getElementById("figScale");
     figureScale = figScaleElem.value;
@@ -211,9 +126,7 @@ function makeView() {
 
 function initMatrices(isMovable) {
     let model = makeModel(isMovable);
-
     let view = makeView();
-
     let projection = makeProjection();
 
     const modelView = mat4.multiply(mat4.create(), view, model);
@@ -268,7 +181,7 @@ function drawScene() {
 
 
 function main() {
-    gl = initGL();
+    gl = initGLControls();
 
     gl.clearColor(0.3, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -316,12 +229,12 @@ function main() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-    logr("DOM content loaded");
+    log("DOM content loaded");
     try {
         main();
 
     } catch (e) {
-        logr('Error: ' + e.message + '\n' + e.stack);
+        log('Error: ' + e.message + '\n' + e.stack);
     }
 }, false);
 

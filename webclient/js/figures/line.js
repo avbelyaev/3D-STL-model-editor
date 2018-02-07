@@ -8,7 +8,7 @@ class Line {
         this.positions = startPointVec3.concat(endPointVec3);
         this.colors = colorVec3.concat(colorVec3);  // both vertices have same color
 
-        logr("Axis: pos: [" + this.positions + "] col: [" + this.colors + "]");
+        log("Axis: pos: [" + this.positions + "] col: [" + this.colors + "]");
     }
 
     setShaderSource(vertexShaderSource, fragmentShaderSource) {

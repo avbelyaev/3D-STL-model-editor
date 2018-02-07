@@ -3,13 +3,15 @@
  */
 
 class MouseControls {
-    constructor() {
+    constructor(canvas) {
         // when this class'es functions are used as event handlers,
         // 'this' in these some functions start pointing to document, some to canvas
         // so mouse control's vars are static for encapsulation purpose
         MouseControls.mouseDown = false;
         MouseControls.lastMouseX = 0;
         MouseControls.lastMouseY = 0;
+
+        MouseControls.setEventListeners(canvas);
     }
 
     static handleMouseDown(event) {
@@ -71,6 +73,17 @@ class MouseControls {
         if (camDistance < 50) {
             camDistance = 50;
         }
+    };
+
+    static setEventListeners(canvas) {
+        canvas.onmousedown = MouseControls.handleMouseDown;
+        document.onmouseup = MouseControls.handleMouseUp;
+        document.onmousemove = MouseControls.handleMouseMove;
+        document.addEventListener('mousewheel', MouseControls.handleMouseWheel);
+        // disable context menu pop up
+        document.addEventListener('contextmenu', function (e) {
+            return false;
+        });
     };
 
     static get BTN_LEFT() {

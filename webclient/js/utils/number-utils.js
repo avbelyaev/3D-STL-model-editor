@@ -13,3 +13,5 @@ function getRandomFloat(min, max) {
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
+
+const degToRad = (x) => x * Math.PI / 180;
