@@ -17,3 +17,6 @@ open /Applications/Google\ Chrome.app --args --allow-file-access-from-files
 
 # gl-matrix lib should be downloaded, compiled and placed at /webclient/js/lib/gl-matrix.js
 http://glmatrix.net/
+
+# logger should be placed at /webclient/js/lib/Logger.js
+http://www.songho.ca/misc/logger/files/Logger.js
