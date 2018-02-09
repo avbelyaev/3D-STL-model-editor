@@ -6,7 +6,7 @@
 const animate = (renderer, scene, camera) => {
     requestAnimationFrame( animate );
 
-    camera.lookAt(0, 0, 0);
+    camera.lookAtPos(0, 0, 0);
 
     renderer.render(scene, camera);
 };
@@ -26,7 +26,7 @@ const main = () => {
         zNear,
         zFar
     );
-    camera.position.set(2, 3, 15);
+    camera.positionVec.set(2, 3, 15);
 
 
     const axes = THREE.AxisHelper(30);

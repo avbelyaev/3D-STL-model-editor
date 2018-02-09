@@ -1,10 +1,7 @@
 
-let gl, figures = [];
-
-let camDistance = 200;
-let camAngleDeg = 30;
-let camHeight = 200;
-const camPosition = [300, 200, 300];
+let gl;
+const figures = [];
+let cam;
 
 const log = (text) => {
     console.log(text);
@@ -40,16 +37,17 @@ const fsSource = `
       // gl_FragColor = vec4(1.0, 0.0, 0, 0);
     }
   `;
-
+// 6-10. 3 modula poned s 12
 const changeRange = () => {
     const camDistElem = document.getElementById("camDist");
-    camDistance = parseInt(camDistElem.value);
+    cam.distance = parseInt(camDistElem.value);
 
     const camHeightElem = document.getElementById("camHeight");
-    camHeight = parseInt(camHeightElem.value);
+    cam.height = parseInt(camHeightElem.value);
 
     const camAngleElem = document.getElementById("camAngle");
-    camAngleDeg = parseInt(camAngleElem.value);
+    cam.angleDeg = parseInt(camAngleElem.value);
+    cam.updatePosition();
 };
 
 const moveFigure = () => {
@@ -111,15 +109,9 @@ function makeModel(isMovable) {
  */
 function makeView() {
     let viewMatrix;
-    {
-        camPosition[0] = Math.sin(degToRad(camAngleDeg)) * camDistance;
-        camPosition[1] = camHeight;
-        camPosition[2] = Math.cos(degToRad(camAngleDeg)) * camDistance;
-    }
-
-    let eye = [camPosition[0], camPosition[1], camPosition[2]];
-    let lookAtPosition = [0, 3, 0];
-    viewMatrix = mat4.lookAt(mat4.create(), eye, lookAtPosition, [0, 1, 0]);
+    let eye = cam.positionVec;
+    let lookAtPosition = cam.lookAtPos;
+    viewMatrix = mat4.lookAtPos(mat4.create(), eye, lookAtPosition, cam.top);
 
     return viewMatrix;
 }
@@ -179,9 +171,26 @@ function drawScene() {
     requestAnimationFrame(drawScene);
 }
 
+const initCamera = () => {
+    const distance = 200;
+    const angleDeg = 30;
+    const height = 200;
+    const position = [300, 200, 300];
+
+    const camera = new Camera(distance, angleDeg, height, position);
+
+    // for lookAtMatrix only
+    const lookAt = [0, 3, 0];
+    const straightTop = [0, 1, 0];
+    camera.setLookAtMatrix(lookAt, straightTop);
+
+    return camera;
+};
+
 
 function main() {
     gl = initGLControls();
+    cam = initCamera();
 
     gl.clearColor(0.3, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
