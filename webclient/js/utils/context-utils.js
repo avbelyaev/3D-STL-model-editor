@@ -12,7 +12,8 @@ const initGLControls = () => {
         throw new Error("Unable to initialize WebGL. Your browser or machine may not support it.");
     }
 
-    new MouseControls(canvas);
+    const controls = new MouseControls(canvas);
+    controls.enabled = true;
 
     return gl;
 };

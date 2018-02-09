@@ -37,7 +37,7 @@ const fsSource = `
       // gl_FragColor = vec4(1.0, 0.0, 0, 0);
     }
   `;
-// 6-10. 3 modula poned s 12
+
 const changeRange = () => {
     const camDistElem = document.getElementById("camDist");
     cam.distance = parseInt(camDistElem.value);
