@@ -21,27 +21,21 @@ class Camera {
         this.positionVec[2] = Math.cos(degToRad(this.angleDeg)) * this.distance;
     }
 
-    incAngle(angleDegDelta) {
-        Camera.validateValue(angleDegDelta);
-
-        this.angleDeg += parseInt(angleDegDelta);
+    updateAngleDeg(updateFunc) {
+        this.angleDeg = updateFunc(this.angleDeg);
         this.updatePosition();
     }
 
-    incDistance(distanceDelta) {
-        Camera.validateValue(distanceDelta);
-
-        this.distance += distanceDelta;
+    updateDistance(updateFunc) {
+        this.distance = updateFunc(this.distance);
 
         this.distance = this.distance < CAM_DIST_MAX ? this.distance : CAM_DIST_MAX;
         this.distance = this.distance > CAM_DIST_MIN ? this.distance : CAM_DIST_MIN;
         this.updatePosition();
     }
 
-    incHeight(heightAmount) {
-        Camera.validateValue(heightAmount);
-
-        this.height += heightAmount;
+    updateHeight(updateFunc) {
+        this.height = updateFunc(this.height);
 
         this.height = this.height < CAM_HEIGHT_MAX ? this.height : CAM_HEIGHT_MAX;
         this.height = this.height > CAM_HEIGHT_MIN ? this.height : CAM_HEIGHT_MIN;
@@ -53,12 +47,12 @@ class Camera {
         this.top = top;
     }
 
-    static validateValue(value) {
-        try {
-            parseInt(value);
+    static setValueFunction(newValue) {
+        // currentValue is ignored
+        return (currValue) => parseInt(newValue);
+    };
 
-        } catch (e) {
-            throw Error('Invalid value was provided to camera');
-        }
-    }
+    static incValueFunction(newValue) {
+        return (currValue) => currValue + parseInt(newValue);
+    };
 }

@@ -15,7 +15,6 @@ class MouseControls {
         MouseControls.lastMouseY = 0;
 
         MouseControls.updateEventListeners(canvas);
-        this.enabled = true;
     }
 
     static handleMouseDown(event) {
@@ -50,8 +49,8 @@ class MouseControls {
                 figureTranslation[2] += deltaY;
 
             } else {
-                cam.incAngle(-1 * deltaX / 5);
-                cam.incHeight(deltaY);
+                cam.updateAngleDeg(Camera.incValueFunction(-1 * deltaX / 5));
+                cam.updateHeight(Camera.incValueFunction(deltaY));
             }
 
         } else if (MOUSE_BTN_RIGHT_CHROME === event.button) {
@@ -64,14 +63,14 @@ class MouseControls {
 
     static handleMouseWheel(event) {
         let delta = event.wheelDelta ? event.wheelDelta : -event.detail;
-        cam.incDistance(delta / 10);
+        cam.updateDistance(Camera.incValueFunction(delta / 10));
     };
 
     static updateEventListeners(canvas) {
-        canvas.onmousedown = this.enabled ? MouseControls.handleMouseDown : () => {};
-        document.onmouseup = this.enabled ? MouseControls.handleMouseUp : () => {};
-        document.onmousemove = this.enabled ? MouseControls.handleMouseMove : () => {};
-        document.addEventListener('mousewheel', this.enabled ? MouseControls.handleMouseWheel : () => {});
+        canvas.onmousedown = MouseControls.handleMouseDown;
+        document.onmouseup = MouseControls.handleMouseUp;
+        document.onmousemove = MouseControls.handleMouseMove;
+        document.addEventListener('mousewheel', MouseControls.handleMouseWheel);
         // disable context menu pop up
         document.addEventListener('contextmenu', function (e) {
             return false;

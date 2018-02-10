@@ -38,16 +38,15 @@ const fsSource = `
     }
   `;
 
-const changeRange = () => {
+const updateCamera = () => {
     const camDistElem = document.getElementById("camDist");
-    cam.distance = parseInt(camDistElem.value);
+    cam.updateDistance(Camera.setValueFunction(camDistElem.value));
 
     const camHeightElem = document.getElementById("camHeight");
-    cam.height = parseInt(camHeightElem.value);
+    cam.updateHeight(Camera.setValueFunction(camHeightElem.value));
 
     const camAngleElem = document.getElementById("camAngle");
-    cam.angleDeg = parseInt(camAngleElem.value);
-    cam.updatePosition();
+    cam.updateAngleDeg(Camera.setValueFunction(camAngleElem.value));
 };
 
 const moveFigure = () => {

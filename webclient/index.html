@@ -37,9 +37,9 @@
                     <input type="button" value="Refresh" onClick="window.location.reload(true)">
 
                     <p>Camera controls:</p>
-                    <p>Dist:<input id="camDist" type="range" min="50" max="500" step="10" value="150" oninput="changeRange()"></p>
-                    <p>H:<input id="camHeight" type="range" min="-600" max="600" step="10" value="100" oninput="changeRange()"></p>
-                    <p>Ang:<input id="camAngle" type="range" min="0" max="360" step="1" value="30" oninput="changeRange()"></p>
+                    <p>Dist:<input id="camDist" type="range" min="50" max="500" step="10" value="150" oninput="updateCamera()"></p>
+                    <p>H:<input id="camHeight" type="range" min="-600" max="600" step="10" value="100" oninput="updateCamera()"></p>
+                    <p>Ang:<input id="camAngle" type="range" min="0" max="360" step="1" value="30" oninput="updateCamera()"></p>
 
                     <p>Figure controls:</p>
                     <p>X:<input id="figX" type="range" min="-500" max="500" step="10" value="0" oninput="moveFigure()"></p>

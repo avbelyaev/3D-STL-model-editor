@@ -13,7 +13,6 @@ const initGLControls = () => {
     }
 
     const controls = new MouseControls(canvas);
-    controls.enabled = true;
 
     return gl;
 };
