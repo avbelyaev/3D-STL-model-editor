@@ -51,19 +51,19 @@ const updateCamera = () => {
 
 const moveFigure = () => {
     const figXElem = document.getElementById("figX");
-    figureTranslation[0] = figXElem.value;
+    figureTranslation[0] = parseInt(figXElem.value);
 
     const figYElem = document.getElementById("figY");
-    figureTranslation[1] = figYElem.value;
+    figureTranslation[1] = parseInt(figYElem.value);
 
     const figZElem = document.getElementById("figZ");
-    figureTranslation[2] = figZElem.value;
+    figureTranslation[2] = parseInt(figZElem.value);
 
     const figAngleElem = document.getElementById("figAngle");
     figureAngleInRadians = degToRad(parseInt(figAngleElem.value));
 
     const figScaleElem = document.getElementById("figScale");
-    figureScale = figScaleElem.value;
+    figureScale = parseInt(figScaleElem.value);
 };
 
 
@@ -198,17 +198,17 @@ function main() {
     gl.depthFunc(gl.LEQUAL);
 
 
-    const axisX = new Line(gl, [-400, 0, 0], [400, 0, 0], [255, 0, 0]);
+    const axisX = new OldLine(gl, [-400, 0, 0], [400, 0, 0], [255, 0, 0]);
     axisX.setShaderSource(vsSource, fsSource);
     axisX.initFigure();
     figures.push(axisX);
 
-    const axisY = new Line(gl, [0, -400, 0], [0, 400, 0], [0, 255, 0]);
+    const axisY = new OldLine(gl, [0, -400, 0], [0, 400, 0], [0, 255, 0]);
     axisY.setShaderSource(vsSource, fsSource);
     axisY.initFigure();
     figures.push(axisY);
 
-    const axisZ = new Line(gl, [0, 0, -400], [0, 0, 400], [0, 0, 255]);
+    const axisZ = new OldLine(gl, [0, 0, -400], [0, 0, 400], [0, 0, 255]);
     axisZ.setShaderSource(vsSource, fsSource);
     axisZ.initFigure();
     figures.push(axisZ);

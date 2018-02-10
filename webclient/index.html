@@ -16,8 +16,9 @@
         <script src="js/matrix/matrix-stack.js"></script>
 
         <script src="js/figures/drawable.js"></script>
-        <script src="js/primitives/polygon.js"></script>
         <script src="js/figures/line.js"></script>
+        <script src="js/primitives/polygon.js"></script>
+        <script src="js/figures/old-line.js"></script>
         <script src="js/figures/triangle.js"></script>
         <script src="js/utils/shader-utils.js"></script>
         <script src="js/lib/gl-matrix.js"></script>
@@ -46,7 +47,7 @@
                     <p>Y:<input id="figY" type="range" min="-300" max="300" step="10" value="0" oninput="moveFigure()"></p>
                     <p>Z:<input id="figZ" type="range" min="-500" max="500" step="15" value="-200" oninput="moveFigure()"></p>
                     <p>Ang:<input id="figAngle" type="range" min="0" max="360" step="10" value="0" oninput="moveFigure()"></p>
-                    <p>S:<input id="figScale" type="range" min="0" max="10" step="0.1" value="1" oninput="moveFigure()"></p>
+                    <p>S:<input id="figScale" type="range" min="0.2" max="10" step="0.1" value="1" oninput="moveFigure()"></p>
                     <br>
 
                     <label id="logr"></label>
