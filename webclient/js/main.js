@@ -148,7 +148,7 @@ function initMatrices(isMovable) {
     return modelViewProjection;
 }
 
-let whiteLine, blackLine;
+let whiteLine, blackLine, yellowLine;
 
 
 function drawScene() {
@@ -162,11 +162,12 @@ function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 
-    whiteLine.__updateMatrices();
     whiteLine.translateBy([0, -50, 0]);
     whiteLine.draw();
 
-    blackLine.__updateMatrices();
+    yellowLine.translateBy([0, 100, 0]);
+    yellowLine.draw();
+
     blackLine.draw();
 
 
@@ -248,6 +249,12 @@ function main() {
     blackLine = new Line(gl, vsSourceExplicitMatrices, fsSource,
         [-100, 0, 100], [100, 0, -100], COLOR_BLACK);
     blackLine.init();
+
+    yellowLine = new Line(gl, vsSourceExplicitMatrices, fsSource,
+        [-50, 0, 100], [50, 0, -100], COLOR_YELLOW);
+    yellowLine.init();
+
+
 
     requestAnimationFrame(drawScene);
 }

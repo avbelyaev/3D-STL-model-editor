@@ -61,6 +61,7 @@ class Line extends Drawable {
         bindBufferToAttribute(this.attribLocations.vertexColor, this.colorBufferInfo);
 
         // uniforms
+        this.__updateMatrices();
         this.gl.uniformMatrix4fv(this.uniformLocations.uModel, false, this.mModel);
         this.gl.uniformMatrix4fv(this.uniformLocations.uView, false, this.mView);
         this.gl.uniformMatrix4fv(this.uniformLocations.uProjection, false, this.mProj);
@@ -73,10 +74,6 @@ class Line extends Drawable {
         this.mModel = makeModelMatrix(this.movable, this.scaleVec, this.translationVec, this.rotationVec);
         this.mView = makeView();
         this.mProj = makeProjection();
-        // copy current matrix-state into figure
-        // mat4.fromMat4(this.mModel, matrixModel);
-        // mat4.fromMat4(this.mView, matrixView);
-        // mat4.fromMat4(this.mProj, matrixProjection);
     }
 
     scaleBy(scaleCoefficient) {
@@ -86,7 +83,6 @@ class Line extends Drawable {
 
     translateBy(translateVec) {
         this.translationVec = translateVec;
-        this.__updateMatrices();
     }
 
     rotateBy(rotateVec, rotationPoint) {
