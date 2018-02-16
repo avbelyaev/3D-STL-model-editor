@@ -4,6 +4,7 @@
 
 class Drawable {
     constructor(gl, vsSource, fsSource) {
+        log('constructing Drawable');
         this.gl = gl;
         this.vsSource = vsSource;
         this.fsSource = fsSource;
@@ -11,27 +12,28 @@ class Drawable {
 
     init() {
         this.initProgram();
-        this.initVertexBuffer();
-        this.initColorBuffer();
-    }
-
-    initVertexBuffer() {
-        Drawable._throwNotImplementedError();
-    }
-  
-    initColorBuffer() {
-        Drawable._throwNotImplementedError();
+        this.initBuffers();
+        this.setShaderArgLocations();
     }
 
     initProgram() {
+        log('initProgram');
         this.program = initShaderProgram(this.gl, this.vsSource, this.fsSource);
     }
 
-    draw() {
-        Drawable._throwNotImplementedError();
+    initBuffers() {
+        Drawable.__throwNotImplementedError();
     }
 
-    static _throwNotImplementedError() {
+    setShaderArgLocations() {
+        Drawable.__throwNotImplementedError();
+    }
+
+    draw(mModel, mView, mProjection) {
+        Drawable.__throwNotImplementedError();
+    }
+
+    static __throwNotImplementedError() {
         throw new TypeError('Method is not implemented!');
     }
 }
