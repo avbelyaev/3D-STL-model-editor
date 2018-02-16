@@ -11,9 +11,18 @@ class Line extends Drawable {
         this.colors = [...color, ...color];
 
         log("Line: pos: [" + this.positions + "] col: [" + this.colors + "]");
+
+        // args for further model matrix creation
+        this.movable = true;
+        this.translationVec = [0, 0, 0];
+        this.scaleVec = [1, 1, 1];
+        this.rotationVec = [0, 0, 0];
+
+        // draw mode
+        this.drawMode = gl.LINE_LOOP;
     }
 
-    initBuffers() {
+    __initBuffers() {
         log('initBuffers');
 
         const posNumComponents = 3;
@@ -28,7 +37,7 @@ class Line extends Drawable {
         this.numElements = numElements;
     }
 
-    setShaderArgLocations() {
+    __setShaderArgLocations() {
         log('setShaderArgLocations');
 
         this.attribLocations = {
@@ -40,12 +49,9 @@ class Line extends Drawable {
             uView: this.gl.getUniformLocation(this.program, 'uView'),
             uProjection: this.gl.getUniformLocation(this.program, 'uProjection')
         };
-
-        this.drawMode = gl.LINE_LOOP;
-        this.movable = false;
     }
 
-    draw(matrixModel, matrixView, matrixProjection) {
+    draw() {
         this.gl.useProgram(this.program);
 
         // vertices
@@ -55,21 +61,32 @@ class Line extends Drawable {
         bindBufferToAttribute(this.attribLocations.vertexColor, this.colorBufferInfo);
 
         // uniforms
-        this.gl.uniformMatrix4fv(this.uniformLocations.uModel, false, matrixModel);
-        this.gl.uniformMatrix4fv(this.uniformLocations.uView, false, matrixView);
-        this.gl.uniformMatrix4fv(this.uniformLocations.uProjection, false, matrixProjection);
+        this.gl.uniformMatrix4fv(this.uniformLocations.uModel, false, this.mModel);
+        this.gl.uniformMatrix4fv(this.uniformLocations.uView, false, this.mView);
+        this.gl.uniformMatrix4fv(this.uniformLocations.uProjection, false, this.mProj);
 
         // draw
         this.gl.drawArrays(this.drawMode, 0, this.numElements);
     }
 
-    scaleBy(scaleVec) {
-        // get current matrix state
-        // scale it by
+    __updateMatrices() {
+        this.mModel = makeModelMatrix(this.movable, this.scaleVec, this.translationVec, this.rotationVec);
+        this.mView = makeView();
+        this.mProj = makeProjection();
+        // copy current matrix-state into figure
+        // mat4.fromMat4(this.mModel, matrixModel);
+        // mat4.fromMat4(this.mView, matrixView);
+        // mat4.fromMat4(this.mProj, matrixProjection);
     }
 
-    tanslateBy(translateVec) {
+    scaleBy(scaleCoefficient) {
+        // scale by all axes
+        this.scaleVec = [scaleCoefficient, scaleCoefficient, scaleCoefficient];
+    }
 
+    translateBy(translateVec) {
+        this.translationVec = translateVec;
+        this.__updateMatrices();
     }
 
     rotateBy(rotateVec, rotationPoint) {

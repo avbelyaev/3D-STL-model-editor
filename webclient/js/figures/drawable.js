@@ -10,26 +10,26 @@ class Drawable {
         this.fsSource = fsSource;
     }
 
-    init() {
-        this.initProgram();
-        this.initBuffers();
-        this.setShaderArgLocations();
+    draw() {
+        Drawable.__throwNotImplementedError();
     }
 
-    initProgram() {
+    init() {
+        this.__initProgram();
+        this.__initBuffers();
+        this.__setShaderArgLocations();
+    }
+
+    __initProgram() {
         log('initProgram');
         this.program = initShaderProgram(this.gl, this.vsSource, this.fsSource);
     }
 
-    initBuffers() {
+    __initBuffers() {
         Drawable.__throwNotImplementedError();
     }
 
-    setShaderArgLocations() {
-        Drawable.__throwNotImplementedError();
-    }
-
-    draw(mModel, mView, mProjection) {
+    __setShaderArgLocations() {
         Drawable.__throwNotImplementedError();
     }
 
