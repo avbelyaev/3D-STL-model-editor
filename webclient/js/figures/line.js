@@ -86,15 +86,6 @@ class Line extends Drawable {
     }
 
     rotateBy(rotateVec, rotationPoint) {
-        let currMatrix;
-        // push
-        let translated = currMatrix;
-        if (rotationPoint) {
-            translated = mat4.translate(translated, translated, rotationPoint);
-        }
-        mat4.rotateX(translated, translated, rotateVec[0]);
-        mat4.rotateY(translated, translated, rotateVec[1]);
-        mat4.rotateZ(translated, translated, rotateVec[2]);
-        // pop
+        this.rotationVec = rotateVec;
     }
 }
