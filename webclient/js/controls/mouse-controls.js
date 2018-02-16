@@ -49,7 +49,7 @@ class MouseControls {
                 figureTranslation[2] += deltaY;
 
             } else {
-                cam.updateAngleDeg(Camera.incValueFunction(-1 * deltaX / 5));
+                cam.updateAngleDeg(Camera.incValueFunction(-1 * deltaX / CAM_HORIZONTAL_ROTATION_DECELERATION));
                 cam.updateHeight(Camera.incValueFunction(deltaY));
             }
 
@@ -63,7 +63,7 @@ class MouseControls {
 
     static handleMouseWheel(event) {
         let delta = event.wheelDelta ? event.wheelDelta : -event.detail;
-        cam.updateDistance(Camera.incValueFunction(delta / 10));
+        cam.updateDistance(Camera.incValueFunction(delta / CAM_DIST_CHANGE_DECELERATION));
     };
 
     static updateEventListeners(canvas) {

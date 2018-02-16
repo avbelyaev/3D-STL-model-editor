@@ -6,6 +6,8 @@ const CAM_HEIGHT_MAX = 600;
 const CAM_HEIGHT_MIN = -600;
 const CAM_DIST_MAX = 500;
 const CAM_DIST_MIN = 50;
+const CAM_HORIZONTAL_ROTATION_DECELERATION = 4;
+const CAM_DIST_CHANGE_DECELERATION = 10;
 
 class Camera {
     constructor(initDist, initAngleDeg, initHeight, initPos) {

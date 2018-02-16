@@ -12,6 +12,25 @@ let figureScale = 1;
 const figureTranslation = [0, 0, 0];
 
 
+const vsSourceExplicitMatrices = `
+    attribute vec3 aPosition;
+    attribute vec3 aColor;
+    
+    uniform mat4 uModel;
+    uniform mat4 uView;
+    uniform mat4 uProjection;
+    
+    varying vec3 fragColor;
+    
+    void main() {
+        mat4 mvp = uProjection * uView * uModel;
+        gl_Position = mvp * vec4(aPosition, 1);
+      
+        fragColor = aColor;
+    }
+  `;
+
+
 const vsSource = `
     attribute vec3 aPosition;
     attribute vec3 aColor;
@@ -126,7 +145,9 @@ function initMatrices(isMovable) {
     return modelViewProjection;
 }
 
-let poly;
+// let poly;
+let newLine;
+
 
 function drawScene() {
 
@@ -139,13 +160,17 @@ function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 
-    const tmpModel = makeModel(poly.movable);
-    mat4.translate(tmpModel, tmpModel, [-100, 0, 100]);
-    const tmpView = makeView();
-    const tmpProj = makeProjection();
-    const modelView = mat4.multiply(mat4.create(), tmpView, tmpModel);
-    const modelViewProjection = mat4.multiply(mat4.create(), tmpProj, modelView);
-    poly.draw(modelViewProjection);
+    const matrixModel = makeModel(newLine.movable);
+    const matrixView = makeView();
+    const matrixProj = makeProjection();
+    newLine.draw(matrixModel, matrixView, matrixProj);
+    // const tmpModel = makeModel(poly.movable);
+    // mat4.translate(tmpModel, tmpModel, [-100, 0, 100]);
+    // const tmpView = makeView();
+    // const tmpProj = makeProjection();
+    // const modelView = mat4.multiply(mat4.create(), tmpView, tmpModel);
+    // const modelViewProjection = mat4.multiply(mat4.create(), tmpProj, modelView);
+    // poly.draw(modelViewProjection);
 
     figures.forEach((f) => {
 
@@ -218,19 +243,22 @@ function main() {
     triangle.initFigure();
     figures.push(triangle);
 
-    poly = new Polygon(gl);
-    poly.setVertices([
-        0, 0, 0,
-        100, 0, 0,
-        0, 200, 100
-    ]);
-    poly.setColors([
-        255, 0, 0,
-        0, 255, 0,
-        0, 0, 255
-    ]);
-    poly.setShaderSource(vsSource, fsSource);
-    poly.initFigure();
+    // poly = new Polygon(gl);
+    // poly.setVertices([
+    //     0, 0, 0,
+    //     100, 0, 0,
+    //     0, 200, 100
+    // ]);
+    // poly.setColors([
+    //     255, 0, 0,
+    //     0, 255, 0,
+    //     0, 0, 255
+    // ]);
+    // poly.setShaderSource(vsSource, fsSource);
+    // poly.initFigure();
+    newLine = new Line(gl, vsSourceExplicitMatrices, fsSource,
+        [100, 100, 100], [-100, -100, -100], [255, 0, 0]);
+    newLine.init();
 
 
     requestAnimationFrame(drawScene);
