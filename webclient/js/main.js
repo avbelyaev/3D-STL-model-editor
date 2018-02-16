@@ -166,13 +166,16 @@ function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 
-    whiteLine.translateBy([0, -50, 0]);
+    whiteLine.translateBy([50, -20, 50]);
+    whiteLine.rotateBy([0, -figureAngleInRadians / 3, 0], null);
     whiteLine.draw();
 
     yellowLine.translateBy([0, 100, 0]);
+    yellowLine.rotateBy([0, figureAngleInRadians, 0], null);
     yellowLine.draw();
 
     blackLine.draw();
+    blackLine.rotateBy([0, -figureAngleInRadians * 2, 0], null);
 
 
     axes.map(axis => axis.draw());
@@ -241,10 +244,10 @@ function main() {
     axes.push(axisZ);
 
 
-    const triangle = new Triangle(gl);
-    triangle.setShaderSource(vsSource, fsSource);
-    triangle.initFigure();
-    figures.push(triangle);
+    const figure = new Figure(gl);
+    figure.setShaderSource(vsSource, fsSource);
+    figure.initFigure();
+    figures.push(figure);
 
 
     whiteLine = new Line(gl, vsSourceExplicitMatrices, fsSource, [100, 0, 80], [-100, 0, -80], COLOR_WHITE);
@@ -255,6 +258,23 @@ function main() {
 
     yellowLine = new Line(gl, vsSourceExplicitMatrices, fsSource, [-50, 0, 100], [50, 0, -100], COLOR_YELLOW);
     yellowLine.init();
+
+    const trianglePositions = [
+        50, 0, 0,
+        0, 0, 100,
+        -100, 0, 0
+    ];
+    const colors = [
+        0, 0, 0,
+        0, 0, 0,
+        0, 0, 0
+    ];
+    // const colors = COLOR_GREEN;
+    // const colorsExtended = 3 === colors.length
+    //     ? Triangle.extendColors(colors, trianglePositions)
+    //     : colors;
+    const triangle = new Triangle(gl, vsSourceExplicitMatrices, fsSource, trianglePositions, colors);
+    triangle.init();
 
 
 
