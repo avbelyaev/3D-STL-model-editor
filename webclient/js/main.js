@@ -11,6 +11,9 @@ let figureAngleInRadians = 0;
 let figureScale = 1;
 const figureTranslation = [0, 0, 0];
 
+const COLOR_WHITE = [255, 255, 255];
+const COLOR_BLACK = [0, 0, 0];
+const COLOR_YELLOW = [255, 255, 0];
 
 const vsSourceExplicitMatrices = `
     attribute vec3 aPosition;
@@ -145,8 +148,7 @@ function initMatrices(isMovable) {
     return modelViewProjection;
 }
 
-// let poly;
-let whiteLine;
+let whiteLine, blackLine;
 
 
 function drawScene() {
@@ -160,8 +162,12 @@ function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 
+    whiteLine.__updateMatrices();
     whiteLine.translateBy([0, -50, 0]);
     whiteLine.draw();
+
+    blackLine.__updateMatrices();
+    blackLine.draw();
 
 
     figures.forEach((f) => {
@@ -236,9 +242,12 @@ function main() {
     figures.push(triangle);
 
     whiteLine = new Line(gl, vsSourceExplicitMatrices, fsSource,
-        [100, 100, 100], [-100, -100, -100], [255, 255, 255]);
+        [100, 0, 80], [-100, 0, -80], COLOR_WHITE);
     whiteLine.init();
 
+    blackLine = new Line(gl, vsSourceExplicitMatrices, fsSource,
+        [-100, 0, 100], [100, 0, -100], COLOR_BLACK);
+    blackLine.init();
 
     requestAnimationFrame(drawScene);
 }
