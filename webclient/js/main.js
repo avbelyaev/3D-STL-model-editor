@@ -1,6 +1,7 @@
 
 let gl;
 const figures = [];
+const axes = [];
 let cam;
 
 const log = (text) => {
@@ -14,6 +15,9 @@ const figureTranslation = [0, 0, 0];
 const COLOR_WHITE = [255, 255, 255];
 const COLOR_BLACK = [0, 0, 0];
 const COLOR_YELLOW = [255, 255, 0];
+const COLOR_RED = [255, 0, 0];
+const COLOR_GREEN = [0, 255, 0];
+const COLOR_BLUE = [0, 0, 255];
 
 const vsSourceExplicitMatrices = `
     attribute vec3 aPosition;
@@ -171,6 +175,8 @@ function drawScene() {
     blackLine.draw();
 
 
+    axes.map(axis => axis.draw());
+
     figures.forEach((f) => {
 
         gl.useProgram(f.program);
@@ -222,36 +228,32 @@ function main() {
     gl.depthFunc(gl.LEQUAL);
 
 
-    const axisX = new OldLine(gl, [-400, 0, 0], [400, 0, 0], [255, 0, 0]);
-    axisX.setShaderSource(vsSource, fsSource);
-    axisX.initFigure();
-    figures.push(axisX);
+    const axisX = new Line(gl, vsSourceExplicitMatrices, fsSource, [-400, 0, 0], [400, 0, 0], COLOR_RED);
+    axisX.init();
+    axes.push(axisX);
 
-    const axisY = new OldLine(gl, [0, -400, 0], [0, 400, 0], [0, 255, 0]);
-    axisY.setShaderSource(vsSource, fsSource);
-    axisY.initFigure();
-    figures.push(axisY);
+    const axisY = new Line(gl, vsSourceExplicitMatrices, fsSource, [0, -400, 0], [0, 400, 0], COLOR_GREEN);
+    axisY.init();
+    axes.push(axisY);
 
-    const axisZ = new OldLine(gl, [0, 0, -400], [0, 0, 400], [0, 0, 255]);
-    axisZ.setShaderSource(vsSource, fsSource);
-    axisZ.initFigure();
-    figures.push(axisZ);
+    const axisZ = new Line(gl, vsSourceExplicitMatrices, fsSource, [0, 0, -400], [0, 0, 400], COLOR_BLUE);
+    axisZ.init();
+    axes.push(axisZ);
+
 
     const triangle = new Triangle(gl);
     triangle.setShaderSource(vsSource, fsSource);
     triangle.initFigure();
     figures.push(triangle);
 
-    whiteLine = new Line(gl, vsSourceExplicitMatrices, fsSource,
-        [100, 0, 80], [-100, 0, -80], COLOR_WHITE);
+
+    whiteLine = new Line(gl, vsSourceExplicitMatrices, fsSource, [100, 0, 80], [-100, 0, -80], COLOR_WHITE);
     whiteLine.init();
 
-    blackLine = new Line(gl, vsSourceExplicitMatrices, fsSource,
-        [-100, 0, 100], [100, 0, -100], COLOR_BLACK);
+    blackLine = new Line(gl, vsSourceExplicitMatrices, fsSource, [-100, 0, 100], [100, 0, -100], COLOR_BLACK);
     blackLine.init();
 
-    yellowLine = new Line(gl, vsSourceExplicitMatrices, fsSource,
-        [-50, 0, 100], [50, 0, -100], COLOR_YELLOW);
+    yellowLine = new Line(gl, vsSourceExplicitMatrices, fsSource, [-50, 0, 100], [50, 0, -100], COLOR_YELLOW);
     yellowLine.init();
 
 
