@@ -1,5 +1,6 @@
 
 let gl;
+const oldFigures = [];
 const figures = [];
 const axes = [];
 let cam;
@@ -179,8 +180,9 @@ function drawScene() {
 
 
     axes.map(axis => axis.draw());
+    figures.map(fig => fig.draw());
 
-    figures.forEach((f) => {
+    oldFigures.forEach((f) => {
 
         gl.useProgram(f.program);
 
@@ -229,6 +231,7 @@ function main() {
 
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
+    gl.enable(gl.CULL_FACE); // dont draw back-facing (clockwise vertices) triangles
 
 
     const axisX = new Line(gl, vsSourceExplicitMatrices, fsSource, [-400, 0, 0], [400, 0, 0], COLOR_RED);
@@ -247,7 +250,7 @@ function main() {
     const figure = new Figure(gl);
     figure.setShaderSource(vsSource, fsSource);
     figure.initFigure();
-    figures.push(figure);
+    oldFigures.push(figure);
 
 
     whiteLine = new Line(gl, vsSourceExplicitMatrices, fsSource, [100, 0, 80], [-100, 0, -80], COLOR_WHITE);
@@ -260,22 +263,13 @@ function main() {
     yellowLine.init();
 
     const trianglePositions = [
-        50, 0, 0,
-        0, 0, 100,
-        -100, 0, 0
+        50, -50, 0,
+        -100, -50, 0,
+        0, -50, 100
     ];
-    const colors = [
-        0, 0, 0,
-        0, 0, 0,
-        0, 0, 0
-    ];
-    // const colors = COLOR_GREEN;
-    // const colorsExtended = 3 === colors.length
-    //     ? Triangle.extendColors(colors, trianglePositions)
-    //     : colors;
-    const triangle = new Triangle(gl, vsSourceExplicitMatrices, fsSource, trianglePositions, colors);
+    const triangle = new Triangle(gl, vsSourceExplicitMatrices, fsSource, trianglePositions, COLOR_GREEN);
     triangle.init();
-
+    figures.push(triangle);
 
 
     requestAnimationFrame(drawScene);

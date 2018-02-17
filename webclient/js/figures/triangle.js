@@ -5,20 +5,22 @@
 
 class Triangle extends Drawable {
     constructor(gl, vsSource, fsSource, positions, colors) {
-        super(gl, vsSource, fsSource, positions, colors);
+        const colorsExtended = 3 === colors.length && positions.length !== colors.length
+            ? Triangle.extendColorsToVertices(colors, positions)
+            : colors;
+        super(gl, vsSource, fsSource, positions, colorsExtended);
         log('constructing Triangle');
 
         this.drawMode = gl.TRIANGLES;
     }
 
-    static extendColors(colors, positions) {
+    static extendColorsToVertices(colors, positions) {
         const colorsExtended = [];
         let i = 0;
         const figureVertexNum = positions.length / 3;
         while (i < figureVertexNum) {
-            colorsExtended.push(colors[0]);
-            colorsExtended.push(colors[1]);
-            colorsExtended.push(colors[2]);
+            colorsExtended.push(...colors);
+            i++;
         }
         return colorsExtended;
     }
