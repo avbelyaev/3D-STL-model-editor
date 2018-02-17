@@ -1,15 +1,15 @@
 
 let gl;
-const oldFigures = [];
 const figures = [];
 const axes = [];
 let cam;
+let selectedFigure;
 
 const log = (text) => {
     console.log(text);
 };
 
-let figureAngleInRadians = 0;
+let figureAngleDeg = 0;
 let figureScale = 1;
 const figureTranslation = [0, 0, 0];
 
@@ -20,7 +20,7 @@ const COLOR_RED = [255, 0, 0];
 const COLOR_GREEN = [0, 255, 0];
 const COLOR_BLUE = [0, 0, 255];
 
-const vsSourceExplicitMatrices = `
+const vsSource = `
     attribute vec3 aPosition;
     attribute vec3 aColor;
     
@@ -33,22 +33,6 @@ const vsSourceExplicitMatrices = `
     void main() {
         mat4 mvp = uProjection * uView * uModel;
         gl_Position = mvp * vec4(aPosition, 1);
-      
-        fragColor = aColor;
-    }
-  `;
-
-
-const vsSource = `
-    attribute vec3 aPosition;
-    attribute vec3 aColor;
-    
-    uniform mat4 uMatrix;
-    
-    varying vec3 fragColor;
-    
-    void main() {
-        gl_Position = uMatrix * vec4(aPosition, 1);
       
         fragColor = aColor;
     }
@@ -76,7 +60,7 @@ const updateCamera = () => {
     cam.updateAngleDeg(Camera.setValueFunction(camAngleElem.value));
 };
 
-const moveFigure = () => {
+const updateFigure = () => {
     const figXElem = document.getElementById("figX");
     figureTranslation[0] = parseInt(figXElem.value);
 
@@ -87,71 +71,16 @@ const moveFigure = () => {
     figureTranslation[2] = parseInt(figZElem.value);
 
     const figAngleElem = document.getElementById("figAngle");
-    figureAngleInRadians = degToRad(parseInt(figAngleElem.value));
+    figureAngleDeg = parseInt(figAngleElem.value);
 
     const figScaleElem = document.getElementById("figScale");
     figureScale = parseInt(figScaleElem.value);
+
+    selectedFigure.scaleBy(figureScale);
+    selectedFigure.translateBy(figureTranslation);
+    selectedFigure.rotateBy([0, figureAngleDeg, 0], null);
 };
 
-
-/**
- * generates matrix to move everything from world space into clip space.
- * think of it as about transforming the whole scene into cube ([-1,-1,-1]..[1,1,1])
- * which is later rendered into 2D pane
- * @returns projection matrix
- */
-function makeProjection() {
-    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-    const zNear = 1;
-    const zFar = 1000;
-    const fieldOfViewRadians = Math.PI / 3;
-
-    const perspective = mat4.create();
-    mat4.perspective(perspective, fieldOfViewRadians, aspect, zNear, zFar);
-    return perspective;
-}
-
-/**
- * moves everything from model space (coordinates relative to model) into world space
- * @returns model matrix
- */
-function makeModel(isMovable) {
-    const figureMove = isMovable ? figureTranslation : [0, 0, 0];
-    const angle = isMovable ? figureAngleInRadians : 0;
-
-    const modelMatrix = mat4.create();
-    const scaled = mat4.scale(modelMatrix, modelMatrix, [figureScale, figureScale, figureScale]);
-    const translated = mat4.translate(scaled, scaled, figureMove); // place objects at center
-    let rotated = mat4.rotateX(translated, translated, 0);
-    rotated = mat4.rotateY(rotated, rotated, -angle);
-    rotated = mat4.rotateZ(rotated, rotated, 0);
-
-    return rotated;
-}
-
-/**
- * generates human-like POV. move everything from world space into camera space where camera is in the center
- * @returns view matrix
- */
-function makeView() {
-    let viewMatrix;
-    let eye = cam.positionVec;
-    let lookAtPosition = cam.lookAtPos;
-    viewMatrix = mat4.lookAtPos(mat4.create(), eye, lookAtPosition, cam.top);
-
-    return viewMatrix;
-}
-
-function initMatrices(isMovable) {
-    let model = makeModel(isMovable);
-    let view = makeView();
-    let projection = makeProjection();
-
-    const modelView = mat4.multiply(mat4.create(), view, model);
-    const modelViewProjection = mat4.multiply(mat4.create(), projection, modelView);
-
-    return modelViewProjection;
-}
 
 let whiteLine, blackLine, yellowLine;
 
@@ -168,38 +97,19 @@ function drawScene() {
 
 
     whiteLine.translateBy([50, -20, 50]);
-    whiteLine.rotateBy([0, -figureAngleInRadians / 3, 0], null);
+    whiteLine.rotateBy([0, -figureAngleDeg / 3, 0], null);
     whiteLine.draw();
 
     yellowLine.translateBy([0, 100, 0]);
-    yellowLine.rotateBy([0, figureAngleInRadians, 0], null);
+    yellowLine.rotateBy([0, figureAngleDeg, 0], null);
     yellowLine.draw();
 
     blackLine.draw();
-    blackLine.rotateBy([0, -figureAngleInRadians * 2, 0], null);
+    blackLine.rotateBy([0, -figureAngleDeg * 2, 0], null);
 
 
     axes.map(axis => axis.draw());
     figures.map(fig => fig.draw());
-
-    oldFigures.forEach((f) => {
-
-        gl.useProgram(f.program);
-
-        // vertices
-        bindBufferToAttribute(f.attribLocations.vertexPosition, f.positionBufferInfo);
-
-        // colors
-        bindBufferToAttribute(f.attribLocations.vertexColor, f.colorBufferInfo);
-
-        // uniforms
-        const m = initMatrices(f.movable);
-        gl.uniformMatrix4fv(f.uniformLocations.uMatrix, false, m);
-
-        // draw
-        gl.drawArrays(f.drawMode, 0, f.numElements);
-    });
-
 
 
     requestAnimationFrame(drawScene);
@@ -234,42 +144,43 @@ function main() {
     gl.enable(gl.CULL_FACE); // dont draw back-facing (clockwise vertices) triangles
 
 
-    const axisX = new Line(gl, vsSourceExplicitMatrices, fsSource, [-400, 0, 0], [400, 0, 0], COLOR_RED);
+    const axisX = new Line([-400, 0, 0], [400, 0, 0], COLOR_RED, gl, vsSource, fsSource);
     axisX.init();
     axes.push(axisX);
 
-    const axisY = new Line(gl, vsSourceExplicitMatrices, fsSource, [0, -400, 0], [0, 400, 0], COLOR_GREEN);
+    const axisY = new Line([0, -400, 0], [0, 400, 0], COLOR_GREEN, gl, vsSource, fsSource);
     axisY.init();
     axes.push(axisY);
 
-    const axisZ = new Line(gl, vsSourceExplicitMatrices, fsSource, [0, 0, -400], [0, 0, 400], COLOR_BLUE);
+    const axisZ = new Line([0, 0, -400], [0, 0, 400], COLOR_BLUE, gl, vsSource, fsSource);
     axisZ.init();
     axes.push(axisZ);
 
 
-    const figure = new Figure(gl);
-    figure.setShaderSource(vsSource, fsSource);
-    figure.initFigure();
-    oldFigures.push(figure);
 
-
-    whiteLine = new Line(gl, vsSourceExplicitMatrices, fsSource, [100, 0, 80], [-100, 0, -80], COLOR_WHITE);
+    whiteLine = new Line([100, 0, 80], [-100, 0, -80], COLOR_WHITE, gl, vsSource, fsSource);
     whiteLine.init();
 
-    blackLine = new Line(gl, vsSourceExplicitMatrices, fsSource, [-100, 0, 100], [100, 0, -100], COLOR_BLACK);
+    blackLine = new Line([-100, 0, 100], [100, 0, -100], COLOR_BLACK, gl, vsSource, fsSource);
     blackLine.init();
 
-    yellowLine = new Line(gl, vsSourceExplicitMatrices, fsSource, [-50, 0, 100], [50, 0, -100], COLOR_YELLOW);
+    yellowLine = new Line([-50, 0, 100], [50, 0, -100], COLOR_YELLOW, gl, vsSource, fsSource);
     yellowLine.init();
+
 
     const trianglePositions = [
         50, -50, 0,
         -100, -50, 0,
         0, -50, 100
     ];
-    const triangle = new Triangle(gl, vsSourceExplicitMatrices, fsSource, trianglePositions, COLOR_GREEN);
+    const triangle = new Polygon(trianglePositions, COLOR_GREEN, gl, vsSource, fsSource);
     triangle.init();
     figures.push(triangle);
+
+    const letterF = new Polygon(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource);
+    letterF.init();
+    figures.push(letterF);
+    selectedFigure = letterF;
 
 
     requestAnimationFrame(drawScene);

@@ -3,7 +3,7 @@
  */
 
 class Drawable {
-    constructor(gl, vsSource, fsSource, positions, colors) {
+    constructor(positions, colors, gl, vsSource, fsSource) {
         log('constructing Drawable');
         this.gl = gl;
         this.vsSource = vsSource;
@@ -32,8 +32,9 @@ class Drawable {
         this.translationVec = translateVec;
     }
 
-    rotateBy(rotateVec, rotationPoint) {
-        this.rotationVec = rotateVec;
+    rotateBy(rotateVecDegree, rotationPoint) {
+        this.rotationVec = rotateVecDegree
+            .map(angleDegree => degToRad(parseInt(angleDegree)));
     }
 
     init() {
@@ -78,8 +79,8 @@ class Drawable {
 
     __updateMatrices() {
         this.mModel = makeModelMatrix(this.movable, this.scaleVec, this.translationVec, this.rotationVec);
-        this.mView = makeView();
-        this.mProj = makeProjection();
+        this.mView = makeViewMatrix();
+        this.mProj = makeProjectionMatrix();
     }
 
     static __throwNotImplementedError() {

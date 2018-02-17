@@ -3,12 +3,12 @@
  */
 
 
-class Triangle extends Drawable {
-    constructor(gl, vsSource, fsSource, positions, colors) {
-        const colorsExtended = 3 === colors.length && positions.length !== colors.length
-            ? Triangle.extendColorsToVertices(colors, positions)
+class Polygon extends Drawable {
+    constructor(positions, colors, gl, vsSource, fsSource) {
+        const colorsExtended = Polygon.isColorMonotonic(colors, positions)
+            ? Polygon.extendColorsToVertices(colors, positions)
             : colors;
-        super(gl, vsSource, fsSource, positions, colorsExtended);
+        super(positions, colorsExtended, gl, vsSource, fsSource);
         log('constructing Triangle');
 
         this.drawMode = gl.TRIANGLES;
@@ -23,6 +23,10 @@ class Triangle extends Drawable {
             i++;
         }
         return colorsExtended;
+    }
+
+    static isColorMonotonic(colorVec, positionVec) {
+        return 3 === colorVec.length && positionVec.length !== colorVec.length;
     }
 
     draw() {
