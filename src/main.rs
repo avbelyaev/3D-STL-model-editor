@@ -12,6 +12,7 @@ use geometry_server::port::adapter::model::mesh_model::MeshModel;
 use geometry_server::port::adapter::command::{perform_on_mesh_command,
                                               perform_on_stl_command,
                                               extract_mesh_command};
+use geometry_server::configuration::cors_config::CORS;
 
 
 // /api/mesh
@@ -51,6 +52,7 @@ fn rocket() -> Rocket {
             mesh_performer_wrapper
         ])
         .mount("/api/stl", routes![create_stl_wrapper, stl_performer_wrapper])
+        .attach(CORS())
 }
 
 
