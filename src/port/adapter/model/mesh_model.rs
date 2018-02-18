@@ -28,19 +28,21 @@ impl MeshModel {
 
 
 pub fn mesh_stub() -> MeshModel {
-    let p1 = [0.0, 1.0, 2.5];
-    let p2 = [2.1, 3.3, 4.6];
-    let p3 = [6.36, 2.77, -1.8];
-    let p4 = [14.88, 2.2, 0.11];
+    let p1 = [100.0, 100.0, 80.0];
+    let p2 = [-80.0, 11.0, 100.0];
+    let p3 = [60.0, -50.0, -90.0];
+    let p4 = [140.0, 20.0, 100.0];
 
     let t1 = TriangleModel { a: p1, b: p2, c: p3, n: p4 };
-    let t2 = TriangleModel { a: p4, b: p3, c: p4, n: p2 };
-    let t3 = TriangleModel { a: p2, b: p3, c: p1, n: p2 };
+    let t2 = TriangleModel { a: p2, b: p3, c: p4, n: p1 };
+    let t3 = TriangleModel { a: p3, b: p4, c: p1, n: p2 };
+    let t4 = TriangleModel { a: p4, b: p1, c: p2, n: p3 };
 
     let mut models: Vec<TriangleModel> = Vec::new();
     models.push(t1);
     models.push(t2);
     models.push(t3);
+    models.push(t4);
 
     MeshModel::from_triangle_models(models)
 }
