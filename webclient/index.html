@@ -7,13 +7,18 @@
     <body>
         <!--WebGL-->
 
-        <!--utils-->
+        <!--libs-->
         <!--<script type="text/javascript" src="js/lib/Logger.js"></script>-->
+        <script src="js/lib/gl-matrix.js"></script>
+        <script src="js/lib/axios.min.js"></script>
+
+        <!--utils-->
         <script src="js/utils/number-utils.js"></script>
         <script src="js/utils/buffer-utils.js"></script>
         <script src="js/utils/context-utils.js"></script>
         <script src="js/utils/matrix-utils.js"></script>
         <script src="js/utils/shader-utils.js"></script>
+        <script src="js/utils/color-utils.js"></script>
 
         <!--controls-->
         <script src="js/controls/camera.js"></script><!-- Camera should be defined before controls -->
@@ -25,7 +30,6 @@
         <script src="js/figures/line.js"></script>
         <script src="js/figures/polygon.js"></script>
 
-        <script src="js/lib/gl-matrix.js"></script>
         <script src="js/main.js"></script>
 
         <div class="my-flex-container">
@@ -43,6 +47,7 @@
                     <p>Ang:<input id="camAngle" type="range" min="0" max="360" step="1" value="30" oninput="updateCamera()"></p>
 
                     <p>Figure controls:</p>
+                    <p>Figure:<input id="figSelection" type="range" min="0" max="1" step="1" value="0" oninput="updateFigure()"></p>
                     <p>X:<input id="figX" type="range" min="-500" max="500" step="10" value="0" oninput="updateFigure()"></p>
                     <p>Y:<input id="figY" type="range" min="-300" max="300" step="10" value="0" oninput="updateFigure()"></p>
                     <p>Z:<input id="figZ" type="range" min="-500" max="500" step="15" value="-200" oninput="updateFigure()"></p>

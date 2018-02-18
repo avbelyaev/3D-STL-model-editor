@@ -9,7 +9,7 @@ class Polygon extends Drawable {
             ? Polygon.extendColorsToVertices(colors, positions)
             : colors;
         super(positions, colorsExtended, gl, vsSource, fsSource);
-        log('constructing Triangle');
+        log('constructing Polygon');
 
         this.drawMode = gl.TRIANGLES;
     }

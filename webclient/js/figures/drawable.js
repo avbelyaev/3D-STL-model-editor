@@ -25,11 +25,13 @@ class Drawable {
 
     scaleBy(scaleCoefficient) {
         // scale by all axes
-        this.scaleVec = [scaleCoefficient, scaleCoefficient, scaleCoefficient];
+        const scale = parseInt(scaleCoefficient);
+        this.scaleVec = [scale, scale, scale];
     }
 
     translateBy(translateVec) {
-        this.translationVec = translateVec;
+        this.translationVec = translateVec
+            .map(translation => parseInt(translation));
     }
 
     rotateBy(rotateVecDegree, rotationPoint) {

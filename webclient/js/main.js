@@ -13,13 +13,6 @@ let figureAngleDeg = 0;
 let figureScale = 1;
 const figureTranslation = [0, 0, 0];
 
-const COLOR_WHITE = [255, 255, 255];
-const COLOR_BLACK = [0, 0, 0];
-const COLOR_YELLOW = [255, 255, 0];
-const COLOR_RED = [255, 0, 0];
-const COLOR_GREEN = [0, 255, 0];
-const COLOR_BLUE = [0, 0, 255];
-
 const vsSource = `
     attribute vec3 aPosition;
     attribute vec3 aColor;
@@ -61,20 +54,23 @@ const updateCamera = () => {
 };
 
 const updateFigure = () => {
+    const figSelectionElem = document.getElementById("figSelection");
+    selectedFigure = figures[parseInt(figSelectionElem.value)];
+
     const figXElem = document.getElementById("figX");
-    figureTranslation[0] = parseInt(figXElem.value);
+    figureTranslation[0] = figXElem.value;
 
     const figYElem = document.getElementById("figY");
-    figureTranslation[1] = parseInt(figYElem.value);
+    figureTranslation[1] = figYElem.value;
 
     const figZElem = document.getElementById("figZ");
-    figureTranslation[2] = parseInt(figZElem.value);
+    figureTranslation[2] = figZElem.value;
 
     const figAngleElem = document.getElementById("figAngle");
-    figureAngleDeg = parseInt(figAngleElem.value);
+    figureAngleDeg = figAngleElem.value;
 
     const figScaleElem = document.getElementById("figScale");
-    figureScale = parseInt(figScaleElem.value);
+    figureScale = figScaleElem.value;
 
     selectedFigure.scaleBy(figureScale);
     selectedFigure.translateBy(figureTranslation);
@@ -115,6 +111,26 @@ function drawScene() {
     requestAnimationFrame(drawScene);
 }
 
+const addFigure = (figureDetails) => {
+    log(figureDetails);
+    const triangles = figureDetails.triangles;
+    for (let t in triangles) {
+        if (triangles.hasOwnProperty(t)) {
+            const positions = [];
+            positions.push(...triangles[t].a);
+            positions.push(...triangles[t].b);
+            positions.push(...triangles[t].c);
+            positions.map(pos => parseInt(pos) * 100);
+            log(positions);
+
+            const colors = [getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255)];
+            const triangle = new Polygon(positions, colors, gl, vsSource, fsSource);
+            triangle.init();
+            figures.push(triangle);
+        }
+    }
+};
+
 const initCamera = () => {
     const distance = 200;
     const angleDeg = 30;
@@ -141,30 +157,30 @@ function main() {
 
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
-    gl.enable(gl.CULL_FACE); // dont draw back-facing (clockwise vertices) triangles
+    // gl.enable(gl.CULL_FACE); // dont draw back-facing (clockwise vertices) triangles
 
 
-    const axisX = new Line([-400, 0, 0], [400, 0, 0], COLOR_RED, gl, vsSource, fsSource);
+    const axisX = new Line([-400, 0, 0], [400, 0, 0], COLORS.RED, gl, vsSource, fsSource);
     axisX.init();
     axes.push(axisX);
 
-    const axisY = new Line([0, -400, 0], [0, 400, 0], COLOR_GREEN, gl, vsSource, fsSource);
+    const axisY = new Line([0, -400, 0], [0, 400, 0], COLORS.GREEN, gl, vsSource, fsSource);
     axisY.init();
     axes.push(axisY);
 
-    const axisZ = new Line([0, 0, -400], [0, 0, 400], COLOR_BLUE, gl, vsSource, fsSource);
+    const axisZ = new Line([0, 0, -400], [0, 0, 400], COLORS.BLUE, gl, vsSource, fsSource);
     axisZ.init();
     axes.push(axisZ);
 
 
 
-    whiteLine = new Line([100, 0, 80], [-100, 0, -80], COLOR_WHITE, gl, vsSource, fsSource);
+    whiteLine = new Line([100, 0, 80], [-100, 0, -80], COLORS.WHITE, gl, vsSource, fsSource);
     whiteLine.init();
 
-    blackLine = new Line([-100, 0, 100], [100, 0, -100], COLOR_BLACK, gl, vsSource, fsSource);
+    blackLine = new Line([-100, 0, 100], [100, 0, -100], COLORS.BLACK, gl, vsSource, fsSource);
     blackLine.init();
 
-    yellowLine = new Line([-50, 0, 100], [50, 0, -100], COLOR_YELLOW, gl, vsSource, fsSource);
+    yellowLine = new Line([-50, 0, 100], [50, 0, -100], COLORS.YELLOW, gl, vsSource, fsSource);
     yellowLine.init();
 
 
@@ -173,14 +189,13 @@ function main() {
         -100, -50, 0,
         0, -50, 100
     ];
-    const triangle = new Polygon(trianglePositions, COLOR_GREEN, gl, vsSource, fsSource);
+    const triangle = new Polygon(trianglePositions, COLORS.GREEN, gl, vsSource, fsSource);
     triangle.init();
     figures.push(triangle);
 
     const letterF = new Polygon(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource);
     letterF.init();
     figures.push(letterF);
-    selectedFigure = letterF;
 
 
     requestAnimationFrame(drawScene);
@@ -190,10 +205,21 @@ window.addEventListener("DOMContentLoaded", () => {
     log("DOM content loaded");
     try {
         main();
-
+        makeRequest();
     } catch (e) {
         log('Error: ' + e.message + '\n' + e.stack);
     }
 }, false);
+
+
+const makeRequest = () => {
+    axios.get('http://localhost:8000/api/mesh/stub')
+        .then(function (response) {
+            addFigure(response.data);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+};
 
 
