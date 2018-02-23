@@ -36,7 +36,15 @@ class Mesh {
     }
 
     translateBy(translationVec) {
-        // TODO tranlation should translation all the triangles of mesh
+        this.drawableFigures.map(figure => figure.translateBy(translationVec));
+    }
+
+    scaleBy(scaleCoeff) {
+        this.drawableFigures.map(figure => figure.scaleBy(scaleCoeff));
+    }
+
+    rotateBy(rotationDegreeVec) {
+        this.drawableFigures.map(figure => figure.rotateBy(rotationDegreeVec));
     }
 
     static getMeshStub(callback) {

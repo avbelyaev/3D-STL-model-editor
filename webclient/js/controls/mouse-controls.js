@@ -46,9 +46,10 @@ class MouseControls {
         if (MOUSE_BTN_LEFT === event.button) {
             if (event.shiftKey) {
                 // apply to figure
-                figureTranslation[0] += deltaX;
-                figureTranslation[2] += deltaY;
-                selectedFigure.translateBy(figureTranslation);
+                const translationVec = selectedFigure.translationVec;
+                translationVec[0] += deltaX;
+                translationVec[2] += deltaY;
+                selectedFigure.translateBy(translationVec);
 
             } else {
                 // apply to camera
@@ -69,8 +70,9 @@ class MouseControls {
 
         if (event.shiftKey) {
             // apply to figure
-            figureTranslation[1] -= delta;
-            selectedFigure.translateBy(figureTranslation);
+            const translationVec = selectedFigure.translationVec;
+            translationVec[1] -= delta;
+            selectedFigure.translateBy(translationVec);
 
         } else {
             // apply to camera

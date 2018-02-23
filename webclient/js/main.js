@@ -1,18 +1,13 @@
 
 let gl;
-const figures = [];
-const axes = [];
 let cam;
 let selectedFigure;
-let modelAppender;
+let figureController;
 
-const log = (text) => {
-    console.log(text);
-};
+const log = (text) => console.log(text);
 
 let figureAngleDeg = 0;
 let figureScale = 1;
-const figureTranslation = [0, 0, 0];
 
 const GS_API_URL = 'http://localhost:8000/api';
 
@@ -57,17 +52,7 @@ const updateCamera = () => {
 };
 
 const updateFigure = () => {
-    const figSelectionElem = document.getElementById("figSelection");
-    selectedFigure = figures[parseInt(figSelectionElem.value)];
-
-    const figXElem = document.getElementById("figX");
-    figureTranslation[0] = figXElem.value;
-
-    const figYElem = document.getElementById("figY");
-    figureTranslation[1] = figYElem.value;
-
-    const figZElem = document.getElementById("figZ");
-    figureTranslation[2] = figZElem.value;
+    selectedFigure = figureController.selectedFigure;
 
     const figAngleElem = document.getElementById("figAngle");
     figureAngleDeg = figAngleElem.value;
@@ -76,12 +61,8 @@ const updateFigure = () => {
     figureScale = figScaleElem.value;
 
     selectedFigure.scaleBy(figureScale);
-    selectedFigure.translateBy(figureTranslation);
     selectedFigure.rotateBy([0, figureAngleDeg, 0], null);
 };
-
-
-let whiteLine, blackLine, yellowLine;
 
 
 function drawScene() {
@@ -95,20 +76,7 @@ function drawScene() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 
-    whiteLine.translateBy([50, -20, 50]);
-    whiteLine.rotateBy([0, -figureAngleDeg / 3, 0], null);
-    whiteLine.draw();
-
-    yellowLine.translateBy([0, 100, 0]);
-    yellowLine.rotateBy([0, figureAngleDeg, 0], null);
-    yellowLine.draw();
-
-    blackLine.draw();
-    blackLine.rotateBy([0, -figureAngleDeg * 2, 0], null);
-
-
-    axes.map(axis => axis.draw());
-    figures.map(fig => fig.draw());
+    figureController.drawFigures();
 
 
     requestAnimationFrame(drawScene);
@@ -134,6 +102,7 @@ const initCamera = () => {
 function main() {
     gl = initGLControls();
     cam = initCamera();
+    figureController = new FigureController();
 
     gl.clearColor(0.3, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -145,26 +114,15 @@ function main() {
 
     const axisX = new Line([-400, 0, 0], [400, 0, 0], COLORS.RED, gl, vsSource, fsSource);
     axisX.init();
-    axes.push(axisX);
+    figureController.addStaticFigure(axisX);
 
     const axisY = new Line([0, -400, 0], [0, 400, 0], COLORS.GREEN, gl, vsSource, fsSource);
     axisY.init();
-    axes.push(axisY);
+    figureController.addStaticFigure(axisY);
 
     const axisZ = new Line([0, 0, -400], [0, 0, 400], COLORS.BLUE, gl, vsSource, fsSource);
     axisZ.init();
-    axes.push(axisZ);
-
-
-
-    whiteLine = new Line([100, 0, 80], [-100, 0, -80], COLORS.WHITE, gl, vsSource, fsSource);
-    whiteLine.init();
-
-    blackLine = new Line([-100, 0, 100], [100, 0, -100], COLORS.BLACK, gl, vsSource, fsSource);
-    blackLine.init();
-
-    yellowLine = new Line([-50, 0, 100], [50, 0, -100], COLORS.YELLOW, gl, vsSource, fsSource);
-    yellowLine.init();
+    figureController.addStaticFigure(axisZ);
 
 
     const trianglePositions = [
@@ -174,13 +132,11 @@ function main() {
     ];
     const triangle = new Polygon(trianglePositions, COLORS.GREEN, gl, vsSource, fsSource);
     triangle.init();
-    figures.push(triangle);
+    figureController.addDynamicFigure(triangle);
 
     const letterF = new Polygon(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource);
     letterF.init();
-    figures.push(letterF);
-
-    selectedFigure = letterF;
+    figureController.addDynamicFigure(letterF);
 
 
     // add mesh stub from geometry server
@@ -190,7 +146,7 @@ function main() {
         const mesh = new Mesh(response.data);
         mesh.init();
 
-        figures.push(mesh);
+        figureController.addDynamicFigure(mesh);
     });
 
 

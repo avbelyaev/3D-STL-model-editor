@@ -54,19 +54,19 @@ fieldset {
    Author's custom styles
    ========================================================================== */
 
-.my-flex-container {
+.page {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: flex-start;
 }
 
-.my-flex-block {
+.page__container {
     display: flex;
     background-color: red;
 }
 
-#menu {
+.menu {
     background-color: #757474;
     width: 244px;
     height: 680px;
