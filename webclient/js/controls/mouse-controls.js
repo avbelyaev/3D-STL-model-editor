@@ -45,10 +45,13 @@ class MouseControls {
 
         if (MOUSE_BTN_LEFT === event.button) {
             if (event.shiftKey) {
+                // apply to figure
                 figureTranslation[0] += deltaX;
                 figureTranslation[2] += deltaY;
+                selectedFigure.translateBy(figureTranslation);
 
             } else {
+                // apply to camera
                 cam.updateAngleDeg(Camera.incValueFunction(-1 * deltaX / CAM_HORIZONTAL_ROTATION_DECELERATION));
                 cam.updateHeight(Camera.incValueFunction(deltaY));
             }
@@ -63,7 +66,16 @@ class MouseControls {
 
     static handleMouseWheel(event) {
         let delta = event.wheelDelta ? event.wheelDelta : -event.detail;
-        cam.updateDistance(Camera.incValueFunction(delta / CAM_DIST_CHANGE_DECELERATION));
+
+        if (event.shiftKey) {
+            // apply to figure
+            figureTranslation[1] -= delta;
+            selectedFigure.translateBy(figureTranslation);
+
+        } else {
+            // apply to camera
+            cam.updateDistance(Camera.incValueFunction(delta / CAM_DIST_CHANGE_DECELERATION));
+        }
     };
 
     static updateEventListeners(canvas) {
