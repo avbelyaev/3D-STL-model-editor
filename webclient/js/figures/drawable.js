@@ -49,7 +49,7 @@ class Drawable {
     init() {
         this.__initProgram();
         this.__initBuffers();
-        this.__setShaderArgLocations();
+        this.__initShaderArgLocations();
     }
 
     __initProgram() {
@@ -72,8 +72,8 @@ class Drawable {
         this.numElements = numElements;
     }
 
-    __setShaderArgLocations() {
-        log('setShaderArgLocations');
+    __initShaderArgLocations() {
+        log('initShaderArgLocations');
 
         this.attribLocations = {
             vertexPosition: this.gl.getAttribLocation(this.program, 'aPosition'),
