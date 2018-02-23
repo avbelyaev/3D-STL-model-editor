@@ -33,9 +33,9 @@ pub fn mesh_stub() -> MeshModel {
     let p3 = [60.0, -50.0, -90.0];
     let p4 = [140.0, 20.0, 100.0];
 
-    let t1 = TriangleModel { a: p1, b: p2, c: p3, n: p4 };
+    let t1 = TriangleModel { a: p1, b: p3, c: p2, n: p4 };
     let t2 = TriangleModel { a: p2, b: p3, c: p4, n: p1 };
-    let t3 = TriangleModel { a: p3, b: p4, c: p1, n: p2 };
+    let t3 = TriangleModel { a: p3, b: p1, c: p4, n: p2 };
     let t4 = TriangleModel { a: p4, b: p1, c: p2, n: p3 };
 
     let mut models: Vec<TriangleModel> = Vec::new();
