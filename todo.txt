@@ -8,6 +8,12 @@ https://webglfundamentals.org/webgl/lessons/webgl-drawing-multiple-things.html
 # и если он окажется на пикселе то применять перенос/поворот только к той фигуре
 # на пикселе которой он окажется
 
+#TODO поворот лучше реализовать явным выбором фигуры в меню.
+# а сам поворот применять к некоторой выбранной фигуре
+
+# TODO сделать скрипт с wget для скачивания gl-matrix/Logger/axios,
+# выполнения npm install и перемещения в /js/lib
+
 
 
 # Known bugs
