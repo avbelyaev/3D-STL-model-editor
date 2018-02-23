@@ -4,6 +4,7 @@ const figures = [];
 const axes = [];
 let cam;
 let selectedFigure;
+let modelAppender;
 
 const log = (text) => {
     console.log(text);
@@ -12,6 +13,8 @@ const log = (text) => {
 let figureAngleDeg = 0;
 let figureScale = 1;
 const figureTranslation = [0, 0, 0];
+
+const GS_API_URL = 'http://localhost:8000/api';
 
 const vsSource = `
     attribute vec3 aPosition;
@@ -111,26 +114,6 @@ function drawScene() {
     requestAnimationFrame(drawScene);
 }
 
-const addFigure = (figureDetails) => {
-    log(figureDetails);
-    const triangles = figureDetails.triangles;
-    for (let t in triangles) {
-        if (triangles.hasOwnProperty(t)) {
-            const positions = [];
-            positions.push(...triangles[t].a);
-            positions.push(...triangles[t].b);
-            positions.push(...triangles[t].c);
-            positions.map(pos => parseInt(pos) * 100);
-            log(positions);
-
-            const colors = [getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255)];
-            const triangle = new Polygon(positions, colors, gl, vsSource, fsSource);
-            triangle.init();
-            figures.push(triangle);
-        }
-    }
-};
-
 const initCamera = () => {
     const distance = 200;
     const angleDeg = 30;
@@ -197,6 +180,19 @@ function main() {
     letterF.init();
     figures.push(letterF);
 
+    selectedFigure = letterF;
+
+
+    // add mesh stub from geometry server
+    const mesh = Mesh.getMeshStub(response => {
+        log(`meshStubData: ${response}`);
+
+        const mesh = new Mesh(response.data);
+        mesh.init();
+
+        figures.push(mesh);
+    });
+
 
     requestAnimationFrame(drawScene);
 }
@@ -205,21 +201,8 @@ window.addEventListener("DOMContentLoaded", () => {
     log("DOM content loaded");
     try {
         main();
-        makeRequest();
+
     } catch (e) {
         log('Error: ' + e.message + '\n' + e.stack);
     }
 }, false);
-
-
-const makeRequest = () => {
-    axios.get('http://localhost:8000/api/mesh/stub')
-        .then(function (response) {
-            addFigure(response.data);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-};
-
-

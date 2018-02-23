@@ -2,6 +2,13 @@
  * Created by anthony on 11.01.2018.
  */
 
+// const SHADER_ATTR_POSITION = 'aPosition';
+// const SHADER_ATTR_COLOR = 'aColor';
+// const SHADER_UNIFORM_MATRIX_MODEL = 'uModel';
+// const SHADER_UNIFORM_MATRIX_VIEW = 'uView';
+// const SHADER_UNIFORM_MATRIX_PROJECTION = 'uProjection';
+// const SHADER_VARYING_FRAGMENT_COLOR = 'fragColor';
+
 function loadShader(gl, type, source) {
     const shader = gl.createShader(type);
     gl.shaderSource(shader, source);

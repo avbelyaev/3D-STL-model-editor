@@ -11,4 +11,8 @@ const COLORS = Object.freeze({
     BLUE: [0, 0, 255],
 
     YELLOW: [255, 255, 0],
+
+    RANDOM: function () {
+        return [getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255)];
+    }
 });
