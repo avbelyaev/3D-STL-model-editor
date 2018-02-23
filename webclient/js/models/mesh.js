@@ -35,8 +35,16 @@ class Mesh {
         this.drawableFigures.map(figure => figure.draw());
     }
 
-    translateBy(translationVec) {
-        this.drawableFigures.map(figure => figure.translateBy(translationVec));
+    translateByX(additionalX) {
+        this.drawableFigures.map(figure => figure.translateByX(additionalX));
+    }
+
+    translateByY(additionalY) {
+        this.drawableFigures.map(figure => figure.translateByY(additionalY));
+    }
+
+    translateByZ(additionalZ) {
+        this.drawableFigures.map(figure => figure.translateByZ(additionalZ));
     }
 
     scaleBy(scaleCoeff) {

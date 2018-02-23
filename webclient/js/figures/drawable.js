@@ -29,9 +29,16 @@ class Drawable {
         this.scaleVec = [scale, scale, scale];
     }
 
-    translateBy(translationVec) {
-        this.translationVec = translationVec
-            .map(translation => parseInt(translation));
+    translateByX(additionalX) {
+        this.translationVec[0] += parseInt(additionalX);
+    }
+
+    translateByY(additionalY) {
+        this.translationVec[1] += parseInt(additionalY);
+    }
+
+    translateByZ(additionalZ) {
+        this.translationVec[2] += parseInt(additionalZ);
     }
 
     rotateBy(rotationDegreeVec, rotationPoint) {
