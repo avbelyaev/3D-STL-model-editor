@@ -18,18 +18,22 @@ class ServerApiClient {
             });
     }
 
-    extractMesh(meshData, callback) {
-        axios.post(`${this.meshUrl}/extract`, meshData)
-            .then(response => callback(response))
+    extractMeshFromStl(stlData, callback) {
+        axios.post(`${this.meshUrl}/extract`, stlData)
+            .then(response => callback(null, response))
             .catch(error => {
                 log(`Error occurred while extracting Mesh: ${error}`);
+                callback(error, null);
             });
     }
 
     static convertToBase64(file, callback) {
         const reader = new FileReader();
         reader.onload = function (event) {
-            callback(event.target.result);
+            // base64 has default prefix like this: data:;base64,****
+            // cut off prefix (including comma) since base64 uses only chars [a-z, A-Z, 0-9, +, /]
+            const prefixRemoved = event.target.result.split(',')[1];
+            callback(prefixRemoved);
         };
         reader.onerror = function (error) {
             log('Error: ', error);

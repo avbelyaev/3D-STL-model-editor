@@ -18,19 +18,19 @@ class MouseControls {
     }
 
     static handleMouseDown(event) {
-        console.log("mouse down");
+//        console.log("mouse down");
 
         MouseControls.mouseDown = true;
         MouseControls.lastMouseX = parseInt(event.clientX);
         MouseControls.lastMouseY = parseInt(event.clientY);
 
-        console.log("lastX: " + MouseControls.lastMouseX + " lastY: " + MouseControls.lastMouseY);
+//        console.log("lastX: " + MouseControls.lastMouseX + " lastY: " + MouseControls.lastMouseY);
     };
 
     static handleMouseUp(event) {
-        console.log("mouse up");
+//        console.log("mouse up");
         MouseControls.mouseDown = false;
-        console.log("lastX: " + MouseControls.lastMouseX + " lastY: " + MouseControls.lastMouseY);
+//        console.log("lastX: " + MouseControls.lastMouseX + " lastY: " + MouseControls.lastMouseY);
     };
 
     static handleMouseMove(event) {

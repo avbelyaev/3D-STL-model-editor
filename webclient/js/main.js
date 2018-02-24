@@ -98,8 +98,9 @@ function main() {
     gl = initGLControls();
     cam = initCamera();
     figureController = new FigureController();
-    // modelSubmitter = new ModelSubmitter();
+    modelSubmitter = new ModelSubmitter();
     serverApiClient = new ServerApiClient('localhost', 8000);
+
 
     gl.clearColor(0.3, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);

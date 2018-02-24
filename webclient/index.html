@@ -36,9 +36,9 @@
         <script src="js/figures/mesh.js"></script>
 
         <!--server-specific-->
-        <!--<script src="js/server-interaction/model-submitter.js"></script>-->
-        <script src="js/server-interaction/models.js"></script>
-        <script src="js/server-interaction/server-api-client.js"></script>
+        <script src="js/server-specific/models.js"></script>
+        <script src="js/server-specific/server-api-client.js"></script>
+        <script src="js/server-specific/model-submitter.js"></script>
 
 
         <script src="js/main.js"></script>
@@ -69,11 +69,11 @@
                         <h4>Figure controller</h4>
                     </div>
 
-                    <!--<div class="menu__model-submitter">-->
-                        <!--<h4>Model submitter</h4>-->
-                        <!--<input class="menu__model-submitter&#45;&#45;input" type="file" />-->
-                        <!--<input class="menu__model-submitter&#45;&#45;button" type="button" value="Submit" onClick="modelSubmitter.submitFile()">-->
-                    <!--</div>-->
+                    <div class="menu__model-submitter">
+                        <h4>Model submitter</h4>
+                        <input class="menu__model-submitter--input" type="file" />
+                        <input class="menu__model-submitter--button" type="button" value="Submit" onClick="modelSubmitter.submitFile()">
+                    </div>
 
                     <label id="logr"></label>
                 </div>
