@@ -3,30 +3,17 @@
  */
 
 
-class Polygon extends Drawable {
-    constructor(positions, colors, gl, vsSource, fsSource) {
-        const colorsExtended = Polygon.isColorMonotonic(colors, positions)
-            ? Polygon.extendColorsToVertices(colors, positions)
+class Figure extends Drawable {
+    constructor(positions, colors, gl, vsSource, fsSource, id) {
+        const colorsExtended = isOneColored(colors, positions)
+            ? extendColorsToVertices(colors, positions)
             : colors;
-        super(positions, colorsExtended, gl, vsSource, fsSource);
-        log('constructing Polygon');
+        const idWithPrefix = `fig-${id}`;
+
+        super(positions, colorsExtended, gl, vsSource, fsSource, idWithPrefix);
+        log(`constructing Figure ${this.id}`);
 
         this.drawMode = gl.TRIANGLES;
-    }
-
-    static extendColorsToVertices(colors, positions) {
-        const colorsExtended = [];
-        let i = 0;
-        const figureVertexNum = positions.length / 3;
-        while (i < figureVertexNum) {
-            colorsExtended.push(...colors);
-            i++;
-        }
-        return colorsExtended;
-    }
-
-    static isColorMonotonic(colorVec, positionVec) {
-        return 3 === colorVec.length && positionVec.length !== colorVec.length;
     }
 
     draw() {

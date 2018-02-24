@@ -3,13 +3,13 @@ let gl;
 let cam;
 let selectedFigure;
 let figureController;
+let modelSubmitter;
+let serverApiClient;
 
 const log = (text) => console.log(text);
 
 let figureAngleDeg = 0;
 let figureScale = 1;
-
-const GS_API_URL = 'http://localhost:8000/api';
 
 const vsSource = `
     attribute vec3 aPosition;
@@ -66,12 +66,7 @@ const updateFigure = () => {
 
 
 function drawScene() {
-
-    const w = gl.canvas.width;
-    const h = gl.canvas.height;
-
-    gl.viewport(0, 0, w, h);
-
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.clearColor(0.3, 0.3, 0.3, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -103,6 +98,8 @@ function main() {
     gl = initGLControls();
     cam = initCamera();
     figureController = new FigureController();
+    // modelSubmitter = new ModelSubmitter();
+    serverApiClient = new ServerApiClient('localhost', 8000);
 
     gl.clearColor(0.3, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -112,15 +109,15 @@ function main() {
     // gl.enable(gl.CULL_FACE); // dont draw back-facing (clockwise vertices) triangles
 
 
-    const axisX = new Line([-400, 0, 0], [400, 0, 0], COLORS.RED, gl, vsSource, fsSource);
+    const axisX = new Line([-400, 0, 0], [400, 0, 0], COLORS.RED, gl, vsSource, fsSource, 'axisX');
     axisX.init();
     figureController.addStaticFigure(axisX);
 
-    const axisY = new Line([0, -400, 0], [0, 400, 0], COLORS.GREEN, gl, vsSource, fsSource);
+    const axisY = new Line([0, -400, 0], [0, 400, 0], COLORS.GREEN, gl, vsSource, fsSource, 'axisY');
     axisY.init();
     figureController.addStaticFigure(axisY);
 
-    const axisZ = new Line([0, 0, -400], [0, 0, 400], COLORS.BLUE, gl, vsSource, fsSource);
+    const axisZ = new Line([0, 0, -400], [0, 0, 400], COLORS.BLUE, gl, vsSource, fsSource, 'axisZ');
     axisZ.init();
     figureController.addStaticFigure(axisZ);
 
@@ -130,24 +127,25 @@ function main() {
         -100, -50, 0,
         0, -50, 100
     ];
-    const triangle = new Polygon(trianglePositions, COLORS.GREEN, gl, vsSource, fsSource);
+    const triangle = new Figure(trianglePositions, COLORS.GREEN, gl, vsSource, fsSource, 'triangle');
     triangle.init();
     figureController.addDynamicFigure(triangle);
 
-    const letterF = new Polygon(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource);
+    const letterF = new Figure(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource, 'letter-F');
     letterF.init();
     figureController.addDynamicFigure(letterF);
 
 
     // add mesh stub from geometry server
-    const mesh = Mesh.getMeshStub(response => {
-        log(`meshStubData: ${response}`);
+    serverApiClient.meshStub(response => {
+        const meshModel = response.data;
+        log(meshModel);
 
-        const mesh = new Mesh(response.data);
+        const mesh = Mesh.ofMeshModel(meshModel, 'stub');
         mesh.init();
-
         figureController.addDynamicFigure(mesh);
     });
+
 
 
     requestAnimationFrame(drawScene);

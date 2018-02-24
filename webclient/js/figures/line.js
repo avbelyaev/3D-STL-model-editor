@@ -4,11 +4,13 @@
 
 
 class Line extends Drawable {
-    constructor(startPoint, endPoint, color, gl, vsSource, fsSource) {
+    constructor(startPoint, endPoint, color, gl, vsSource, fsSource, id) {
         const positions = [...startPoint, ...endPoint];
         const colors = [...color, ...color];
-        super(positions, colors, gl, vsSource, fsSource);
-        log("constructing Line: pos: [" + this.positions + "] col: [" + this.colors + "]");
+        const idWithPrefix = `line-${id}`;
+
+        super(positions, colors, gl, vsSource, fsSource, idWithPrefix);
+        log(`constructing Line ${this.id}. pos: ${this.positions}, colors: ${this.colors}`);
 
         // draw mode
         this.drawMode = gl.LINE_LOOP;

@@ -14,6 +14,9 @@ https://webglfundamentals.org/webgl/lessons/webgl-drawing-multiple-things.html
 # TODO сделать скрипт с wget для скачивания gl-matrix/Logger/axios,
 # выполнения npm install и перемещения в /js/lib
 
+#TODO добавить сетку (стол) как на гитхабе и отдельно зону деплоя моделей
+# куда будут доавбляться модели по мере ответа бэкенда
+
 
 
 # Known bugs

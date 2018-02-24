@@ -3,8 +3,13 @@
  */
 
 class Drawable {
-    constructor(positions, colors, gl, vsSource, fsSource) {
-        log('constructing Drawable');
+    constructor(positions, colors, gl, vsSource, fsSource, id) {
+        log(`constructing Drawable ${id}`);
+        if (!id) {
+            throw new Error('Drawable id is null or empty');
+        }
+
+        this.id = id;
         this.gl = gl;
         this.vsSource = vsSource;
         this.fsSource = fsSource;
@@ -47,6 +52,7 @@ class Drawable {
     }
 
     init() {
+        log(`init Drawable ${this.id}`);
         this.__initProgram();
         this.__initBuffers();
         this.__initShaderArgLocations();
