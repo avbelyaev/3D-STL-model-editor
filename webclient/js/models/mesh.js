@@ -10,8 +10,8 @@ class Mesh {
         this.posMultiplicationFactor = 100;
         this.drawableFigures = [];
 
-        const triangles = data['triangles'];
-        triangles.forEach(t => {
+        this.triangles = data['triangles'];
+        this.triangles.forEach(t => {
             const positions = [];
             positions.push(...t['a']);
             positions.push(...t['b']);
@@ -19,12 +19,10 @@ class Mesh {
 
             positions.map(pos => parseInt(pos) * this.posMultiplicationFactor);
 
-            const colors = COLORS.RANDOM();
-            const triangle = new Polygon(positions, colors, gl, vsSource, fsSource);
-
+            const triangle = new Polygon(positions, COLORS.RANDOM(), gl, vsSource, fsSource);
             this.drawableFigures.push(triangle);
         });
-        log(`Mesh with triangles amount: ${triangles.length}`);
+        log(`Mesh with triangles amount: ${this.triangles.length}`);
     }
 
     init() {

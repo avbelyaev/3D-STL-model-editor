@@ -18,10 +18,9 @@ class FigureController {
     addDynamicFigure(dynamicFigure) {
         this.dynamicFigures.push(dynamicFigure);
 
-        // save dynamic figure's index in figures array into radio-button
+        // save dynamic figure's index into radio-button
         const radioButton = createRadioElement(this.childElementsClassName, this.childElementsGroupName, true);
-        const figureIndexValue = this.dynamicFigures.length - 1;
-        radioButton.setAttribute(this.childElementsAttr, figureIndexValue.toString());
+        this.__customizeRadioButton(radioButton);
         this.figureControllerElement.appendChild(radioButton);
 
         selectedFigure = this.selectedFigure;
@@ -43,5 +42,11 @@ class FigureController {
         const selectedFigureIndex = parseInt(checked.getAttribute(this.childElementsAttr));
 
         return this.dynamicFigures[selectedFigureIndex];
+    }
+
+    __customizeRadioButton(radioButton) {
+        const figureIndexValue = this.dynamicFigures.length - 1;
+        radioButton.setAttribute(this.childElementsAttr, figureIndexValue.toString());
+        radioButton.setAttribute('onclick', 'updateFigure()');
     }
 }

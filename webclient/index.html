@@ -12,14 +12,16 @@
         <script src="js/lib/gl-matrix.js"></script>
         <script src="js/lib/axios.min.js"></script>
 
-        <!--utils-->
+        <!--math functions & utils-->
         <script src="js/utils/dom-utils.js"></script>
-        <script src="js/utils/number-utils.js"></script>
-        <script src="js/utils/buffer-utils.js"></script>
-        <script src="js/utils/context-utils.js"></script>
-        <script src="js/utils/matrix-utils.js"></script>
-        <script src="js/utils/shader-utils.js"></script>
-        <script src="js/utils/color-utils.js"></script>
+        <script src="js/maths/numbers.js"></script>
+        <script src="js/maths/matrices.js"></script>
+
+        <!--webgl-specific-->
+        <script src="js/webgl-specific/buffers.js"></script>
+        <script src="js/webgl-specific/context.js"></script>
+        <script src="js/webgl-specific/shaders.js"></script>
+        <script src="js/webgl-specific/colors.js"></script>
 
         <!--controls-->
         <script src="js/controls/camera.js"></script><!-- Camera should be defined before controls -->
@@ -34,6 +36,7 @@
 
         <!--models-->
         <script src="js/models/mesh.js"></script>
+        <script src="js/models/model-submitter.js"></script>
 
         <script src="js/main.js"></script>
 
@@ -46,17 +49,27 @@
                     <!-- reload(true) forces reload from server -->
                     <input type="button" value="Refresh" onClick="window.location.reload(true)">
 
-                    <p>Camera controls:</p>
-                    <p>Dist:<input id="camDist" type="range" min="50" max="500" step="10" value="150" oninput="updateCamera()"></p>
-                    <p>H:<input id="camHeight" type="range" min="-600" max="600" step="10" value="100" oninput="updateCamera()"></p>
-                    <p>Ang:<input id="camAngle" type="range" min="0" max="360" step="1" value="30" oninput="updateCamera()"></p>
+                    <div class="menu__camera-controls">
+                        <h4>Camera controls</h4>
+                        <p>Dist:<input id="camDist" type="range" min="50" max="500" step="10" value="150" oninput="updateCamera()"></p>
+                        <p>H:<input id="camHeight" type="range" min="-600" max="600" step="10" value="100" oninput="updateCamera()"></p>
+                        <p>Ang:<input id="camAngle" type="range" min="0" max="360" step="1" value="30" oninput="updateCamera()"></p>
+                    </div>
 
-                    <p>Figure controls:</p>
-                    <p>Ang:<input id="figAngle" type="range" min="0" max="360" step="10" value="0" oninput="updateFigure()"></p>
-                    <p>S:<input id="figScale" type="range" min="0.2" max="10" step="0.1" value="1" oninput="updateFigure()"></p>
-                    <br>
+                    <div class="menu__figure-controls">
+                        <h4>Figure controls</h4>
+                        <p>Ang:<input id="figAngle" type="range" min="0" max="360" step="10" value="0" oninput="updateFigure()"></p>
+                        <p>S:<input id="figScale" type="range" min="0.2" max="10" step="0.1" value="1" oninput="updateFigure()"></p>
+                    </div>
+
                     <div class="menu__figure-controller">
+                        <h4>Figure controller</h4>
+                    </div>
 
+                    <div class="menu__model-submitter">
+                        <h4>Model submitter</h4>
+                        <input class="menu__model-submitter--input" type="file" />
+                        <input class="menu__model-submitter--button" type="button" value="Submit" onClick="modelSubmitter.submitFile()">
                     </div>
 
                     <label id="logr"></label>

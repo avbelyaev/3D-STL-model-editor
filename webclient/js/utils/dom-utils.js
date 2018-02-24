@@ -11,7 +11,6 @@ const createRadioElement = (className, groupName, checked) => {
     if (checked) {
         radioHtml.setAttribute('checked', 'checked');
     }
-    radioHtml.setAttribute('onclick', 'updateFigure()');
 
     return radioHtml;
 };

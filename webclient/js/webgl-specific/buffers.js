@@ -45,12 +45,6 @@ const bindBufferToAttribute = (attribArray, bufferInfo) => {
         offset);
 };
 
-const enableAndBindBuffer = (attribArray, bufferInfo) => {
-    gl.enableVertexAttribArray(attribArray);
-    gl.bindBuffer(gl.ARRAY_BUFFER, bufferInfo.buffer);
-};
-
-
 const createBufferInfo = (gl, array, numComponents, componentType, normalize) => {
     const buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
