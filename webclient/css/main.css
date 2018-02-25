@@ -74,6 +74,10 @@ fieldset {
     font-size: 14px;
 }
 
+.menu__model-submitter--input {
+    border: #ffffff 1px solid;
+}
+
 #logr {
     white-space: pre-wrap;
 }

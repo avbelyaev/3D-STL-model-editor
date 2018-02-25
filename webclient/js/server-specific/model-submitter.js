@@ -11,33 +11,20 @@ class ModelSubmitter {
         this.canBeSubmitted = true;
     }
 
-    submitModel() {
-
-    }
-
     submitFile() {
         const file = this.modelSubmitterElement.files[0];
-        log(`converting '${this.modelSubmitterElement.value}' file to base64`);
 
         if (file && this.canBeSubmitted) {
-            ServerApiClient.convertToBase64(file, (base64ed) => {
-                log(`base64: ${base64ed.substring(0, 30)}...`);
+            STLLoader.parseBinarySTL(file, (meshData) => {
+                const vertices = meshData.vertices;
+                log(vertices);
 
-                serverApiClient.extractMeshFromStl(Models.extractMeshModel(base64ed), (err, mesh) => {
-                    if (!err) {
-                        const meshModel = mesh.data;
-                        log(meshModel);
+                const mesh = new Figure(vertices, COLORS.RANDOM(), gl, vsSource, fsSource, 'mesh');
+                mesh.init();
+                figureController.addDynamicFigure(mesh);
 
-                        log('extracting mesh from meshModel');
-                        const extractedMesh = Mesh.ofMeshModel(meshModel, this.modelSubmitterElement.value);
-                        extractedMesh.init();
-                        figureController.addDynamicFigure(extractedMesh);
-
-                    }
-                    this.canBeSubmitted = true;
-                });
+                this.canBeSubmitted = true;
             });
-
             this.canBeSubmitted = false;
 
         } else {
