@@ -15,14 +15,19 @@ class ModelSubmitter {
         const file = this.modelSubmitterElement.files[0];
 
         if (file && this.canBeSubmitted) {
-            STLLoader.parseBinarySTL(file, (meshData) => {
-                const vertices = meshData.vertices;
-                log(vertices);
+            STLLoader.parseBinarySTL(file, (err, meshData) => {
+                if (!err) {
+                    const vertices = meshData.vertices;
+                    log(vertices);
 
-                const mesh = new Figure(vertices, COLORS.RANDOM(), gl, vsSource, fsSource, 'mesh');
-                mesh.init();
-                figureController.addDynamicFigure(mesh);
+                    // const multiplyCoeff = 1000;
+                    // log(`multiplying by ${multiplyCoeff}`);
+                    // vertices.map(vertex => parseInt(vertex) * multiplyCoeff);
 
+                    const mesh = new Figure(vertices, COLORS.RANDOM(), gl, vsSource, fsSource, 'mesh');
+                    mesh.init();
+                    figureController.addDynamicFigure(mesh);
+                }
                 this.canBeSubmitted = true;
             });
             this.canBeSubmitted = false;
