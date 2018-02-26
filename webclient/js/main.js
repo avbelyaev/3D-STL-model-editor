@@ -52,16 +52,15 @@ const updateCamera = () => {
 };
 
 const updateFigure = () => {
-    selectedFigure = figureController.selectedFigure;
-
     const figAngleElem = document.getElementById("figAngle");
     figureAngleDeg = figAngleElem.value;
 
     const figScaleElem = document.getElementById("figScale");
     figureScale = figScaleElem.value;
 
+    selectedFigure = figureController.selectedFigure;
     selectedFigure.scaleBy(figureScale);
-    selectedFigure.rotateBy([0, figureAngleDeg, 0], null);
+    selectedFigure.rotateBy([figureAngleDeg, figureAngleDeg, 0], null);
 };
 
 
