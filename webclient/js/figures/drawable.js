@@ -30,7 +30,7 @@ class Drawable {
 
     scaleBy(scaleCoefficient) {
         // scale by all axes
-        const scale = parseInt(scaleCoefficient);
+        const scale = parseFloat(scaleCoefficient);
         this.scaleVec = [scale, scale, scale];
     }
 
