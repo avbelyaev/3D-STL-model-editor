@@ -51,10 +51,10 @@ class Camera {
 
     static setValueFunction(newValue) {
         // currentValue is ignored
-        return (currValue) => parseInt(newValue);
+        return (currValue) => parseFloat(newValue);
     };
 
     static incValueFunction(newValue) {
-        return (currValue) => currValue + parseInt(newValue);
+        return (currValue) => currValue + parseFloat(newValue);
     };
 }

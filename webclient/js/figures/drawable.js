@@ -35,20 +35,20 @@ class Drawable {
     }
 
     translateByX(additionalX) {
-        this.translationVec[0] += parseInt(additionalX);
+        this.translationVec[0] += parseFloat(additionalX);
     }
 
     translateByY(additionalY) {
-        this.translationVec[1] += parseInt(additionalY);
+        this.translationVec[1] += parseFloat(additionalY);
     }
 
     translateByZ(additionalZ) {
-        this.translationVec[2] += parseInt(additionalZ);
+        this.translationVec[2] += parseFloat(additionalZ);
     }
 
     rotateBy(rotationDegreeVec, rotationPoint) {
         this.rotationVec = rotationDegreeVec
-            .map(angleDegree => degToRad(parseInt(angleDegree)));
+            .map(angleDegree => degToRad(parseFloat(angleDegree)));
     }
 
     init() {
