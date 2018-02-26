@@ -28,7 +28,7 @@ const extendColorsToVertices = (colorsArray, positionsArray) => {
     let i = 0;
     const figureVertexNum = positionsArray.length / 3;
     while (i < figureVertexNum) {
-        colorsExtended.push(...colorsArray);
+        colorsExtended.push(...COLORS.RANDOM());
         i++;
     }
     return colorsExtended;

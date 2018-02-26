@@ -74,6 +74,17 @@ fieldset {
     font-size: 14px;
 }
 
+.figure-controller__button--wrapper {
+    border: #ffffff 1px solid;
+    display: block;
+    padding: 5px;
+    margin: 10px;
+}
+
+.figure-controller__button--label {
+    display: inline-block;
+}
+
 .menu__model-submitter--input {
     border: #ffffff 1px solid;
 }

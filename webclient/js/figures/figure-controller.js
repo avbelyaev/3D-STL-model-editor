@@ -9,8 +9,8 @@ class FigureController {
         this.dynamicFigures = new Map();
         this.staticFigures = new Map();
 
-        this.figureControllerElement = document.getElementsByClassName('menu__figure-controller')[0];
-        this.childElementsClassName = 'figure-controller__radio-button';
+        this.figureControllerElement = document.getElementsByClassName('figure-controller__button-list')[0];
+        this.childElementsClassName = 'figure-controller__button--input';
         this.childElementsGroupName = 'figure-controller-group';
         this.childElementsAttr = 'selectedFigureId';
     }
@@ -21,9 +21,14 @@ class FigureController {
         this.dynamicFigures.set(dynamicFigure.id, dynamicFigure);
 
         // save dynamic figure's index into radio-button
-        const radioButton = createRadioElement(this.childElementsClassName, this.childElementsGroupName, true);
-        this.__customizeRadioButton(radioButton, dynamicFigure.id);
-        this.figureControllerElement.appendChild(radioButton);
+        const customAttr = {
+            'name': this.childElementsAttr,
+            'value': dynamicFigure.id
+        };
+        const figureButton = createFigureButton(
+            this.childElementsClassName, this.childElementsGroupName, true, customAttr);
+        this.__customizeButton(figureButton, dynamicFigure.id);
+        this.figureControllerElement.appendChild(figureButton);
 
         selectedFigure = this.selectedFigure;
     }
@@ -48,8 +53,8 @@ class FigureController {
         return this.dynamicFigures.get(selectedFigureId);
     }
 
-    __customizeRadioButton(radioButton, figureId) {
-        radioButton.setAttribute(this.childElementsAttr, figureId);
+    __customizeButton(radioButton, figureId) {
         radioButton.setAttribute('onclick', 'updateFigure()');
+        radioButton.innerHTML += figureId;
     }
 }

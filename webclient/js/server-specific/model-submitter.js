@@ -24,7 +24,8 @@ class ModelSubmitter {
                     // log(`multiplying by ${multiplyCoeff}`);
                     // vertices.map(vertex => parseInt(vertex) * multiplyCoeff);
 
-                    const mesh = new Figure(vertices, COLORS.RANDOM(), gl, vsSource, fsSource, 'mesh');
+                    const mesh = new Figure(vertices, COLORS.RANDOM(), gl,
+                        vsSource, fsSource, file.name);
                     mesh.init();
                     figureController.addDynamicFigure(mesh);
                 }
