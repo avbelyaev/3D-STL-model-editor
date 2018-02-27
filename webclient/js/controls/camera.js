@@ -2,30 +2,33 @@
  * Created by anthony on 09.02.2018.
  */
 
-const CAM_HEIGHT_MAX = 600;
-const CAM_HEIGHT_MIN = -600;
+const CAM_VERTICAL_ANGLE_MAX_DEGREE = 178;
+const CAM_VERTICAL_ANGLE_MIN_DEGREE = 2;
 const CAM_DIST_MAX = 500;
 const CAM_DIST_MIN = 50;
 const CAM_HORIZONTAL_ROTATION_DECELERATION = 4;
+const CAM_VERT_ROTATION_DECELERATION = 3;
 const CAM_DIST_CHANGE_DECELERATION = 10;
 
+/**
+ * Camera position is a point in spherical coordinate system
+ */
 class Camera {
-    constructor(initDist, initAngleDeg, initHeight, initPos) {
+    constructor(initDist, initHorizontalAngleDeg, initVerticalAngleDeg, lookAt) {
+        // lookAt camera only
+        this.top = [0, 1, 0];
+        this.lookAtPos = lookAt;
+
         this.distance = initDist;
-        this.angleDeg = initAngleDeg;
-        this.height = initHeight;
-        this.positionVec = initPos;
+        this.horizontalAngleDeg = initHorizontalAngleDeg;
+        this.verticalAngleDeg = initVerticalAngleDeg;
+        this.positionVec = [];
+        this.__updatePosition();
     }
 
-    updatePosition() {
-        this.positionVec[0] = Math.sin(degToRad(this.angleDeg)) * this.distance;
-        this.positionVec[1] = this.height;
-        this.positionVec[2] = Math.cos(degToRad(this.angleDeg)) * this.distance;
-    }
-
-    updateAngleDeg(updateFunc) {
-        this.angleDeg = updateFunc(this.angleDeg);
-        this.updatePosition();
+    updateHorizontalAngleDeg(updateFunc) {
+        this.horizontalAngleDeg = updateFunc(this.horizontalAngleDeg);
+        this.__updatePosition();
     }
 
     updateDistance(updateFunc) {
@@ -33,24 +36,36 @@ class Camera {
 
         this.distance = this.distance < CAM_DIST_MAX ? this.distance : CAM_DIST_MAX;
         this.distance = this.distance > CAM_DIST_MIN ? this.distance : CAM_DIST_MIN;
-        this.updatePosition();
+        this.__updatePosition();
     }
 
-    updateHeight(updateFunc) {
-        this.height = updateFunc(this.height);
+    updateVerticalAngleDeg(updateFunc) {
+        this.verticalAngleDeg = updateFunc(this.verticalAngleDeg);
 
-        this.height = this.height < CAM_HEIGHT_MAX ? this.height : CAM_HEIGHT_MAX;
-        this.height = this.height > CAM_HEIGHT_MIN ? this.height : CAM_HEIGHT_MIN;
-        this.updatePosition();
+        this.verticalAngleDeg = this.verticalAngleDeg < CAM_VERTICAL_ANGLE_MAX_DEGREE
+            ? this.verticalAngleDeg
+            : CAM_VERTICAL_ANGLE_MAX_DEGREE;
+        this.verticalAngleDeg = this.verticalAngleDeg > CAM_VERTICAL_ANGLE_MIN_DEGREE
+            ? this.verticalAngleDeg
+            : CAM_VERTICAL_ANGLE_MIN_DEGREE;
+        this.__updatePosition();
     }
 
-    setLookAtMatrix(lookAtPosition, top) {
-        this.lookAtPos = lookAtPosition;
-        this.top = top;
+    __updatePosition() {
+        // let P be the point with (x,y,z)
+        // x: R * sin(YOP) * sin(ZOP)
+        // y: R * cos(YOP)
+        // z: R * sin(YOP) * cos(ZOP)
+        const spherical = (f, g) => this.distance
+            * f(degToRad(this.verticalAngleDeg)) * g(degToRad(this.horizontalAngleDeg));
+
+        this.positionVec[0] = spherical(Math.sin, Math.sin);
+        this.positionVec[1] = spherical(Math.cos, (any) => 1);
+        this.positionVec[2] = spherical(Math.sin, Math.cos);
     }
 
     static setValueFunction(newValue) {
-        // currentValue is ignored
+        // currValue is ignored
         return (currValue) => parseFloat(newValue);
     };
 

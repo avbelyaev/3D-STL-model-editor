@@ -45,10 +45,10 @@ const updateCamera = () => {
     cam.updateDistance(Camera.setValueFunction(camDistElem.value));
 
     const camHeightElem = document.getElementById("camHeight");
-    cam.updateHeight(Camera.setValueFunction(camHeightElem.value));
+    cam.updateVerticalAngleDeg(Camera.setValueFunction(camHeightElem.value));
 
     const camAngleElem = document.getElementById("camAngle");
-    cam.updateAngleDeg(Camera.setValueFunction(camAngleElem.value));
+    cam.updateHorizontalAngleDeg(Camera.setValueFunction(camAngleElem.value));
 };
 
 const updateFigure = () => {
@@ -78,18 +78,11 @@ function drawScene() {
 
 const initCamera = () => {
     const distance = 200;
-    const angleDeg = 30;
-    const height = 200;
-    const position = [300, 200, 300];
+    const horizontalAngleDeg = 30;
+    const vertAngleDeg = 30;
+    const lookAt = [0, 30, 0];
 
-    const camera = new Camera(distance, angleDeg, height, position);
-
-    // for lookAtMatrix only
-    const lookAt = [0, 3, 0];
-    const straightTop = [0, 1, 0];
-    camera.setLookAtMatrix(lookAt, straightTop);
-
-    return camera;
+    return new Camera(distance, horizontalAngleDeg, vertAngleDeg, lookAt);
 };
 
 

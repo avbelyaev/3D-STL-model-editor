@@ -51,8 +51,8 @@ class MouseControls {
 
             } else {
                 // apply to camera
-                cam.updateAngleDeg(Camera.incValueFunction(-1 * deltaX / CAM_HORIZONTAL_ROTATION_DECELERATION));
-                cam.updateHeight(Camera.incValueFunction(deltaY));
+                cam.updateHorizontalAngleDeg(Camera.incValueFunction(-1 * deltaX / CAM_HORIZONTAL_ROTATION_DECELERATION));
+                cam.updateVerticalAngleDeg(Camera.incValueFunction( -1 * deltaY / CAM_VERT_ROTATION_DECELERATION));
             }
 
         } else if (MOUSE_BTN_RIGHT_CHROME === event.button) {
