@@ -20,14 +20,9 @@ class FigureController {
 
         this.dynamicFigures.set(dynamicFigure.id, dynamicFigure);
 
-        // save dynamic figure's index into radio-button
-        const customAttr = {
-            'name': this.childElementsAttr,
-            'value': dynamicFigure.id
-        };
-        const figureButton = createFigureButton(
-            this.childElementsClassName, this.childElementsGroupName, true, customAttr);
-        this.__customizeButton(figureButton, dynamicFigure.id);
+        // save dynamic figure's id into radio-button
+        const figureButton = this.createFigureButton(
+            this.childElementsClassName, this.childElementsGroupName, true, dynamicFigure.id);
         this.figureControllerElement.appendChild(figureButton);
 
         selectedFigure = this.selectedFigure;
@@ -53,8 +48,33 @@ class FigureController {
         return this.dynamicFigures.get(selectedFigureId);
     }
 
-    __customizeButton(radioButton, figureId) {
-        radioButton.setAttribute('onclick', 'updateFigure()');
-        radioButton.innerHTML += figureId;
-    }
+    createFigureButton(className, groupName, checked, idAttr) {
+        let radioButton = document.createElement('input');
+        radioButton.type = 'radio';
+        radioButton.name = groupName;
+        radioButton.setAttribute('class', className);
+        radioButton.setAttribute(this.childElementsAttr, idAttr);
+        if (checked) {
+            radioButton.setAttribute('checked', 'checked');
+        }
+
+        let label = document.createElement('label');
+        label.setAttribute('class', 'figure-controller__button--label');
+
+        const checkbox = document.createElement('input');
+        checkbox.type = "checkbox";
+        checkbox.name = "name";
+        checkbox.value = "value";
+        checkbox.id = "id";
+
+        let wrapper = document.createElement('div');
+        wrapper.setAttribute('class', 'figure-controller__button--wrapper');
+        wrapper.setAttribute('onclick', 'updateFigure()');
+        wrapper.appendChild(radioButton);
+        wrapper.appendChild(label);
+        wrapper.appendChild(checkbox);
+        wrapper.innerHTML += idAttr;
+
+        return wrapper;
+    };
 }

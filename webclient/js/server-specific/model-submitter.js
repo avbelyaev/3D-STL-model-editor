@@ -28,6 +28,14 @@ class ModelSubmitter {
                         vsSource, fsSource, file.name);
                     mesh.init();
                     figureController.addDynamicFigure(mesh);
+
+                    // save to local storage
+                    log(`converting to base64 and saving into local storage`);
+                    ServerApiClient.convertToBase64(file, (err, res) => {
+                        if (!err) {
+                            localStorage.setItem(mesh.id, res);
+                        }
+                    });
                 }
                 this.canBeSubmitted = true;
             });
@@ -36,5 +44,10 @@ class ModelSubmitter {
         } else {
             log('nothing to submit or already submitted');
         }
+    }
+
+    performBoolOp() {
+        const stl1 = localStorage.getItem('stl1');
+        const stl2 = localStorage.getItem('stl2');
     }
 }

@@ -62,23 +62,23 @@ fieldset {
 }
 
 .page__container {
-    display: flex;
     background-color: red;
+    display: flex;
 }
 
 .menu {
     background-color: #757474;
-    width: 244px;
+    font-size: 14px;
     height: 680px;
     padding: 10px;
-    font-size: 14px;
+    width: 244px;
 }
 
 .figure-controller__button--wrapper {
     border: #ffffff 1px solid;
     display: block;
-    padding: 5px;
     margin: 10px;
+    padding: 5px;
 }
 
 .figure-controller__button--label {
@@ -87,6 +87,9 @@ fieldset {
 
 .menu__model-submitter--input {
     border: #ffffff 1px solid;
+    margin: 10px;
+    padding: 7px;
+    width: 210px;
 }
 
 #logr {

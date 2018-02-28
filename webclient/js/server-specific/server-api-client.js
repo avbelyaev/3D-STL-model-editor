@@ -33,11 +33,16 @@ class ServerApiClient {
             // base64 has default prefix like this: data:;base64,****
             // cut off prefix (including comma) since base64 uses only chars [a-z, A-Z, 0-9, +, /]
             const prefixRemoved = event.target.result.split(',')[1];
-            callback(prefixRemoved);
+            callback(null, prefixRemoved);
         };
         reader.onerror = function (error) {
-            log('Error: ', error);
+            log(`Error occured while converting to base64: ${error}`);
+            callback(error, null);
         };
         reader.readAsDataURL(file);
     };
+
+    static convertFromBse64(base64String, callback) {
+
+    }
 }
