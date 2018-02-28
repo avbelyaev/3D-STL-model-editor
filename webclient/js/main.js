@@ -2,6 +2,7 @@
 let gl;
 let cam;
 let selectedFigure;
+let idsOfFiguresToBeProcessed;
 let figureController;
 let modelSubmitter;
 let serverApiClient;
@@ -57,6 +58,8 @@ const updateFigure = () => {
 
     const figScaleElem = document.getElementById("figScale");
     figureScale = figScaleElem.value;
+
+    idsOfFiguresToBeProcessed = figureController.figuresToBeProcessed;
 
     selectedFigure = figureController.selectedFigure;
     selectedFigure.scaleBy(figureScale);

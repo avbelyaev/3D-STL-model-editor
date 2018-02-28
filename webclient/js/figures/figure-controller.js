@@ -10,7 +10,8 @@ class FigureController {
         this.staticFigures = new Map();
 
         this.figureControllerElement = document.getElementsByClassName('figure-controller__button-list')[0];
-        this.childElementsClassName = 'figure-controller__button--input';
+        this.classForRadioButtons = 'figure-controller__radio-button--input';
+        this.classForCheckboxes = 'figure-controller__checkbox--input';
         this.childElementsGroupName = 'figure-controller-group';
         this.childElementsAttr = 'selectedFigureId';
     }
@@ -21,8 +22,7 @@ class FigureController {
         this.dynamicFigures.set(dynamicFigure.id, dynamicFigure);
 
         // save dynamic figure's id into radio-button
-        const figureButton = this.createFigureButton(
-            this.childElementsClassName, this.childElementsGroupName, true, dynamicFigure.id);
+        const figureButton = this.createFigureButton(this.childElementsGroupName, true, dynamicFigure.id);
         this.figureControllerElement.appendChild(figureButton);
 
         selectedFigure = this.selectedFigure;
@@ -41,18 +41,26 @@ class FigureController {
     }
 
     get selectedFigure() {
-        const checked = Array.from(document.getElementsByClassName(this.childElementsClassName))
+        const checked = Array.from(document.getElementsByClassName(this.classForRadioButtons))
             .find(radioButton => radioButton.checked);
         const selectedFigureId = checked.getAttribute(this.childElementsAttr);
 
         return this.dynamicFigures.get(selectedFigureId);
     }
 
-    createFigureButton(className, groupName, checked, idAttr) {
+    get figuresToBeProcessed() {
+        const toBeProcessed = Array.from(document.getElementsByClassName(this.classForCheckboxes))
+            .filter(checkbox => checkbox.checked)
+            .map(checkedCheckBox => checkedCheckBox.getAttribute(this.childElementsAttr));
+
+        return toBeProcessed;
+    }
+
+    createFigureButton(groupName, checked, idAttr) {
         let radioButton = document.createElement('input');
         radioButton.type = 'radio';
         radioButton.name = groupName;
-        radioButton.setAttribute('class', className);
+        radioButton.setAttribute('class', this.classForRadioButtons);
         radioButton.setAttribute(this.childElementsAttr, idAttr);
         if (checked) {
             radioButton.setAttribute('checked', 'checked');
@@ -63,9 +71,9 @@ class FigureController {
 
         const checkbox = document.createElement('input');
         checkbox.type = "checkbox";
-        checkbox.name = "name";
-        checkbox.value = "value";
-        checkbox.id = "id";
+        checkbox.name = groupName;
+        checkbox.setAttribute('class', this.classForCheckboxes);
+        checkbox.setAttribute(this.childElementsAttr, idAttr);
 
         let wrapper = document.createElement('div');
         wrapper.setAttribute('class', 'figure-controller__button--wrapper');
