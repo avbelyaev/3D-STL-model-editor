@@ -9,6 +9,7 @@ class ModelSubmitter {
 
         this.modelSubmitterElement = document.getElementsByClassName('menu__model-submitter--input')[0];
         this.canBeSubmitted = true;
+        this.canBePerformed = true;
     }
 
     submitFile() {
@@ -47,7 +48,26 @@ class ModelSubmitter {
     }
 
     performBoolOp() {
-        const stl1 = localStorage.getItem('stl1');
-        const stl2 = localStorage.getItem('stl2');
+        const stl1 = localStorage.getItem(idsOfFiguresToBeProcessed[0]);
+        const stl2 = localStorage.getItem(idsOfFiguresToBeProcessed[1]);
+        const cmd = Models.performOnStlModel('union', stl1, stl2);
+
+        if (this.canBePerformed) {
+            serverApiClient.performBoolOp(cmd, (err, res) => {
+                if (!err) {
+                    const meshModel = res.data;
+                    log(meshModel);
+
+                    const mesh = Mesh.ofMeshModel(meshModel, 'bool-op-res');
+                    mesh.init();
+                    figureController.addDynamicFigure(mesh);
+                }
+                this.canBePerformed = true;
+            });
+            this.canBePerformed = false;
+
+        }  else {
+            log('nothing to perform already performed');
+        }
     }
 }

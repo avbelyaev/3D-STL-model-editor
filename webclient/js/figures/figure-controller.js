@@ -10,22 +10,27 @@ class FigureController {
         this.staticFigures = new Map();
 
         this.figureControllerElement = document.getElementsByClassName('figure-controller__button-list')[0];
-        this.classForRadioButtons = 'figure-controller__radio-button--input';
-        this.classForCheckboxes = 'figure-controller__checkbox--input';
+        this.selectedFigureClass = 'figure-controller__radio-button--input';
+        this.processedFiguresClass = 'figure-controller__checkbox--input';
         this.childElementsGroupName = 'figure-controller-group';
         this.childElementsAttr = 'selectedFigureId';
     }
 
     addDynamicFigure(dynamicFigure) {
         log(`adding dynamic figure ${dynamicFigure.id}`);
+        if (!this.dynamicFigures.has(dynamicFigure.id)) {
 
-        this.dynamicFigures.set(dynamicFigure.id, dynamicFigure);
+            this.dynamicFigures.set(dynamicFigure.id, dynamicFigure);
 
-        // save dynamic figure's id into radio-button
-        const figureButton = this.createFigureButton(this.childElementsGroupName, true, dynamicFigure.id);
-        this.figureControllerElement.appendChild(figureButton);
+            // save dynamic figure's id into radio-button
+            const figureButton = this.createFigureButton(this.childElementsGroupName, true, dynamicFigure.id);
+            this.figureControllerElement.appendChild(figureButton);
 
-        selectedFigure = this.selectedFigure;
+            selectedFigure = this.selectedFigure;
+
+        } else {
+            log(`figure with id ${dynamicFigure.id} already exists`);
+        }
     }
 
     addStaticFigure(staticFigure) {
@@ -41,7 +46,7 @@ class FigureController {
     }
 
     get selectedFigure() {
-        const checked = Array.from(document.getElementsByClassName(this.classForRadioButtons))
+        const checked = Array.from(document.getElementsByClassName(this.selectedFigureClass))
             .find(radioButton => radioButton.checked);
         const selectedFigureId = checked.getAttribute(this.childElementsAttr);
 
@@ -49,7 +54,7 @@ class FigureController {
     }
 
     get figuresToBeProcessed() {
-        const toBeProcessed = Array.from(document.getElementsByClassName(this.classForCheckboxes))
+        const toBeProcessed = Array.from(document.getElementsByClassName(this.processedFiguresClass))
             .filter(checkbox => checkbox.checked)
             .map(checkedCheckBox => checkedCheckBox.getAttribute(this.childElementsAttr));
 
@@ -60,7 +65,7 @@ class FigureController {
         let radioButton = document.createElement('input');
         radioButton.type = 'radio';
         radioButton.name = groupName;
-        radioButton.setAttribute('class', this.classForRadioButtons);
+        radioButton.setAttribute('class', this.selectedFigureClass);
         radioButton.setAttribute(this.childElementsAttr, idAttr);
         if (checked) {
             radioButton.setAttribute('checked', 'checked');
@@ -72,7 +77,7 @@ class FigureController {
         const checkbox = document.createElement('input');
         checkbox.type = "checkbox";
         checkbox.name = groupName;
-        checkbox.setAttribute('class', this.classForCheckboxes);
+        checkbox.setAttribute('class', this.processedFiguresClass);
         checkbox.setAttribute(this.childElementsAttr, idAttr);
 
         let wrapper = document.createElement('div');

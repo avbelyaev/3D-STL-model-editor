@@ -27,6 +27,15 @@ class ServerApiClient {
             });
     }
 
+    performBoolOp(boolOpCommand, callback) {
+        axios.post(`${this.stlUrl}/perform`, boolOpCommand)
+            .then(response => callback(null, response))
+            .catch(error => {
+                log(`Error occurred while performing bool op on STLs: ${error}`);
+                callback(error, null);
+            });
+    }
+
     static convertToBase64(file, callback) {
         const reader = new FileReader();
         reader.onload = function (event) {
