@@ -22,6 +22,8 @@ class Drawable {
         this.translationVec = [0, 0, 0];
         this.scaleVec = [1, 1, 1];
         this.rotationVec = [0, 0, 0];
+
+        this.visible = true;
     }
 
     draw() {

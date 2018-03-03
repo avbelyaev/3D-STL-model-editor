@@ -41,17 +41,6 @@ const fsSource = `
     }
   `;
 
-const updateCamera = () => {
-    const camDistElem = document.getElementById("camDist");
-    cam.updateDistance(Camera.setValueFunction(camDistElem.value));
-
-    const camHeightElem = document.getElementById("camHeight");
-    cam.updateVerticalAngleDeg(Camera.setValueFunction(camHeightElem.value));
-
-    const camAngleElem = document.getElementById("camAngle");
-    cam.updateHorizontalAngleDeg(Camera.setValueFunction(camAngleElem.value));
-};
-
 const updateFigure = () => {
     const figAngleElem = document.getElementById("figAngle");
     figureAngleDeg = figAngleElem.value;
@@ -64,6 +53,12 @@ const updateFigure = () => {
     selectedFigure = figureController.selectedFigure;
     selectedFigure.scaleBy(figureScale);
     selectedFigure.rotateBy([figureAngleDeg, figureAngleDeg, 0], null);
+};
+
+const updateVisibility = (visibilityCheckbox) => {
+    const figureId = visibilityCheckbox.getAttribute(figureController.figureIdAttrName);
+    const figure = figureController.dynamicFigures.get(figureId);
+    figure.visible = !figure.visible;
 };
 
 
@@ -134,12 +129,12 @@ function main() {
 
     // add mesh stub from geometry server
     serverApiClient.meshStub(response => {
-        const meshModel = response.data;
-        log(meshModel);
+        const data = response.data;
+        log(data);
 
-        const mesh = Mesh.ofMeshModel(meshModel, 'stub');
-        mesh.init();
-        figureController.addDynamicFigure(mesh);
+        const stub = Figure.ofInnerRepresentation(data, 'stub');
+        stub.init();
+        figureController.addDynamicFigure(stub);
     });
 
 

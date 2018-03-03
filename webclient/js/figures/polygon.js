@@ -17,21 +17,41 @@ class Figure extends Drawable {
     }
 
     draw() {
-        this.gl.useProgram(this.program);
+        if (this.visible) {
+            this.gl.useProgram(this.program);
 
-        // vertices
-        bindBufferToAttribute(this.attribLocations.vertexPosition, this.positionBufferInfo);
+            // vertices
+            bindBufferToAttribute(this.attribLocations.vertexPosition, this.positionBufferInfo);
 
-        // colors
-        bindBufferToAttribute(this.attribLocations.vertexColor, this.colorBufferInfo);
+            // colors
+            bindBufferToAttribute(this.attribLocations.vertexColor, this.colorBufferInfo);
 
-        // uniforms
-        this.__updateMatrices();
-        this.gl.uniformMatrix4fv(this.uniformLocations.uModel, false, this.mModel);
-        this.gl.uniformMatrix4fv(this.uniformLocations.uView, false, this.mView);
-        this.gl.uniformMatrix4fv(this.uniformLocations.uProjection, false, this.mProj);
+            // uniforms
+            this.__updateMatrices();
+            this.gl.uniformMatrix4fv(this.uniformLocations.uModel, false, this.mModel);
+            this.gl.uniformMatrix4fv(this.uniformLocations.uView, false, this.mView);
+            this.gl.uniformMatrix4fv(this.uniformLocations.uProjection, false, this.mProj);
 
-        // draw
-        this.gl.drawArrays(this.drawMode, 0, this.numElements);
+            // draw
+            this.gl.drawArrays(this.drawMode, 0, this.numElements);
+        }
+    }
+
+    static ofInnerRepresentation(data, figureId) {
+        const triangles = data['triangles'];
+
+        const positions = [];
+        triangles.forEach(t => {
+            positions.push(...t['a']);
+            positions.push(...t['b']);
+            positions.push(...t['c']);
+
+            positions.map(pos => parseInt(pos) * this.posMultiplicationFactor);
+        });
+
+        const figure = new Figure(positions, COLORS.RANDOM(), gl, vsSource, fsSource, figureId);
+        figure.init();
+
+        return figure;
     }
 }

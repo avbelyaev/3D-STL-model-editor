@@ -55,12 +55,12 @@ class ModelSubmitter {
         if (this.canBePerformed) {
             serverApiClient.performBoolOp(cmd, (err, res) => {
                 if (!err) {
-                    const meshModel = res.data;
-                    log(meshModel);
+                    const data = res.data;
+                    log(data);
 
-                    const mesh = Mesh.ofMeshModel(meshModel, 'bool-op-res');
-                    mesh.init();
-                    figureController.addDynamicFigure(mesh);
+                    const boolOpResult = Figure.ofInnerRepresentation(data, 'boolOpResult');
+                    boolOpResult.init();
+                    figureController.addDynamicFigure(boolOpResult);
                 }
                 this.canBePerformed = true;
             });

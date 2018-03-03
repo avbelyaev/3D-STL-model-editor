@@ -10,27 +10,23 @@ class FigureController {
         this.staticFigures = new Map();
 
         this.figureControllerElement = document.getElementsByClassName('figure-controller__button-list')[0];
-        this.selectedFigureClass = 'figure-controller__radio-button--input';
-        this.processedFiguresClass = 'figure-controller__checkbox--input';
+        this.selectedFigureClass = 'figure-controller__selected-figure';
+        this.processedFiguresClass = 'figure-controller__bool-op';
+        this.visibilityCheckboxClass = 'figure-controller__visibility';
         this.childElementsGroupName = 'figure-controller-group';
-        this.childElementsAttr = 'selectedFigureId';
+        this.figureIdAttrName = 'figureId';
     }
 
     addDynamicFigure(dynamicFigure) {
         log(`adding dynamic figure ${dynamicFigure.id}`);
-        if (!this.dynamicFigures.has(dynamicFigure.id)) {
 
-            this.dynamicFigures.set(dynamicFigure.id, dynamicFigure);
+        this.dynamicFigures.set(dynamicFigure.id, dynamicFigure);
 
-            // save dynamic figure's id into radio-button
-            const figureButton = this.createFigureButton(this.childElementsGroupName, true, dynamicFigure.id);
-            this.figureControllerElement.appendChild(figureButton);
+        // save dynamic figure's id into radio-button
+        const figureButton = this.createFigureButton(this.childElementsGroupName, dynamicFigure.id);
+        this.figureControllerElement.appendChild(figureButton);
 
-            selectedFigure = this.selectedFigure;
-
-        } else {
-            log(`figure with id ${dynamicFigure.id} already exists`);
-        }
+        selectedFigure = this.selectedFigure;
     }
 
     addStaticFigure(staticFigure) {
@@ -48,45 +44,53 @@ class FigureController {
     get selectedFigure() {
         const checked = Array.from(document.getElementsByClassName(this.selectedFigureClass))
             .find(radioButton => radioButton.checked);
-        const selectedFigureId = checked.getAttribute(this.childElementsAttr);
+        const selectedFigureId = checked.getAttribute(this.figureIdAttrName);
 
         return this.dynamicFigures.get(selectedFigureId);
     }
 
     get figuresToBeProcessed() {
-        const toBeProcessed = Array.from(document.getElementsByClassName(this.processedFiguresClass))
+        return Array.from(document.getElementsByClassName(this.processedFiguresClass))
             .filter(checkbox => checkbox.checked)
-            .map(checkedCheckBox => checkedCheckBox.getAttribute(this.childElementsAttr));
-
-        return toBeProcessed;
+            .map(checkedCheckBox => checkedCheckBox.getAttribute(this.figureIdAttrName));
     }
 
-    createFigureButton(groupName, checked, idAttr) {
-        let radioButton = document.createElement('input');
-        radioButton.type = 'radio';
-        radioButton.name = groupName;
-        radioButton.setAttribute('class', this.selectedFigureClass);
-        radioButton.setAttribute(this.childElementsAttr, idAttr);
-        if (checked) {
-            radioButton.setAttribute('checked', 'checked');
-        }
+    createFigureButton(groupName, idAttr) {
+        let selectedFigureButton = document.createElement('input');
+        selectedFigureButton.type = 'radio';
+        selectedFigureButton.name = groupName;
+        selectedFigureButton.setAttribute('class', this.selectedFigureClass);
+        selectedFigureButton.setAttribute(this.figureIdAttrName, idAttr);
+        selectedFigureButton.setAttribute('checked', 'checked');
 
-        let label = document.createElement('label');
-        label.setAttribute('class', 'figure-controller__button--label');
+        const figureIdLabel = document.createElement('label');
+        figureIdLabel.innerHTML += idAttr;
 
-        const checkbox = document.createElement('input');
-        checkbox.type = "checkbox";
-        checkbox.name = groupName;
-        checkbox.setAttribute('class', this.processedFiguresClass);
-        checkbox.setAttribute(this.childElementsAttr, idAttr);
+        const boolOpCheckbox = document.createElement('input');
+        boolOpCheckbox.type = "checkbox";
+        boolOpCheckbox.name = groupName;
+        boolOpCheckbox.setAttribute('class', this.processedFiguresClass);
+        boolOpCheckbox.setAttribute(this.figureIdAttrName, idAttr);
+
+        const visibilityLabel = document.createElement('label');
+        visibilityLabel.innerHTML += 'visible';
+
+        const visibilityCheckbox = document.createElement('input');
+        visibilityCheckbox.type = "checkbox";
+        visibilityCheckbox.name = groupName;
+        visibilityCheckbox.setAttribute('class', this.visibilityCheckboxClass);
+        visibilityCheckbox.setAttribute(this.figureIdAttrName, idAttr);
+        visibilityCheckbox.setAttribute('onclick', 'updateVisibility(this)');
+        visibilityCheckbox.setAttribute('checked', 'checked');
 
         let wrapper = document.createElement('div');
         wrapper.setAttribute('class', 'figure-controller__button--wrapper');
         wrapper.setAttribute('onclick', 'updateFigure()');
-        wrapper.appendChild(radioButton);
-        wrapper.appendChild(label);
-        wrapper.appendChild(checkbox);
-        wrapper.innerHTML += idAttr;
+        wrapper.appendChild(selectedFigureButton);
+        wrapper.appendChild(figureIdLabel);
+        wrapper.appendChild(boolOpCheckbox);
+        wrapper.appendChild(visibilityLabel);
+        wrapper.appendChild(visibilityCheckbox);
 
         return wrapper;
     };

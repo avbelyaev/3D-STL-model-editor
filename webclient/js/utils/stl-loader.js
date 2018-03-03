@@ -8,7 +8,7 @@
 class STLLoader {
 
     static parseBinarySTL(file, callback) {
-        log(`parsing binary file ${file}`);
+        log(`parsing binary file`);
 
         const fileReader = new FileReader();
         fileReader.onload = function() {
