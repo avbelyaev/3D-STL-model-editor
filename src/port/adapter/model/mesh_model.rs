@@ -1,6 +1,7 @@
 use domain::model::mesh::Mesh;
 use domain::model::triangle::Triangle;
 use port::adapter::model::triangle_model::TriangleModel;
+use stl;
 
 
 #[derive(Serialize, Deserialize)]
@@ -23,6 +24,13 @@ impl MeshModel {
 
     pub fn from_triangle_models(triangle_models: Vec<TriangleModel>) -> Self {
         MeshModel{ len: triangle_models.len() as u32, triangles: triangle_models }
+    }
+
+    pub fn from_binary_stl_file(binary_stl_file: &stl::BinaryStlFile) -> Self {
+        let unwrapped = binary_stl_file;
+
+        // TODO use trait MshArrayableModel. same method
+        mesh_stub()
     }
 }
 

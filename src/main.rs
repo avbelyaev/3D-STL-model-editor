@@ -9,6 +9,7 @@ use rocket::{Rocket, Data};
 use rocket_contrib::Json;
 use geometry_server::resource::{mesh_resource, stl_resource};
 use geometry_server::port::adapter::model::mesh_model::MeshModel;
+use geometry_server::port::adapter::model::mesh_arrayable_model::MeshArrayableModel;
 use geometry_server::port::adapter::command::{perform_on_mesh_command,
                                               perform_on_stl_command,
                                               extract_mesh_command};
@@ -17,7 +18,7 @@ use geometry_server::configuration::cors_config::CORS;
 
 // /api/mesh
 #[post("/extract", format = "application/json", data = "<cmd>")]
-fn extract_mesh_wrapper(cmd: Json<extract_mesh_command::ExtractMeshCommand>) -> Json<MeshModel> {
+fn extract_mesh_wrapper(cmd: Json<extract_mesh_command::ExtractMeshCommand>) -> Json<MeshArrayableModel> {
     mesh_resource::extract_mesh_from_stl(cmd)
 }
 
