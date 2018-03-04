@@ -18,8 +18,10 @@ impl MeshArrayableModel {
         let mut vertices = Vec::new();
         let mut normals = Vec::new();
         for t in binary_stl.triangles.iter() {
-            vertices.push(1.0);
-            normals.push(2.0);
+            vertices.extend_from_slice(&t.v1);
+            vertices.extend_from_slice(&t.v2);
+            vertices.extend_from_slice(&t.v3);
+            normals.extend_from_slice(&t.normal);
         }
 
         MeshArrayableModel { vertices, normals }
