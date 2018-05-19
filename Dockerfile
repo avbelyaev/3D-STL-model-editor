@@ -40,6 +40,13 @@ COPY . /app
 
 WORKDIR /app
 
+#ENV https_proxy=https://35.227.74.16:3128
+#ENV SSL_CERT_FILE=cert.crt
+
+# compile rocket
+RUN cargo update -p libc && \
+    cargo build --verbose
+
 ENV ROCKET_ENV=production
 
 ENTRYPOINT ["cargo", "run"]
