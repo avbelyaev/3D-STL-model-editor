@@ -1,6 +1,8 @@
 # Hrust-Wiggle
 
 ## Rust Rocket web server
+
+### Cargo
 Rocket runs on specific Rust-nightly version of 21 dec (coincidence? I dont think so) 2017
 ```
 rustup install nightly
@@ -10,6 +12,25 @@ rustup default nightly-2017-12-21
 Run web server:
 ```
 cargo run
+```
+
+### Docker
+Docker requires https while pulling image.
+So prior to building image add the following to docker deamon config (dockerd).
+Docker config on MacOS: tray -> preferences -> daemon -> advanced
+
+```
+{
+  ... other options
+  "insecure-registries" : [
+    "registry-1.docker.io:443"
+  ]
+}
+```
+
+Build and run:
+```
+docker build -t server .
 ```
 
 

@@ -31,9 +31,15 @@ RUN set -eux; \
 
 
 # set up nightly for rocket
-
 RUN rustup update && \
     rustup install nightly && \
-    rustup default nightly
+    rustup default nightly && \
+    rustc --version
 
-RUN rustc --version
+COPY . /app
+
+WORKDIR /app
+
+ENV ROCKET_ENV=production
+
+ENTRYPOINT ["cargo", "run"]
