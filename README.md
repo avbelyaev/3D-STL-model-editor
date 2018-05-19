@@ -43,7 +43,7 @@ Axios should be [downloaded](https://github.com/axios/axios) and placed at `/web
 Logger should be [downloaded](http://www.songho.ca/misc/logger/files/Logger.js) and placed at `/webclient/js/lib/Logger.js`
 
 
-### Notes
+## Notes
 - Back to stable version of Rust: `rustup default stable`
 - Lib can be omitted on Mac: `brew install gmp`
 - Allow Chrome open local files on OSX
