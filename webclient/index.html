@@ -34,6 +34,7 @@
         <script src="js/figures/line.js"></script>
         <script src="js/figures/polygon.js"></script>
         <script src="js/figures/mesh.js"></script>
+        <script src="js/figures/grid.js"></script>
 
         <!--server-specific-->
         <script src="js/server-specific/models.js"></script>
@@ -46,7 +47,7 @@
             <div class="view">
                 <canvas id="glCanvas"></canvas>
                 <div class="log">
-                    <div class="log--content">
+                    <div class="log__content">
                         <!-- logging goes here -->
                     </div>
                 </div>
@@ -65,7 +66,9 @@
 
                 <div id="control-selection" class="control">
                     <div class="control-title">Select figure</div>
-                    <div class="control-element">Figure selection from available figure</div>
+                    <div class="control-element">
+                        <!-- figure list goes here -->
+                    </div>
                 </div>
 
                 <div id="control-adjustment" class="control">
