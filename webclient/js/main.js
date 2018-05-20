@@ -52,7 +52,7 @@ const updateFigure = () => {
 
     selectedFigure = figureController.selectedFigure;
     selectedFigure.scaleBy(figureScale);
-    selectedFigure.rotateBy([figureAngleDeg, figureAngleDeg, 0], null);
+    selectedFigure.rotateBy([0, figureAngleDeg, 0], null);
 };
 
 const updateVisibility = (visibilityCheckbox) => {
@@ -61,9 +61,20 @@ const updateVisibility = (visibilityCheckbox) => {
     figure.visible = !figure.visible;
 };
 
+const resize = () => {
+    const width = gl.canvas.clientWidth;
+    const height = gl.canvas.clientHeight;
+    if (gl.canvas.width !== width || gl.canvas.height !== height) {
+        gl.canvas.width = width;
+        gl.canvas.height = height;
+    }
+};
+
 
 function drawScene() {
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    resize();
+
+    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.clearColor(0.3, 0.3, 0.3, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -74,15 +85,28 @@ function drawScene() {
     requestAnimationFrame(drawScene);
 }
 
+
+
 const initCamera = () => {
     const distance = 200;
     const horizontalAngleDeg = 30;
     const vertAngleDeg = 30;
-    const lookAt = [0, 30, 0];
+    const lookAt = [0, 10, 0];
 
     return new Camera(distance, horizontalAngleDeg, vertAngleDeg, lookAt);
 };
 
+const initGLControls = () => {
+    const canvas = document.getElementById("glCanvas");
+    const gl = canvas.getContext("webgl");
+    if (!gl) {
+        throw new Error("Unable to initialize WebGL. Your browser or machine may not support it.");
+    }
+
+    const controls = new MouseControls(canvas);
+
+    return gl;
+};
 
 function main() {
     gl = initGLControls();
@@ -92,7 +116,7 @@ function main() {
     serverApiClient = new ServerApiClient('localhost', 8000);
 
 
-    gl.clearColor(0.3, 0.0, 0.0, 1.0);
+    gl.clearColor(0.8, 0.8, 0.8, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     gl.enable(gl.DEPTH_TEST);
