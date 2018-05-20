@@ -57,7 +57,11 @@ const log = (text) => {
         dateTimeNow.getSeconds() + ":" +
         dateTimeNow.getMilliseconds();
 
-    logr.innerText += currentTime + " " + text + "\n";
+    if (text.toLowerCase().includes('error')) {
+        text = `<span class=${H2JS_LOG_CONTENT_ERROR}>${text}</span>`;
+    }
+
+    logr.innerHTML += currentTime + " " + text + "<br>";
 };
 
 let figureAngleDeg = 0;

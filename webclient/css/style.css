@@ -37,6 +37,10 @@ html body .editor .view .log .log__content {
   font-family: "Courier New", Courier, monospace;
   font-size: 14px;
 }
+html body .editor .view .log .log__content .log__content--error {
+  color: red;
+  font-size: 15px;
+}
 html body .editor .controls {
   width: 20%;
   height: 100%;
@@ -47,11 +51,11 @@ html body .editor .controls .control {
   margin: 0 0 2px 2px;
   padding: 4px;
 }
-html body .editor .controls .control-title {
+html body .editor .controls .control .control-title {
   background-color: #C0C0C0;
   padding-left: 4px;
 }
-html body .editor .controls .control-element {
+html body .editor .controls .control .control-element {
   padding-top: 4px;
 }
 

@@ -49,6 +49,11 @@ html {
             overflow: auto;
             font-family: $font-courier;
             font-size: 14px;
+
+            .log__content--error {
+              color: red;
+              font-size: 15px;
+            }
           }
         }
       }
@@ -62,15 +67,15 @@ html {
           background-color: $control--background-color;
           margin: 0 0 2px 2px;
           padding: 4px;
-        }
 
-        .control-title {
-          background-color: $control-title--background-color;
-          padding-left: 4px;
-        }
+          .control-title {
+            background-color: $control-title--background-color;
+            padding-left: 4px;
+          }
 
-        .control-element {
-          padding-top: 4px;
+          .control-element {
+            padding-top: 4px;
+          }
         }
       }
     }

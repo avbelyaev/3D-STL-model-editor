@@ -13,3 +13,4 @@ const H2JS_CONTROL_SELECTION = "control-selection";
 // logs
 const H2JS_LOG = "log";
 const H2JS_LOG_CONTENT = "log__content";
+const H2JS_LOG_CONTENT_ERROR = "log__content--error";
