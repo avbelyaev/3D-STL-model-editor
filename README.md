@@ -3,18 +3,25 @@
 ## Rust Rocket web server
 
 ### Cargo
+
+
 Rocket runs on specific Rust-nightly version of 21 dec (coincidence? I dont think so) 2017
 ```
 rustup install nightly
 rustup update
 rustup default nightly-2017-12-21
 ```
+
+
 Run web server:
 ```
 cargo run
 ```
 
+
+
 ### Docker
+
 Docker requires https while pulling image.
 So prior to building image add the following to docker deamon config (dockerd).
 Docker config on MacOS: tray -> preferences -> daemon -> advanced
@@ -28,30 +35,36 @@ Docker config on MacOS: tray -> preferences -> daemon -> advanced
 }
 ```
 
+
 Build and run:
 ```
 docker build -t server .
+docker run server
 ```
 
 
-## WebGL (OpenGL ES 2.0) web client
+## WebGL (OpenGL ES 2.0) client
 
-GL-matrix lib should be [downloaded](http://glmatrix.net/), compiled and placed at `/webclient/js/lib/gl-matrix.js`
+Requirements:
+- GL-matrix lib should be [downloaded](http://glmatrix.net/), compiled and placed at `/webclient/js/lib/gl-matrix.js`
+- Axios should be [downloaded](https://github.com/axios/axios) and placed at `/webclient/js/lib/axios.min.js`
+- Logger should be [downloaded](http://www.songho.ca/misc/logger/files/Logger.js) and placed at `/webclient/js/lib/Logger.js`
 
-Axios should be [downloaded](https://github.com/axios/axios) and placed at `/webclient/js/lib/axios.min.js`
-
-Logger should be [downloaded](http://www.songho.ca/misc/logger/files/Logger.js) and placed at `/webclient/js/lib/Logger.js`
 
 
 ## Notes
 - Back to stable version of Rust: `rustup default stable`
-- Lib can be omitted on Mac: `brew install gmp`
+- Lib `gmp` can be omitted on Mac: `brew install gmp`
 - Allow Chrome open local files on OSX
 ```
 open /Applications/Google\ Chrome.app --args --allow-file-access-from-files
 ```
+- Proxy may be needed to use brew: `export ALL_PROXY=https://host:port`
+- Proxy for git (cargo/docker): `git config --global http.proxy http://host:port`
 
-### Todo
+
+
+## Todo
 - обработка ресайза в меню справа
 https://webglfundamentals.org/webgl/lessons/webgl-anti-patterns.html
 
