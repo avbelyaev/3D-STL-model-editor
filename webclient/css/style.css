@@ -36,13 +36,15 @@ html body .editor .controls {
 }
 html body .editor .controls .control {
   background-color: #D3D3D3;
-  height: 90px;
   margin: 0 0 2px 2px;
   padding: 4px;
 }
 html body .editor .controls .control-title {
   background-color: #C0C0C0;
   padding-left: 4px;
+}
+html body .editor .controls .control-element {
+  padding-top: 4px;
 }
 
 /*# sourceMappingURL=style.css.map */

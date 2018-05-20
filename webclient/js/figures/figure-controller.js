@@ -9,7 +9,8 @@ class FigureController {
         this.dynamicFigures = new Map();
         this.staticFigures = new Map();
 
-        this.figureControllerElement = document.getElementsByClassName('figure-controller__button-list')[0];
+        const controlSelectionElem = document.getElementById(H2JS_CONTROL_SELECTION);
+        this.figureControllerElement = controlSelectionElem.getElementsByClassName(H2JS_CONTROL_ELEMENT)[0];
         this.selectedFigureClass = 'figure-controller__selected-figure';
         this.processedFiguresClass = 'figure-controller__bool-op';
         this.visibilityCheckboxClass = 'figure-controller__visibility';

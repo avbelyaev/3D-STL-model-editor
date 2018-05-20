@@ -50,7 +50,6 @@ html {
 
         .control {
           background-color: $control--background-color;
-          height: 90px;
           margin: 0 0 2px 2px;
           padding: 4px;
         }
@@ -58,6 +57,10 @@ html {
         .control-title {
           background-color: $control-title--background-color;
           padding-left: 4px;
+        }
+
+        .control-element {
+          padding-top: 4px;
         }
       }
     }

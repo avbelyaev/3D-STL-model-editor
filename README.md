@@ -48,8 +48,8 @@ docker run server
 Requirements:
 - GL-matrix lib should be [downloaded](http://glmatrix.net/), compiled and placed at `/webclient/js/lib/gl-matrix.js`
 - Axios should be [downloaded](https://github.com/axios/axios) and placed at `/webclient/js/lib/axios.min.js`
-- Logger should be [downloaded](http://www.songho.ca/misc/logger/files/Logger.js) and placed at `/webclient/js/lib/Logger.js`
-
+- SASS-preprocessor should be [downloaded](http://sass-lang.com/install).
+Added to PATH: `export PATH=$PATH:/path/to/dart-sass`. Usage: `sass style.scss style.css`.
 
 
 ## Notes

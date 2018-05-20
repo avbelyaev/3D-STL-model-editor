@@ -7,7 +7,8 @@ class ModelSubmitter {
     constructor() {
         log(`constructing Model Submitter`);
 
-        this.modelSubmitterElement = document.getElementsByClassName('menu__model-submitter--input')[0];
+        const controlAdditionElem = document.getElementById(H2JS_CONTROL_ADDITION);
+        this.modelSubmitterElement = controlAdditionElem.getElementsByClassName(H2JS_CONTROL_ELEMENT)[0];
         this.canBeSubmitted = true;
         this.canBePerformed = true;
     }
