@@ -44,10 +44,11 @@ html {
           background-color: $color-light-gray;
           padding: 2px;
 
-          .log--content {
+          .log__content {
             height: 100%;
             overflow: auto;
             font-family: $font-courier;
+            font-size: 14px;
           }
         }
       }
@@ -57,6 +58,7 @@ html {
         height: 100%;
 
         .control {
+          height: calc(20% - 9px);
           background-color: $control--background-color;
           margin: 0 0 2px 2px;
           padding: 4px;

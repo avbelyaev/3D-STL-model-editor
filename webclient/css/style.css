@@ -31,16 +31,18 @@ html body .editor .view .log {
   background-color: #D3D3D3;
   padding: 2px;
 }
-html body .editor .view .log .log--content {
+html body .editor .view .log .log__content {
   height: 100%;
   overflow: auto;
   font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
 }
 html body .editor .controls {
   width: 20%;
   height: 100%;
 }
 html body .editor .controls .control {
+  height: calc(20% - 9px);
   background-color: #D3D3D3;
   margin: 0 0 2px 2px;
   padding: 4px;
