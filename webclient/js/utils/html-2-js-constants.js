@@ -8,6 +8,7 @@ const H2JS_CANVAS = "glCanvas";
 // controls
 const H2JS_CONTROL_ELEMENT = "control-element";
 const H2JS_CONTROL_ADDITION = "control-addition";
+const H2JS_CONTROL_ADDITION_FILE = "control-addition--file";
 const H2JS_CONTROL_SELECTION = "control-selection";
 
 // logs

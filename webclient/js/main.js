@@ -57,7 +57,7 @@ const log = (text) => {
         dateTimeNow.getSeconds() + ":" +
         dateTimeNow.getMilliseconds();
 
-    if (text.toLowerCase().includes('error')) {
+    if ('string' === typeof text && text.toLowerCase().includes('error')) {
         text = `<span class=${H2JS_LOG_CONTENT_ERROR}>${text}</span>`;
     }
 

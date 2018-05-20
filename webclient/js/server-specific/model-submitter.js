@@ -7,27 +7,32 @@ class ModelSubmitter {
     constructor() {
         log(`constructing Model Submitter`);
 
-        const controlAdditionElem = document.getElementById(H2JS_CONTROL_ADDITION);
-        this.modelSubmitterElement = controlAdditionElem.getElementsByClassName(H2JS_CONTROL_ELEMENT)[0];
+        // const controlAdditionElem = document.getElementById(H2JS_CONTROL_ADDITION);
+        this.modelSubmitterElement = document.getElementsByClassName(H2JS_CONTROL_ADDITION_FILE)[0];
         this.canBeSubmitted = true;
         this.canBePerformed = true;
     }
 
-    submitFile() {
+    addModelFromFile() {
         const file = this.modelSubmitterElement.files[0];
 
         if (file && this.canBeSubmitted) {
             STLLoader.parseBinarySTL(file, (err, meshData) => {
                 if (!err) {
+                    log('file has been successfully parsed');
+
                     const vertices = meshData.vertices;
-                    log(vertices);
+                    console.log(vertices);
 
                     // const multiplyCoeff = 1000;
                     // log(`multiplying by ${multiplyCoeff}`);
                     // vertices.map(vertex => parseInt(vertex) * multiplyCoeff);
+                    const fileNameNoExtension = file.name.includes('.')
+                        ? file.name.substr(0, file.name.indexOf('.'))
+                        : file.name;
 
                     const mesh = new Figure(vertices, COLORS.RANDOM(), gl,
-                        vsSource, fsSource, file.name);
+                        vsSource, fsSource, fileNameNoExtension);
                     mesh.init();
                     figureController.addDynamicFigure(mesh);
 
@@ -38,6 +43,9 @@ class ModelSubmitter {
                             localStorage.setItem(mesh.id, res);
                         }
                     });
+
+                } else {
+                    log('file parse error: ' + err);
                 }
                 this.canBeSubmitted = true;
             });
