@@ -4,6 +4,7 @@ $color-dark-gray: #D9D9D9;
 $color-silver: #C0C0C0;
 
 $font-helvetica: "Trebuchet MS", Helvetica, sans-serif;
+$font-courier: "Courier New", Courier, monospace;
 
 $control--background-color: $color-light-gray;
 $control-title--background-color: $color-silver;
@@ -32,15 +33,22 @@ html {
 
         #glCanvas {
           width: 100%;
-          height: 90%;
+          height: 80%;
           display: block;
         }
 
         .log {
-          height: 10%;
+          height: 20%;
+          width: calc(100% - 4px);
           margin: 2px 0 2px 0;
           background-color: $color-light-gray;
           padding: 2px;
+
+          .log--content {
+            height: 100%;
+            overflow: auto;
+            font-family: $font-courier;
+          }
         }
       }
 

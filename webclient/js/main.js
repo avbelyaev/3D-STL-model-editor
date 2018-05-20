@@ -1,4 +1,3 @@
-
 let gl;
 let cam;
 let selectedFigure;
@@ -7,7 +6,59 @@ let figureController;
 let modelSubmitter;
 let serverApiClient;
 
-const log = (text) => console.log(text);
+let logr;
+
+const initLogger = () => {
+    const logElement = document.getElementsByClassName(H2JS_LOG)[0];
+    const logContentHolder = logElement.getElementsByClassName(H2JS_LOG_CONTENT)[0];
+
+    // make logger resizable
+    const logElementClass = '.' + H2JS_LOG;
+    interact(logElementClass)
+        .resizable({
+            edges: {
+                top: true,
+                bottom: false
+            },
+            restrictEdges: {
+                outer: 'parent',
+                endOnly: true,
+            },
+            restrictSize: {
+                min: {
+                    height: 70
+                }
+            }
+        })
+        .on('resizemove', function (event) {
+            const target = event.target;
+            let y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+            // update the element's style
+            target.style.height = event.rect.height + 'px';
+
+            // translate when resizing from top or left edges
+            y += event.deltaRect.top;
+
+            target.style.webkitTransform = target.style.transform =
+                'translate(' + 0 + 'px,' + y + 'px)';
+
+            target.setAttribute('data-y', y);
+        });
+
+    return logContentHolder;
+};
+
+
+const log = (text) => {
+    const dateTimeNow = new Date();
+    const currentTime = dateTimeNow.getHours() + ":" +
+        dateTimeNow.getMinutes() + ":" +
+        dateTimeNow.getSeconds() + ":" +
+        dateTimeNow.getMilliseconds();
+
+    logr.innerText += currentTime + " " + text + "\n";
+};
 
 let figureAngleDeg = 0;
 let figureScale = 1;
@@ -86,7 +137,6 @@ function drawScene() {
 }
 
 
-
 const initCamera = () => {
     const distance = 200;
     const horizontalAngleDeg = 30;
@@ -97,7 +147,7 @@ const initCamera = () => {
 };
 
 const initGLControls = () => {
-    const canvas = document.getElementById("glCanvas");
+    const canvas = document.getElementById(H2JS_CANVAS);
     const gl = canvas.getContext("webgl");
     if (!gl) {
         throw new Error("Unable to initialize WebGL. Your browser or machine may not support it.");
@@ -162,11 +212,11 @@ function main() {
     });
 
 
-
     requestAnimationFrame(drawScene);
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+    logr = initLogger();
     log("DOM content loaded");
     try {
         main();

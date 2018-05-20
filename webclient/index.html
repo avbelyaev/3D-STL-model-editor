@@ -8,7 +8,7 @@
         <!--WebGL-->
 
         <!--libs-->
-        <!--<script type="text/javascript" src="js/lib/Logger.js"></script>-->
+        <script src="js/lib/interact.js"></script>
         <script src="js/lib/gl-matrix.js"></script>
         <script src="js/lib/axios.min.js"></script>
 
@@ -41,15 +41,14 @@
         <script src="js/server-specific/model-submitter.js"></script>
 
 
-        <script src="js/main.js"></script>
-
-
         <div class="editor">
             <!-- left column -->
             <div class="view">
                 <canvas id="glCanvas"></canvas>
                 <div class="log">
-                    Log
+                    <div class="log--content">
+                        <!-- logging goes here -->
+                    </div>
                 </div>
             </div>
 
@@ -96,5 +95,9 @@
                 </div>
             </div>
         </div>
+
+        <!-- only run main() when all page is rendered -->
+        <script src="js/main.js"></script>
+
     </body>
 </html>

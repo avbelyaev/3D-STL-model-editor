@@ -14,7 +14,7 @@ class MouseControls {
         MouseControls.lastMouseX = 0;
         MouseControls.lastMouseY = 0;
 
-        MouseControls.updateEventListeners(canvas);
+        MouseControls.__updateEventListeners(canvas);
     }
 
     static handleMouseDown(event) {
@@ -64,19 +64,22 @@ class MouseControls {
     };
 
     static handleMouseWheel(event) {
-        let delta = event.wheelDelta ? event.wheelDelta : -event.detail;
+        // only handle mouseWheel events inside canvas
+        if (H2JS_CANVAS === event.target.id) {
+            let delta = event.wheelDelta ? event.wheelDelta : -event.detail;
 
-        if (event.shiftKey) {
-            // apply to figure
-            selectedFigure.translateByY(-1 * parseInt(delta));
+            if (event.shiftKey) {
+                // apply to figure
+                selectedFigure.translateByY(-1 * parseInt(delta));
 
-        } else {
-            // apply to camera
-            cam.updateDistance(Camera.incValueFunction(delta / CAM_DIST_CHANGE_DECELERATION));
+            } else {
+                // apply to camera
+                cam.updateDistance(Camera.incValueFunction(delta / CAM_DIST_CHANGE_DECELERATION));
+            }
         }
     };
 
-    static updateEventListeners(canvas) {
+    static __updateEventListeners(canvas) {
         canvas.onmousedown = MouseControls.handleMouseDown;
         document.onmouseup = MouseControls.handleMouseUp;
         document.onmousemove = MouseControls.handleMouseMove;
