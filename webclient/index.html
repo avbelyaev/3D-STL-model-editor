@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
         <!--WebGL-->
@@ -43,38 +43,81 @@
 
         <script src="js/main.js"></script>
 
-        <div class="page">
-            <div class="page__container">
+
+        <div class="editor">
+            <!-- left column -->
+            <div class="view">
                 <canvas id="glCanvas"></canvas>
-            </div>
-            <div class="page__container">
-                <div class="menu">
-                    <!-- reload(true) forces reload from server -->
-                    <input type="button" value="Refresh" onClick="window.location.reload(true)">
-
-                    <div class="menu__figure-controls">
-                        <h4>Figure controls</h4>
-                        <p>Ang:<input id="figAngle" type="range" min="0" max="360" step="10" value="0" oninput="updateFigure()"></p>
-                        <p>S:<input id="figScale" type="range" min="0.5" max="10" step="0.07" value="1" oninput="updateFigure()"></p>
-                    </div>
-
-                    <div class="menu__model-submitter">
-                        <h4>Model submitter</h4>
-                        <input class="menu__model-submitter--input" type="file" />
-                        <input class="menu__model-submitter--button" type="button" value="Submit" onClick="modelSubmitter.submitFile()">
-                        <br>
-                        <input class="menu__model-submitter---boolop-button" type="button" value="Perform Bool op" onClick="modelSubmitter.performBoolOp()">
-                    </div>
-
-                    <div class="figure-controller">
-                        <h4>Figure controller</h4>
-                        <div class="figure-controller__button-list"></div>
-                    </div>
-
-                    <label id="logr"></label>
+                <div class="log">
+                    Log
                 </div>
             </div>
+
+            <!-- right column -->
+            <div class="controls">
+                <div id="control-addition" class="control">
+                    <div class="control-title">Add figure</div>
+                    <div class="element">Figure addition settings</div>
+                </div>
+
+                <div id="control-selection" class="control">
+                    <div class="control-title">Select figure</div>
+                    <div class="element">Figure selection from available figure</div>
+                </div>
+
+                <div id="control-adjustment" class="control">
+                    <div class="control-title">Adjust figure</div>
+                    <div class="element">Position, rotate, resize selected figure</div>
+                </div>
+
+                <div id="control-operation" class="control">
+                    <div class="control-title">Perform operation</div>
+                    <div class="element">Perform operation on selected figures</div>
+                </div>
+
+                <div id="control-reserved" class="control">
+                    <div class="control-title">Reserved space</div>
+                    <div class="element">
+                        <!-- reload(true) forces reload from server -->
+                        <input type="button" value="Refresh" onClick="window.location.reload(true)">
+                    </div>
+                </div>
+            </div>
+
+
         </div>
+        <!--<div class="page">-->
+            <!--<div class="page__container">-->
+                <!--<canvas id="glCanvas"></canvas>-->
+            <!--</div>-->
+            <!--<div class="page__container">-->
+                <!--<div class="menu">-->
+                    <!---->
+                    <!---->
+
+                    <!--<div class="menu__figure-controls">-->
+                        <!--<h4>Figure controls</h4>-->
+                        <!--<p>Ang:<input id="figAngle" type="range" min="0" max="360" step="10" value="0" oninput="updateFigure()"></p>-->
+                        <!--<p>S:<input id="figScale" type="range" min="0.5" max="10" step="0.07" value="1" oninput="updateFigure()"></p>-->
+                    <!--</div>-->
+
+                    <!--<div class="menu__model-submitter">-->
+                        <!--<h4>Model submitter</h4>-->
+                        <!--<input class="menu__model-submitter&#45;&#45;input" type="file" />-->
+                        <!--<input class="menu__model-submitter&#45;&#45;button" type="button" value="Submit" onClick="modelSubmitter.submitFile()">-->
+                        <!--<br>-->
+                        <!--<input class="menu__model-submitter-&#45;&#45;boolop-button" type="button" value="Perform Bool op" onClick="modelSubmitter.performBoolOp()">-->
+                    <!--</div>-->
+
+                    <!--<div class="figure-controller">-->
+                        <!--<h4>Figure controller</h4>-->
+                        <!--<div class="figure-controller__button-list"></div>-->
+                    <!--</div>-->
+
+                    <!--<label id="logr"></label>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
 
     </body>
 </html>

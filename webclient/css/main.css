@@ -54,12 +54,37 @@ fieldset {
    Author's custom styles
    ========================================================================== */
 
-.page {
+.editor {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: flex-start;
+    width: 100%;
 }
+
+.view {
+    width: 80%;
+}
+
+#glCanvas {
+    width: 100%;
+    display: block;
+}
+
+.log {
+
+}
+
+.controls {
+    width: 20%;
+    height: 100%;
+}
+
+.control {
+    background-color: red;
+    height: 100px;
+}
+
 
 .page__container {
     background-color: red;
