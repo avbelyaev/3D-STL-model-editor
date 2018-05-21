@@ -10,8 +10,7 @@ class Grid extends Drawable {
         let colorsExtended = extendColorsToVertices(colors, positions);
 
         super(positions, colorsExtended, gl, vsSource, fsSource, idWithPrefix);
-        log(`constructing Grid ${this.id}. 
-            Cell w: ${cellWidth}, elements: ${gridElements}, colors: ${this.colors}`);
+        log(`constructing Grid ${this.id}. Cell w: ${cellWidth}, elements: ${gridElements}`);
 
         // draw mode
         this.drawMode = gl.LINES;

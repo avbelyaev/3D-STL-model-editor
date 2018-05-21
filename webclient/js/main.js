@@ -178,18 +178,9 @@ function main() {
     // gl.enable(gl.CULL_FACE); // dont draw back-facing (clockwise vertices) triangles
 
 
-    // const axisX = new Line([-400, 0, 0], [400, 0, 0], COLORS.RED, gl, vsSource, fsSource, 'axisX');
-    // axisX.init();
-    // figureController.addStaticFigure(axisX);
-
     const axisY = new Line([0, -400, 0], [0, 400, 0], COLORS.GREEN, gl, vsSource, fsSource, 'axisY');
     axisY.init();
     figureController.addStaticFigure(axisY);
-
-    // const axisZ = new Line([0, 0, -400], [0, 0, 400], COLORS.BLUE, gl, vsSource, fsSource, 'axisZ');
-    // axisZ.init();
-    // figureController.addStaticFigure(axisZ);
-
 
     const grid = new Grid(200, 10, COLORS.WHITE, gl, vsSource, fsSource, 'griddy');
     grid.init();

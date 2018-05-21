@@ -5,10 +5,12 @@
 ### Cargo
 
 
-Rocket runs on specific Rust-nightly version of 21 dec (coincidence? I dont think so) 2017
+Rocket runs on specific Rust-nightly version
 ```
 rustup install nightly
 rustup update
+
+# optionally fix version
 rustup default nightly-2017-12-21
 ```
 
@@ -50,6 +52,7 @@ Requirements:
 - Axios should be [downloaded](https://github.com/axios/axios) and placed at `/webclient/js/lib/axios.min.js`
 - SASS-preprocessor should be [downloaded](http://sass-lang.com/install).
 Added to PATH: `export PATH=$PATH:/path/to/dart-sass`. Usage: `sass style.scss style.css`.
+Or it can be done with brew: `brew install --devel sass/sass/sass`
 
 
 ## Notes
