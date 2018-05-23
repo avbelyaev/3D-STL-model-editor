@@ -6,7 +6,9 @@ authors = ["anthony"]
 [dependencies]
 base64 = "0.6.0"
 byteorder = "1"
-geometry_kernel = { git = "https://github.com/AsadiR/geometry_kernel", rev = "987714d8b5b77ed98755f97452985fb9d789c071"}
+geometry_kernel = { git = "https://github.com/AsadiR/geometry_kernel"}
+log = "*"
+env_logger = "*"
 regex = "0.2"
 rocket = "0.3.5"
 rocket_codegen = "0.3.5"

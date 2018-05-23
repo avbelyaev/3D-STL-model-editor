@@ -6,6 +6,9 @@ extern crate byteorder;
 extern crate geometry_kernel;
 extern crate regex;
 
+#[macro_use] extern crate log;
+extern crate env_logger;
+
 extern crate rocket;
 #[macro_use] extern crate rocket_contrib;
 #[macro_use] extern crate serde_derive;
