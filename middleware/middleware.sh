@@ -1,4 +1,4 @@
 export LOGXI=*
 export LOGXI_FORMAT=pretty,happy
 
-go run middleware.go proxy.go
+go run main.go proxy.go proxy_transport.go
