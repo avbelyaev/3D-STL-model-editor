@@ -37,6 +37,7 @@ pub fn perform_on_stls(operation_name: &str, stl1_bytes: Vec<u8>, stl2_bytes: Ve
         let multi_mesh_result = match operation_name {
             "difference_ab" => result.difference_ab(),
             "difference_ba" => result.difference_ba(),
+            "intersection" => result.intersection(),
             _ => result.intersection()
         };
 
