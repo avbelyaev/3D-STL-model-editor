@@ -1,4 +1,4 @@
-/target/
+/backend/target/
 **/*.rs.bk
-/Cargo.lock
+/backend/Cargo.lock
 /webclient/js/lib/
