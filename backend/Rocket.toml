@@ -6,7 +6,7 @@ log = "normal"
 limits = { forms = 32768, json = 5242880 }
 
 [production]
-address = "localhost"
+address = "0.0.0.0"
 port = 5000
 workers = 4
 log = "normal"

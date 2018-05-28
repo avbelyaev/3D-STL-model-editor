@@ -6,7 +6,7 @@ authors = ["anthony"]
 [dependencies]
 base64 = "0.6.0"
 byteorder = "1"
-geometry_kernel = { git = "https://github.com/AsadiR/geometry_kernel"}
+geometry_kernel = { path = "geometry_kernel"}
 log = "*"
 env_logger = "*"
 regex = "0.2"

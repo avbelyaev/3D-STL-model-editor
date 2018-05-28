@@ -29,8 +29,10 @@ RUN set -eux; \
     cargo --version; \
     rustc --version;
 
-
 # set up nightly rust for rocket
+RUN apt-get update
+RUN yes | apt-get install libgmp3-dev
+
 RUN rustup update && \
     rustup install nightly && \
     rustup default nightly && \
@@ -42,7 +44,7 @@ WORKDIR /app
 
 # compile server with cargo
 RUN cargo update -p libc && \
-    cargo build --verbose
+    cargo build
 
 ENV ROCKET_ENV=production
 
