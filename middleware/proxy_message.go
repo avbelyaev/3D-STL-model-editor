@@ -1,15 +1,26 @@
 package main
 
-type ProxyMessage struct {
+type RequestMessage struct {
 	Operation 	string `json:"operation"`
 	Stl1 		string `json:"stl1"`
 	Stl2 		string `json:"stl2"`
 }
 
-func NewProxyMessage(operation, stl1, stl2 string) *ProxyMessage {
-	return &ProxyMessage{
+type ResponseMessage struct {
+	Result 		string `json:"res"`
+}
+
+
+func NewRequestMessage(operation, stl1, stl2 string) *RequestMessage {
+	return &RequestMessage{
 		Operation: operation,
 		Stl1:      stl1,
 		Stl2:      stl2,
+	}
+}
+
+func NewResponseMessage(result string) *ResponseMessage {
+	return &ResponseMessage{
+		Result: result,
 	}
 }

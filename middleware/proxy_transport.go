@@ -28,27 +28,51 @@ func NewProxyTransport() *ProxyTransport {
 
 func (t *ProxyTransport) RoundTrip(request *http.Request) (*http.Response, error)  {
 	request.Header.Set(HEADER_REQUEST_MODIFIED, "0")
-
 	if "POST" == request.Method {
-		var originalMessage = readRequestBody(request)
-
-		var filepath1 = decodeFileAndSaveToDisk(originalMessage.Stl1)
-		var filepath2 = decodeFileAndSaveToDisk(originalMessage.Stl2)
-
-		var modifiedMsg = NewProxyMessage(originalMessage.Operation, filepath1, filepath2)
-		var modMsgBytes, serializeErr = json.Marshal(modifiedMsg)
-		check(serializeErr)
-
-		modifyRequestBody(request, modMsgBytes)
-
-		request.Header.Set(HEADER_REQUEST_MODIFIED, "1")
+		modifyRequest(request)
 	}
+	request.Header.Set(HEADER_REQUEST_MODIFIED, "1")
 
-	var response, err = http.DefaultTransport.RoundTrip(request)
+
+	// acquire response
+	var response, roundTripErr = http.DefaultTransport.RoundTrip(request)
 	response.Header.Set(HEADER_RESPONSE_MODIFIED, "0")
+
+	// only modify response for post (perform operation on STLs) request
+	if "POST" == request.Method {
+		modifyResponse(response)
+	}
 	response.Header.Set(HEADER_RESPONSE_MODIFIED, "1")
 
-	return response, err
+	return response, roundTripErr
+}
+
+func modifyRequest(request *http.Request)  {
+	var originalMessage = readRequestBody(request)
+
+	var filepath1 = decodeFileAndSaveToDisk(originalMessage.Stl1)
+	var filepath2 = decodeFileAndSaveToDisk(originalMessage.Stl2)
+
+	var modifiedMsg = NewRequestMessage(originalMessage.Operation, filepath1, filepath2)
+	var modMsgBytes, serializeErr = json.Marshal(modifiedMsg)
+	check(serializeErr)
+
+	modifyRequestBody(request, modMsgBytes)
+}
+
+func modifyResponse(response *http.Response)  {
+	var originalResponse = readResponseBody(response)
+
+	var fileContent, readErr = ioutil.ReadFile(originalResponse.Result)
+	check(readErr)
+
+	var encodedBase64Response = base64.StdEncoding.EncodeToString(fileContent)
+
+	var modifiedResponse = NewResponseMessage(encodedBase64Response)
+	var serialized, serializeErr = json.Marshal(modifiedResponse)
+	check(serializeErr)
+
+	modifyResponseBody(response, []byte(serialized))
 }
 
 // dumps file to disk and returns filepath
@@ -63,12 +87,23 @@ func decodeFileAndSaveToDisk(fileContentBase64 string) string {
 	return filename
 }
 
-// deserializes request body into type ProxyMessage
-func readRequestBody(request *http.Request) *ProxyMessage {
+// deserializes request body into type RequestMessage
+func readRequestBody(request *http.Request) *RequestMessage {
 	var buf, readErr = ioutil.ReadAll(request.Body)
 	check(readErr)
 
-	var message ProxyMessage
+	var message RequestMessage
+	var deserializeErr = json.Unmarshal(buf, &message)
+	check(deserializeErr)
+
+	return &message
+}
+
+func readResponseBody(response *http.Response) *ResponseMessage {
+	var buf, readErr = ioutil.ReadAll(response.Body)
+	check(readErr)
+
+	var message ResponseMessage
 	var deserializeErr = json.Unmarshal(buf, &message)
 	check(deserializeErr)
 
@@ -79,6 +114,13 @@ func modifyRequestBody(request *http.Request, newBody []byte) {
 	request.Body = ioutil.NopCloser(bytes.NewReader(newBody))
 	request.ContentLength = int64(len(newBody))
 	request.Header.Set("Content-Length", strconv.Itoa(len(newBody)))
+}
+
+// thanks golang has no polymorphism
+func modifyResponseBody(response *http.Response, newBody []byte) {
+	response.Body = ioutil.NopCloser(bytes.NewReader(newBody))
+	response.ContentLength = int64(len(newBody))
+	response.Header.Set("Content-Length", strconv.Itoa(len(newBody)))
 }
 
 func check(e error) {

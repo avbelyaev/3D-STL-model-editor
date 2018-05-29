@@ -20,7 +20,7 @@ pub fn perform_on_stls(operation_name: &str, stl1_filepath: &str, stl2_filepath:
 
 
     // perform operation
-    let res_path = "/tmp/res.stl";
+    let res_path = "/tmp/stl-res.stl";
     let mut f_res= File::create(res_path).unwrap();
 
     let result = BoolOpResult::new(&mesh1, &mesh2)
