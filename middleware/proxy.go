@@ -22,14 +22,10 @@ func NewCachingProxy(listen, target string) *CachingProxy {
 	}
 }
 
-func (p *CachingProxy) doSmth()  {
-	p.log.Info("Doing smth")
-}
-
 func (p *CachingProxy) handle(rsp http.ResponseWriter, rq *http.Request) {
 	p.log.Info("proxying request")
 
-	rsp.Header().Set("X-GoProxy", "GoProxy")
-	p.proxy.Transport = &ProxyTransport{}
+	rsp.Header().Set("X-proxy", "GoProxy")
+	p.proxy.Transport = NewProxyTransport()
 	p.proxy.ServeHTTP(rsp, rq)
 }
