@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"encoding/json"
 	"github.com/satori/go.uuid"
+	"encoding/base64"
 )
 
 type ProxyTransport struct {
@@ -26,8 +27,8 @@ func (t *ProxyTransport) RoundTrip(request *http.Request) (*http.Response, error
 	if "POST" == request.Method {
 		var originalMessage = readRequestBody(request)
 
-		var filepath1 = saveFileToDisk(originalMessage.Stl1)
-		var filepath2 = saveFileToDisk(originalMessage.Stl2)
+		var filepath1 = decodeFileAndSaveToDisk(originalMessage.Stl1)
+		var filepath2 = decodeFileAndSaveToDisk(originalMessage.Stl2)
 
 		var modifiedMsg = NewProxyMessage(originalMessage.Operation, filepath1, filepath2)
 		var modMsgBytes, serializeErr = json.Marshal(modifiedMsg)
@@ -44,10 +45,12 @@ func (t *ProxyTransport) RoundTrip(request *http.Request) (*http.Response, error
 }
 
 // dumps file to disk and returns filepath
-func saveFileToDisk(encodedFile string) string {
+func decodeFileAndSaveToDisk(fileContentBase64 string) string {
 	var filename = "/tmp/stl-" + uuid.Must(uuid.NewV4()).String() + ".stl"
-	var fileBytes = []byte(encodedFile)
-	var writeFileErr = ioutil.WriteFile(filename, fileBytes, 0644)
+	var decoded, decodeErr = base64.StdEncoding.DecodeString(fileContentBase64)
+	check(decodeErr)
+
+	var writeFileErr = ioutil.WriteFile(filename, decoded, 0644)
 	check(writeFileErr)
 
 	return filename
