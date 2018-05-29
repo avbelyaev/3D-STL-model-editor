@@ -8,9 +8,10 @@ extern crate rocket_contrib;
 
 use rocket::{Rocket, Data};
 use rocket_contrib::Json;
-use geometry_server::resource::{mesh_resource, stl_resource};
-use geometry_server::port::adapter::model::mesh_model::MeshModel;
-use geometry_server::port::adapter::model::mesh_arrayable_model::MeshArrayableModel;
+use geometry_server::port::adapter::resource::{mesh_resource, stl_resource};
+use geometry_server::port::adapter::model::{mesh_model::MeshModel,
+                                            mesh_arrayable_model::MeshArrayableModel,
+                                            stl_filepath_model::StlFilepathModel};
 use geometry_server::port::adapter::command::{perform_on_mesh_command,
                                               perform_on_stl_command,
                                               extract_mesh_command};
@@ -41,7 +42,7 @@ fn create_stl_wrapper(cmd: Data) -> String {
 }
 
 #[post("/perform", format = "application/json", data = "<cmd>")]
-fn stl_performer_wrapper(cmd: Json<perform_on_stl_command::PerformOnStlCommand>) -> Json<MeshModel> {
+fn stl_performer_wrapper(cmd: Json<perform_on_stl_command::PerformOnStlCommand>) -> Json<StlFilepathModel> {
     stl_resource::perform_bool_op_on_stl(cmd)
 }
 

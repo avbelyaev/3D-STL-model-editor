@@ -6,7 +6,7 @@ use geometry_kernel::primitives::mesh;
 use geometry_kernel::bool_op::BoolOpResult;
 
 
-pub fn perform_on_stls(operation_name: &str, stl1_filepath: &str, stl2_filepath: &str) -> Mesh {
+pub fn perform_on_stls(operation_name: &str, stl1_filepath: &str, stl2_filepath: &str) -> String {
     if !valid_operation(operation_name) {
         panic!("Invalid or not supported operation provided!");
     }
@@ -20,6 +20,9 @@ pub fn perform_on_stls(operation_name: &str, stl1_filepath: &str, stl2_filepath:
 
 
     // perform operation
+    let res_path = "/tmp/res.stl";
+    let mut f_res= File::create(res_path).unwrap();
+
     let result = BoolOpResult::new(&mesh1, &mesh2)
         .expect("The error was raised in a constructor of <BoolOpResult>!");
 
@@ -27,11 +30,11 @@ pub fn perform_on_stls(operation_name: &str, stl1_filepath: &str, stl2_filepath:
         let single_mesh_result = result.union();
         // write STL to file since geometry_kernel uses it's own Number impl
         // and it's easier to parse output file to extract Mesh of my own type
-        let res_path = "/tmp/res.stl";
-        let mut f_res= File::create(res_path).unwrap();
+
         single_mesh_result.write_stl(&mut f_res);
 
-        binary_stl_reader::mesh_from_binary_stl_file(res_path)
+//        binary_stl_reader::mesh_from_binary_stl_file(res_path)
+
 
     } else {
         let multi_mesh_result = match operation_name {
@@ -43,12 +46,13 @@ pub fn perform_on_stls(operation_name: &str, stl1_filepath: &str, stl2_filepath:
 
         // write STL to file since geometry_kernel uses it's own Number impl
         // and it's easier to parse output file to extract Mesh of my own type
-        let res_path = "/tmp/res.stl";
-        let mut f_res = File::create(res_path).unwrap();
         multi_mesh_result[0].write_stl(&mut f_res);
 
-        binary_stl_reader::mesh_from_binary_stl_file(res_path)
+//        binary_stl_reader::mesh_from_binary_stl_file(res_path)
     }
+
+    // return only filepath
+    res_path.to_string()
 }
 
 fn valid_operation(op_name: &str) -> bool {
