@@ -11,6 +11,11 @@ import (
 	"encoding/base64"
 )
 
+const (
+	HEADER_REQUEST_MODIFIED = "X-Request-Modified"
+	HEADER_RESPONSE_MODIFIED = "X-Response-Modified"
+)
+
 type ProxyTransport struct {
 	log    log.Logger
 }
@@ -22,7 +27,7 @@ func NewProxyTransport() *ProxyTransport {
 }
 
 func (t *ProxyTransport) RoundTrip(request *http.Request) (*http.Response, error)  {
-	request.Header.Set("X-Modified", "0")
+	request.Header.Set(HEADER_REQUEST_MODIFIED, "0")
 
 	if "POST" == request.Method {
 		var originalMessage = readRequestBody(request)
@@ -36,10 +41,12 @@ func (t *ProxyTransport) RoundTrip(request *http.Request) (*http.Response, error
 
 		modifyRequestBody(request, modMsgBytes)
 
-		request.Header.Set("X-Modified", "1")
+		request.Header.Set(HEADER_REQUEST_MODIFIED, "1")
 	}
 
 	var response, err = http.DefaultTransport.RoundTrip(request)
+	response.Header.Set(HEADER_RESPONSE_MODIFIED, "0")
+	response.Header.Set(HEADER_RESPONSE_MODIFIED, "1")
 
 	return response, err
 }
