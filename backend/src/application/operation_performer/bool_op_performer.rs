@@ -6,16 +6,16 @@ use geometry_kernel::primitives::mesh;
 use geometry_kernel::bool_op::BoolOpResult;
 
 
-pub fn perform_on_stls(operation_name: &str, stl1_bytes: Vec<u8>, stl2_bytes: Vec<u8>) -> Mesh {
+pub fn perform_on_stls(operation_name: &str, stl1_filepath: &str, stl2_filepath: &str) -> Mesh {
     if !valid_operation(operation_name) {
         panic!("Invalid or not supported operation provided!");
     }
 
     // create 2 stl files
-    let mut f1 = create_stl_file("/tmp/f1.stl", stl1_bytes);
+    let mut f1 = File::open(stl1_filepath).unwrap();
     let mesh1 = mesh::BinaryStlFile::read_stl(&mut f1).unwrap();
 
-    let mut f2 = create_stl_file("/tmp/f2.stl", stl2_bytes);
+    let mut f2 = File::open(stl2_filepath).unwrap();
     let mesh2 = mesh::BinaryStlFile::read_stl(&mut f2).unwrap();
 
 

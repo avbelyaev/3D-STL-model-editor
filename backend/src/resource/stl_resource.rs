@@ -13,10 +13,9 @@ pub fn create_stl_from_mesh(mesh: Data) -> String {
 pub fn perform_bool_op_on_stl(cmd: Json<PerformOnStlCommand>) -> Json<MeshModel> {
     println!("Performing {} operation on STLs", cmd.operation);
 
-    let stl1_bytes = convert_base64_to_bytes(&cmd.stl1);
-    let stl2_bytes = convert_base64_to_bytes(&cmd.stl2);
-    let output_mesh = perform_on_stls(
-        &cmd.operation, stl1_bytes, stl2_bytes);
+//    let stl1_bytes = convert_base64_to_bytes(&cmd.stl1);
+//    let stl2_bytes = convert_base64_to_bytes(&cmd.stl2);
+    let output_mesh = perform_on_stls(&cmd.operation, &cmd.stl1, &cmd.stl2);
 
     Json(MeshModel::from_mesh(output_mesh))
 }
