@@ -84,6 +84,7 @@ html body .editor .controls .figure-controller-item {
   background-color: #131111;
   border: 1px solid #17395d;
   margin-top: 4px;
+  padding-left: 4px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -97,6 +98,7 @@ html body .editor .controls .control-operation-item {
   background-color: #131111;
   border: 1px solid #17395d;
   margin-top: 4px;
+  padding-left: 4px;
   display: flex;
   justify-content: center;
   align-items: center;

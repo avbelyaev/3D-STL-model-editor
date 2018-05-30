@@ -27,6 +27,7 @@ $control-title-font-color: #716f6f;
   background-color: $color-light-black;
   border: $border;
   margin-top: 4px;
+  padding-left: 4px;
 
   // override centered-text
   @include centered-text;
