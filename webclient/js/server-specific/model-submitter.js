@@ -13,6 +13,27 @@ class ModelSubmitter {
         this.canBePerformed = true;
     }
 
+    static operations() {
+        return [
+            {
+                id: "union",
+                label: "Union"
+            },
+            {
+                id: "intersection",
+                label: "Intersection"
+            },
+            {
+                id: "difference_ab",
+                label: "Difference (a-b)"
+            },
+            {
+                id: "difference_ba",
+                label: "Difference (b-a)"
+            }
+        ];
+    }
+
     addModelFromFile() {
         const file = this.modelSubmitterElement.files[0];
 

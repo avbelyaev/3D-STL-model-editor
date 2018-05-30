@@ -85,7 +85,7 @@ class FigureController {
         visibilityCheckbox.setAttribute('checked', 'checked');
 
         let wrapper = document.createElement('div');
-        wrapper.setAttribute('class', 'figure-controller__button--wrapper');
+        wrapper.setAttribute('class', H2JS_FIGURE_CONTROLLER_ITEM);
         wrapper.setAttribute('onclick', 'updateFigure()');
         wrapper.appendChild(selectedFigureButton);
         wrapper.appendChild(figureIdLabel);

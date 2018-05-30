@@ -1,10 +1,12 @@
 html {
   height: 100%;
+  background-color: black;
 }
 html body {
   height: calc(100% - 10px);
   margin: 2px;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
+  color: #969696;
   box-sizing: border-box;
 }
 html body .editor {
@@ -28,7 +30,7 @@ html body .editor .view .log {
   height: 20%;
   width: calc(100% - 4px);
   margin: 2px 0 2px 0;
-  background-color: #D3D3D3;
+  background-color: #131111;
   padding: 2px;
 }
 html body .editor .view .log .log__content {
@@ -46,17 +48,62 @@ html body .editor .controls {
   height: 100%;
 }
 html body .editor .controls .control {
-  height: calc(20% - 9px);
-  background-color: #D3D3D3;
+  background-color: #131111;
   margin: 0 0 2px 2px;
   padding: 4px;
 }
 html body .editor .controls .control .control-title {
-  background-color: #C0C0C0;
-  padding-left: 4px;
+  background-color: #000000;
+  padding: 4px 0 4px 4px;
+  color: #716f6f;
 }
 html body .editor .controls .control .control-element {
   padding-top: 4px;
+}
+html body .editor .controls .submit-button {
+  width: 100%;
+  height: 30px;
+  background-color: #000000;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #17395d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+html body .editor .controls .submit-button:hover {
+  background-color: #17395d;
+  cursor: pointer;
+}
+html body .editor .controls .submit-button:active {
+  background-color: #081421;
+  cursor: pointer;
+}
+html body .editor .controls .figure-controller-item {
+  height: 24px;
+  background-color: #131111;
+  border: 1px solid #17395d;
+  margin-top: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: left;
+}
+html body .editor .controls .figure-controller-item:hover {
+  background-color: #17395d;
+}
+html body .editor .controls .control-operation-item {
+  height: 24px;
+  background-color: #131111;
+  border: 1px solid #17395d;
+  margin-top: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: left;
+}
+html body .editor .controls .control-operation-item:hover {
+  background-color: #17395d;
 }
 
 /*# sourceMappingURL=style.css.map */

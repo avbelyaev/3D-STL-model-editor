@@ -130,7 +130,7 @@ function drawScene() {
     resize();
 
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-    gl.clearColor(0.3, 0.3, 0.3, 1.0);
+    gl.clearColor(0.5, 0.5, 0.5, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 
@@ -162,7 +162,12 @@ const initGLControls = () => {
     return gl;
 };
 
+const renderGUI = () => {
+    GuiRenderer.renderOperations();
+};
+
 function main() {
+    renderGUI();
     gl = initGLControls();
     cam = initCamera();
     figureController = new FigureController();
