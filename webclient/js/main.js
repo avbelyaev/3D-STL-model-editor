@@ -8,50 +8,6 @@ let serverApiClient;
 
 let logr;
 
-const initLogger = () => {
-    const logElement = document.getElementsByClassName(H2JS_LOG)[0];
-    const logContentHolder = logElement.getElementsByClassName(H2JS_LOG_CONTENT)[0];
-
-    // make logger resizable
-    const logElementClass = '.' + H2JS_LOG;
-    interact(logElementClass)
-        .resizable({
-            edges: {
-                top: true,
-                bottom: false
-            },
-            restrictEdges: {
-                outer: 'parent',
-                endOnly: true,
-            },
-            restrictSize: {
-                min: {
-                    height: 170
-                },
-                max: {
-                    height: 750
-                }
-            }
-        })
-        .on('resizemove', function (event) {
-            const target = event.target;
-            let y = (parseFloat(target.getAttribute('data-y')) || 0);
-
-            // update the element's style
-            target.style.height = event.rect.height + 'px';
-
-            // translate when resizing from top or left edges
-            y += event.deltaRect.top;
-
-            target.style.webkitTransform = target.style.transform =
-                'translate(' + 0 + 'px,' + y + 'px)';
-
-            target.setAttribute('data-y', y);
-        });
-
-    return logContentHolder;
-};
-
 
 const log = (text) => {
     const dateTimeNow = new Date();
@@ -166,8 +122,10 @@ const initGLControls = () => {
 };
 
 const renderGUI = () => {
+    logr = GuiRenderer.initLogger();
     GuiRenderer.renderOperations();
     GuiRenderer.renderAxis();
+    log("GUI has started");
 };
 
 
@@ -178,6 +136,7 @@ function main() {
     figureController = new FigureController();
     modelSubmitter = new ModelSubmitter();
     serverApiClient = new ServerApiClient('localhost', 8000);
+    log("Camera, Controls, FigureController/Submitter have started");
 
 
     gl.clearColor(0.8, 0.8, 0.8, 1.0);
@@ -222,12 +181,12 @@ function main() {
     });
 
 
+    log("Starting render loop");
     requestAnimationFrame(drawScene);
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-    logr = initLogger();
-    log("DOM content loaded");
+    console.log("Launching editor");
     try {
         main();
 
