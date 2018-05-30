@@ -26,7 +26,10 @@ const initLogger = () => {
             },
             restrictSize: {
                 min: {
-                    height: 150
+                    height: 170
+                },
+                max: {
+                    height: 750
                 }
             }
         })
