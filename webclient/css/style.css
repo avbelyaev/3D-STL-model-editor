@@ -93,6 +93,9 @@ html body .editor .controls .figure-controller-item {
 html body .editor .controls .figure-controller-item:hover {
   background-color: #17395d;
 }
+html body .editor .controls .figure-controller-item .figure-controller-item-title {
+  margin-left: 4px;
+}
 html body .editor .controls .control-operation-item {
   height: 24px;
   background-color: #131111;
@@ -106,6 +109,9 @@ html body .editor .controls .control-operation-item {
 }
 html body .editor .controls .control-operation-item:hover {
   background-color: #17395d;
+}
+html body .editor .controls .control-operation-item .control-operation-item-title {
+  margin-left: 4px;
 }
 
 /*# sourceMappingURL=style.css.map */

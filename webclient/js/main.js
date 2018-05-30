@@ -26,7 +26,7 @@ const initLogger = () => {
             },
             restrictSize: {
                 min: {
-                    height: 70
+                    height: 150
                 }
             }
         })
@@ -164,7 +164,9 @@ const initGLControls = () => {
 
 const renderGUI = () => {
     GuiRenderer.renderOperations();
+    GuiRenderer.renderAxis();
 };
+
 
 function main() {
     renderGUI();

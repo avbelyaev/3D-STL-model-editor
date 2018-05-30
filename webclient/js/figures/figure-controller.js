@@ -65,6 +65,7 @@ class FigureController {
         selectedFigureButton.setAttribute('checked', 'checked');
 
         const figureIdLabel = document.createElement('label');
+        figureIdLabel.setAttribute('class', H2JS_FIGURE_CONTROLLER_ITEM_TITLE);
         figureIdLabel.innerHTML += idAttr;
 
         const boolOpCheckbox = document.createElement('input');

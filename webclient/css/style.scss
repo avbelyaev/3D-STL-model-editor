@@ -131,10 +131,18 @@ html {
 
         .figure-controller-item {
           @include list-item;
+
+          .figure-controller-item-title {
+            margin-left: 4px;
+          }
         }
 
         .control-operation-item {
           @include list-item;
+
+          .control-operation-item-title {
+            margin-left: 4px;
+          }
         }
       }
     }
