@@ -25,8 +25,6 @@ class FigureController {
         // save dynamic figure's id into radio-button
         const figureButton = this.createFigureButton(this.childElementsGroupName, dynamicFigure.id);
         this.figureControllerElement.appendChild(figureButton);
-
-        selectedFigure = this.selectedFigure;
     }
 
     addStaticFigure(staticFigure) {
@@ -53,6 +51,16 @@ class FigureController {
         return Array.from(document.getElementsByClassName(this.processedFiguresClass))
             .filter(checkbox => checkbox.checked)
             .map(checkedCheckBox => checkedCheckBox.getAttribute(this.figureIdAttrName));
+    }
+
+    toggleDynamicFiguresVisibility(isVisible) {
+        Array.from(this.dynamicFigures.values()).map(f => f.visible = isVisible);
+    }
+
+    togglefigureOfTypeVisibility(ofType, isVisible) {
+        const elementsToToggle = Array.from(this.staticFigures.values())
+            .filter(f => f.type === ofType);
+        elementsToToggle.map(f => f.visible = isVisible);
     }
 
     createFigureButton(groupName, idAttr) {

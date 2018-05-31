@@ -97,10 +97,11 @@ html {
           }
 
           .dropdown-content {
+            width: max-content;
+            min-width: 160px;
             display: none;
             position: absolute;
             background-color: $color-light-black;
-            min-width: 160px;
             z-index: 1;
 
             .dropdown-content--item {

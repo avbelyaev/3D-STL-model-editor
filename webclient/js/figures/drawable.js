@@ -2,8 +2,14 @@
  * Created by anthony on 04.02.2018.
  */
 
+const DRAWABLES = Object.freeze({
+    FIGURE: "figure",
+    GRID: "grid",
+    AXIS: "axis"
+});
+
 class Drawable {
-    constructor(positions, colors, gl, vsSource, fsSource, id) {
+    constructor(positions, colors, gl, vsSource, fsSource, id, type) {
         log(`constructing Drawable ${id}`);
         if (!id) {
             throw new Error('Drawable id is null or empty');
@@ -22,6 +28,8 @@ class Drawable {
         this.translationVec = [0, 0, 0];
         this.scaleVec = [1, 1, 1];
         this.rotationVec = [0, 0, 0];
+
+        this.type = type;
 
         this.visible = true;
     }

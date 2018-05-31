@@ -75,9 +75,14 @@
             <div class="dropdown">
                 <div id="menu-view" onclick="Menu.toggleView()" class="dropbtn">Вид</div>
                 <div class="dropdown-content" id="view-dropdown">
-                    <a class="dropdown-content--item dropdown-content__first" href="#">Link 1</a>
-                    <a class="dropdown-content--item" href="#">Link 2</a>
-                    <a class="dropdown-content--item dropdown-content__last" href="#">Link 3</a>
+                    <div class="dropdown-content--item dropdown-content__first"
+                         onClick="menu.viewRefreshScene()">Перезагрузить сцену</div>
+                    <div class="dropdown-content--item"
+                        onclick="menu.viewToggleModelsVisibility(event)">Показать/скрыть все модели</div>
+                    <div class="dropdown-content--item dropdown-content__last"
+                         onclick="menu.viewToggleAxisVisibility(event)">Показать/скрыть оси координат</div>
+                    <div class="dropdown-content--item dropdown-content__last"
+                         onclick="menu.viewToggleGridVisibility(event)">Показать/скрыть сетку</div>
                 </div>
             </div>
 
@@ -151,15 +156,6 @@
                 </div>
             </div>
 
-            <div id="control-reserved" class="control">
-                <div class="control-title">Сцена</div>
-                <div class="control-element">
-                    <!-- reload(true) forces reload from server -->
-                    <div class="submit-button" id="control-reserved--button"
-                         onClick="window.location.reload(true)">Перезагрузить сцену
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>

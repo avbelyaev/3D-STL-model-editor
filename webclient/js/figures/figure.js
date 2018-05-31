@@ -9,7 +9,7 @@ class Figure extends Drawable {
             ? extendColorsToVertices(colors, positions)
             : colors;
 
-        super(positions, colorsExtended, gl, vsSource, fsSource, id);
+        super(positions, colorsExtended, gl, vsSource, fsSource, id, DRAWABLES.FIGURE);
         log(`constructing Figure ${this.id}`);
 
         this.drawMode = gl.TRIANGLES;

@@ -46,8 +46,8 @@ class MouseControls {
         if (MOUSE_BTN_LEFT === event.button) {
             if (event.shiftKey) {
                 // apply to figure
-                selectedFigure.translateByX(deltaX);
-                selectedFigure.translateByZ(deltaY);
+                figureController.selectedFigure.translateByX(deltaX);
+                figureController.selectedFigure.translateByZ(deltaY);
 
             } else {
                 // apply to camera
@@ -70,7 +70,7 @@ class MouseControls {
 
             if (event.shiftKey) {
                 // apply to figure
-                selectedFigure.translateByY(-1 * parseInt(delta));
+                figureController.selectedFigure.translateByY(-1 * parseInt(delta));
 
             } else {
                 // apply to camera

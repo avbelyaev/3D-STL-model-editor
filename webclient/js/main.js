@@ -6,6 +6,7 @@ let figureController;
 let operationPerformer;
 let serverApiClient;
 let logr;
+let menu;
 
 
 const log = (text) => {
@@ -63,9 +64,8 @@ const updateFigure = () => {
 
     idsOfFiguresToBeProcessed = figureController.figuresToBeProcessed;
 
-    selectedFigure = figureController.selectedFigure;
-    selectedFigure.scaleBy(figureScale);
-    selectedFigure.rotateBy([0, figureAngleDeg, 0], null);
+    figureController.selectedFigure.scaleBy(figureScale);
+    figureController.selectedFigure.rotateBy([0, figureAngleDeg, 0], null);
 };
 
 const updateVisibility = (visibilityCheckbox) => {
@@ -124,7 +124,7 @@ const renderGUI = () => {
     logr = GuiRenderer.initLogger();
     GuiRenderer.renderOperations();
     GuiRenderer.renderAxis();
-    new Menu();
+    menu = new Menu();
     log("GUI has started");
 };
 

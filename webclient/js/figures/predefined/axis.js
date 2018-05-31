@@ -14,27 +14,32 @@ const initAxis = () => {
     const axisYLen = len;
     const axisZLen = len;
 
-    const axisXTop = new Line([0, 0.1, 0], [axisXLen, 0.1, 0], COLORS.RED, gl, vsSource, fsSource, 'axisXTop');
+    const axisXTop = new Line([0, 0.1, 0], [axisXLen, 0.1, 0], COLORS.RED, gl, vsSource, fsSource,
+        'axisXTop', DRAWABLES.AXIS);
     axisXTop.init();
     figureController.addStaticFigure(axisXTop);
 
-    const axisXBottom = new Line([0, -0.1, 0], [axisXLen, -0.1, 0], COLORS.RED, gl, vsSource, fsSource, 'axisXBot');
+    const axisXBottom = new Line([0, -0.1, 0], [axisXLen, -0.1, 0], COLORS.RED, gl, vsSource, fsSource,
+        'axisXBot', DRAWABLES.AXIS);
     axisXBottom.init();
     figureController.addStaticFigure(axisXBottom);
 
 
 
-    const axisY = new Line([0, -axisYLen, 0], [0, axisYLen, 0], COLORS.GREEN, gl, vsSource, fsSource, 'axisY');
+    const axisY = new Line([0, -axisYLen, 0], [0, axisYLen, 0], COLORS.GREEN, gl, vsSource, fsSource,
+        'axisY', DRAWABLES.AXIS);
     axisY.init();
     figureController.addStaticFigure(axisY);
 
 
 
-    const axisZTop = new Line([0, 0.1, 0], [0, 0.1, axisZLen], COLORS.BLUE, gl, vsSource, fsSource, 'axisZTop');
+    const axisZTop = new Line([0, 0.1, 0], [0, 0.1, axisZLen], COLORS.BLUE, gl, vsSource, fsSource,
+        'axisZTop',DRAWABLES.AXIS);
     axisZTop.init();
     figureController.addStaticFigure(axisZTop);
 
-    const axisZBottom = new Line([0, -0.1, 0], [0, -0.1, axisZLen], COLORS.BLUE, gl, vsSource, fsSource, 'axisZBot');
+    const axisZBottom = new Line([0, -0.1, 0], [0, -0.1, axisZLen], COLORS.BLUE, gl, vsSource, fsSource,
+        'axisZBot', DRAWABLES.AXIS);
     axisZBottom.init();
     figureController.addStaticFigure(axisZBottom);
 

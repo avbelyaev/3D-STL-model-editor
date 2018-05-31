@@ -8,7 +8,7 @@ class Grid extends Drawable {
         let positions = Grid.__count_grid_positions(cellWidth, gridElements);
         let colorsExtended = extendColorsToVertices(colors, positions);
 
-        super(positions, colorsExtended, gl, vsSource, fsSource, id);
+        super(positions, colorsExtended, gl, vsSource, fsSource, id, DRAWABLES.GRID);
         log(`constructing Grid ${this.id}. Cell w: ${cellWidth}, elements: ${gridElements}`);
 
         // draw mode
@@ -16,22 +16,24 @@ class Grid extends Drawable {
     }
 
     draw() {
-        this.gl.useProgram(this.program);
+        if (this.visible) {
+            this.gl.useProgram(this.program);
 
-        // vertices
-        bindBufferToAttribute(this.attribLocations.vertexPosition, this.positionBufferInfo);
+            // vertices
+            bindBufferToAttribute(this.attribLocations.vertexPosition, this.positionBufferInfo);
 
-        // colors
-        bindBufferToAttribute(this.attribLocations.vertexColor, this.colorBufferInfo);
+            // colors
+            bindBufferToAttribute(this.attribLocations.vertexColor, this.colorBufferInfo);
 
-        // uniforms
-        this.__updateMatrices();
-        this.gl.uniformMatrix4fv(this.uniformLocations.uModel, false, this.mModel);
-        this.gl.uniformMatrix4fv(this.uniformLocations.uView, false, this.mView);
-        this.gl.uniformMatrix4fv(this.uniformLocations.uProjection, false, this.mProj);
+            // uniforms
+            this.__updateMatrices();
+            this.gl.uniformMatrix4fv(this.uniformLocations.uModel, false, this.mModel);
+            this.gl.uniformMatrix4fv(this.uniformLocations.uView, false, this.mView);
+            this.gl.uniformMatrix4fv(this.uniformLocations.uProjection, false, this.mProj);
 
-        // draw
-        this.gl.drawArrays(this.drawMode, 0, this.numElements);
+            // draw
+            this.gl.drawArrays(this.drawMode, 0, this.numElements);
+        }
     }
 
     static __count_grid_positions(cellWidth, elementsNum) {
