@@ -1,14 +1,14 @@
-
 $color-light-black: #131111;
 $color-dark-black: #000000;
-$color-dark-blue: #1a6bc1;
-$color-light-blue: #17395d;
+$color-light-blue: #1a6bc1;
+$color-dark-blue: #17395d;
 
 $font-helvetica: "Trebuchet MS", Helvetica, sans-serif;
 $font-courier: "Courier New", Courier, monospace;
 $font-color: #d0d0d0;
 
-$border: 1px solid $color-light-blue;
+$border-list-item: 1px solid $color-dark-blue;
+$border-menu-item: 1px solid $color-light-blue;
 
 $height-list-item: 24px;
 
@@ -23,19 +23,19 @@ $control-title-font-color: #716f6f;
 }
 
 @mixin hover-effect {
-  background-color: $color-dark-blue;
+  background-color: $color-light-blue;
   cursor: pointer;
 }
 
 @mixin active-effect {
-  background-color: $color-light-blue;
+  background-color: $color-dark-blue;
   cursor: pointer;
 }
 
 @mixin list-item {
   height: $height-list-item;
   background-color: $color-light-black;
-  border: $border;
+  border: $border-list-item;
   margin-top: 4px;
   padding-left: 4px;
 
@@ -48,10 +48,10 @@ $control-title-font-color: #716f6f;
   }
 }
 
-@mixin menu-item {
+@mixin menu-top-item {
+  height: 22px;
   padding-left: 10px;
   padding-right: 10px;
-  border-right: 1px solid $color-dark-blue;
   @include centered-text;
 
   &:hover {
@@ -67,6 +67,7 @@ $control-title-font-color: #716f6f;
 html {
   height: 100%;
   background-color: black;
+  cursor: default;
 
   body {
     height: calc(100% - 10px);
@@ -79,22 +80,62 @@ html {
       height: 100%;
 
       .menu {
-        height: 22px;
         width: 100%;
         display: flex;
         background-color: $color-dark-black;
-        border-bottom: 1px solid black;
 
         #logo {
           width: 80px;
         }
 
-        .menu--item {
-          @include menu-item;
+        .dropdown {
+          position: relative;
+          display: inline-block;
+
+          .dropbtn {
+            @include menu-top-item;
+          }
+
+          .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: $color-light-black;
+            min-width: 160px;
+            z-index: 1;
+
+            .dropdown-content--item {
+              height: 24px;
+              display: block;
+              border-bottom: $border-menu-item;
+              padding: 4px;
+              text-decoration: none;
+              color: $font-color;
+
+              // override centered-text
+              @include centered-text;
+              justify-content: left;
+
+              &:hover {
+                @include hover-effect;
+              }
+
+              &:active {
+                @include active-effect;
+              }
+            }
+          }
+
+          .dropdown-content__last {
+            border-bottom: none;
+          }
+
+          .dropdown-show {
+            display: block;
+          }
         }
 
-        .menu--item__first {
-          border-left: 1px solid $color-dark-blue;
+        .single-button {
+          @include menu-top-item;
         }
       }
 
@@ -163,7 +204,7 @@ html {
             background-color: $color-dark-black;
             margin-top: 10px;
             margin-bottom: 10px;
-            border: $border;
+            border: $border-list-item;
             @include centered-text;
 
             &:hover {

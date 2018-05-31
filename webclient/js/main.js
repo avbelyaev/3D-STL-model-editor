@@ -124,6 +124,7 @@ const renderGUI = () => {
     logr = GuiRenderer.initLogger();
     GuiRenderer.renderOperations();
     GuiRenderer.renderAxis();
+    new Menu();
     log("GUI has started");
 };
 

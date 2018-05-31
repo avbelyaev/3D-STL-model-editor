@@ -5,6 +5,13 @@
 // canvas
 const H2JS_CANVAS = "glCanvas";
 
+// menu
+const H2JS_DROPDOWN_CONTENT = "dropdown-content";
+const H2JS_DROPDOWN_SHOW = "dropdown-show";
+const H2JS_EDIT_DROPDOWN = "edit-dropdown";
+const H2JS_FILE_DROPDOWN = "file-dropdown";
+const H2JS_VIEW_DROPDOWN = "view-dropdown";
+
 // controls
 const H2JS_CONTROL_ELEMENT = "control-element";
 const H2JS_FIGURE_CONTROLLER_ITEM = "figure-controller-item";

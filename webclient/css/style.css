@@ -1,6 +1,7 @@
 html {
   height: 100%;
   background-color: black;
+  cursor: default;
 }
 html body {
   height: calc(100% - 10px);
@@ -13,33 +14,81 @@ html body .page {
   height: 100%;
 }
 html body .page .menu {
-  height: 22px;
   width: 100%;
   display: flex;
   background-color: #000000;
-  border-bottom: 1px solid black;
 }
 html body .page .menu #logo {
   width: 80px;
 }
-html body .page .menu .menu--item {
+html body .page .menu .dropdown {
+  position: relative;
+  display: inline-block;
+}
+html body .page .menu .dropdown .dropbtn {
+  height: 22px;
   padding-left: 10px;
   padding-right: 10px;
-  border-right: 1px solid #1a6bc1;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-html body .page .menu .menu--item:hover {
+html body .page .menu .dropdown .dropbtn:hover {
   background-color: #1a6bc1;
   cursor: pointer;
 }
-html body .page .menu .menu--item:active {
+html body .page .menu .dropdown .dropbtn:active {
   background-color: #17395d;
   cursor: pointer;
 }
-html body .page .menu .menu--item__first {
-  border-left: 1px solid #1a6bc1;
+html body .page .menu .dropdown .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #131111;
+  min-width: 160px;
+  z-index: 1;
+}
+html body .page .menu .dropdown .dropdown-content .dropdown-content--item {
+  height: 24px;
+  display: block;
+  border-bottom: 1px solid #1a6bc1;
+  padding: 4px;
+  text-decoration: none;
+  color: #d0d0d0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: left;
+}
+html body .page .menu .dropdown .dropdown-content .dropdown-content--item:hover {
+  background-color: #1a6bc1;
+  cursor: pointer;
+}
+html body .page .menu .dropdown .dropdown-content .dropdown-content--item:active {
+  background-color: #17395d;
+  cursor: pointer;
+}
+html body .page .menu .dropdown .dropdown-content__last {
+  border-bottom: none;
+}
+html body .page .menu .dropdown .dropdown-show {
+  display: block;
+}
+html body .page .menu .single-button {
+  height: 22px;
+  padding-left: 10px;
+  padding-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+html body .page .menu .single-button:hover {
+  background-color: #1a6bc1;
+  cursor: pointer;
+}
+html body .page .menu .single-button:active {
+  background-color: #17395d;
+  cursor: pointer;
 }
 html body .page .editor {
   width: 100%;

@@ -53,15 +53,50 @@
     <header>
         <div class="menu">
             <div id="logo">Logo</div>
-            <div class="menu--item menu--item__first">Файл</div>
-            <div class="menu--item">Правка</div>
-            <div class="menu--item">Вид</div>
-            <div class="menu--item">Помощь</div>
-            <div class="menu--item">О программе</div>
+
+                <div class="dropdown">
+                    <div id="menu-file" onclick="Menu.toggleFile()" class="dropbtn">Файл</div>
+                    <div class="dropdown-content" id="file-dropdown">
+                        <a class="dropdown-content--item dropdown-content__first" href="#">Link 1</a>
+                        <a class="dropdown-content--item" href="#">Link 2</a>
+                        <a class="dropdown-content--item dropdown-content__last" href="#">Link 3</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <div id="menu-edit" onclick="Menu.toggleEdit()" class="dropbtn">Правка</div>
+                    <div class="dropdown-content" id="edit-dropdown">
+                        <a class="dropdown-content--item dropdown-content__first" href="#">Link 1</a>
+                        <a class="dropdown-content--item" href="#">Link 2</a>
+                        <a class="dropdown-content--item dropdown-content__last" href="#">Link 3</a>
+                    </div>
+                </div>
+
+            <div class="dropdown">
+                <div id="menu-view" onclick="Menu.toggleView()" class="dropbtn">Вид</div>
+                <div class="dropdown-content" id="view-dropdown">
+                    <a class="dropdown-content--item dropdown-content__first" href="#">Link 1</a>
+                    <a class="dropdown-content--item" href="#">Link 2</a>
+                    <a class="dropdown-content--item dropdown-content__last" href="#">Link 3</a>
+                </div>
+            </div>
+
+            <div class="single-button">
+                Помощь
+            </div>
+
+            <div class="single-button">
+                О программе
+            </div>
         </div>
     </header>
 
+
+
     <!-- editor area -->
+
+
+
     <div class="editor">
         <!-- left column -->
         <div class="view">
