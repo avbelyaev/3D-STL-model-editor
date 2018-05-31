@@ -91,7 +91,7 @@ class GuiRenderer {
                         height: 170
                     },
                     max: {
-                        height: 750
+                        height: 728
                     }
                 }
             })
