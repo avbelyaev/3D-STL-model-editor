@@ -20,7 +20,6 @@ class FigureController {
 
     addDynamicFigure(dynamicFigure) {
         log(`adding dynamic figure ${dynamicFigure.id}`);
-
         this.dynamicFigures.set(dynamicFigure.id, dynamicFigure);
 
         // save dynamic figure's id into radio-button

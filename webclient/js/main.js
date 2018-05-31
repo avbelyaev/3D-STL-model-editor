@@ -20,7 +20,7 @@ const log = (text) => {
         text = `<span class=${H2JS_LOG_CONTENT_ERROR}>${text}</span>`;
     }
 
-    logr.innerHTML += currentTime + " " + text + "<br>";
+    logr.innerHTML += currentTime + "\t" + text + "<br>";
 };
 
 let figureAngleDeg = 0;
@@ -135,7 +135,7 @@ function main() {
     cam = initCamera();
     figureController = new FigureController();
     modelSubmitter = new ModelSubmitter();
-    serverApiClient = new ServerApiClient('localhost', 8000);
+    serverApiClient = new ServerApiClient('localhost', 5000);
     log("Camera, Controls, FigureController/Submitter have started");
 
 
@@ -161,9 +161,9 @@ function main() {
         -100, -50, 0,
         0, -50, 100
     ];
-    const triangle = new Figure(trianglePositions, COLORS.RANDOM(), gl, vsSource, fsSource, 'triangle');
-    triangle.init();
-    figureController.addDynamicFigure(triangle);
+    // const triangle = new Figure(trianglePositions, COLORS.RANDOM(), gl, vsSource, fsSource, 'triangle');
+    // triangle.init();
+    // figureController.addDynamicFigure(triangle);
 
     const letterF = new Figure(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource, 'letter-F');
     letterF.init();
@@ -171,14 +171,14 @@ function main() {
 
 
     // add mesh stub from geometry server
-    serverApiClient.meshStub(response => {
-        const data = response.data;
-        log(data);
-
-        const stub = Figure.ofInnerRepresentation(data, 'stub');
-        stub.init();
-        figureController.addDynamicFigure(stub);
-    });
+    // serverApiClient.meshStub(response => {
+    //     const data = response.data;
+    //     log(data);
+    //
+    //     const stub = Figure.ofInnerRepresentation(data, 'stub');
+    //     stub.init();
+    //     figureController.addDynamicFigure(stub);
+    // });
 
 
     log("Starting render loop");

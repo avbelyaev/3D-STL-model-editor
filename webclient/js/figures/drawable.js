@@ -9,7 +9,7 @@ class Drawable {
             throw new Error('Drawable id is null or empty');
         }
 
-        this.id = id;
+        this.id = `${id}_${getRandomInt(100000, 999999)}`;
         this.gl = gl;
         this.vsSource = vsSource;
         this.fsSource = fsSource;

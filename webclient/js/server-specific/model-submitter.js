@@ -36,11 +36,14 @@ class ModelSubmitter {
 
     addModelFromFile() {
         const file = this.modelSubmitterElement.files[0];
+        const filename = file.name.includes('.')
+            ? file.name.substr(0, file.name.indexOf('.'))
+            : file.name;
 
         if (file && this.canBeSubmitted) {
             STLLoader.parseBinarySTL(file, (err, meshData) => {
                 if (!err) {
-                    log('file has been successfully parsed');
+                    log(`file ${filename} has been successfully parsed`);
 
                     const vertices = meshData.vertices;
                     console.log(vertices);
@@ -48,22 +51,20 @@ class ModelSubmitter {
                     // const multiplyCoeff = 1000;
                     // log(`multiplying by ${multiplyCoeff}`);
                     // vertices.map(vertex => parseInt(vertex) * multiplyCoeff);
-                    const fileNameNoExtension = file.name.includes('.')
-                        ? file.name.substr(0, file.name.indexOf('.'))
-                        : file.name;
 
-                    const mesh = new Figure(vertices, COLORS.RANDOM(), gl,
-                        vsSource, fsSource, fileNameNoExtension);
+                    const mesh = new Figure(vertices, extendRandomColors(vertices), gl,
+                        vsSource, fsSource, filename);
                     mesh.init();
                     figureController.addDynamicFigure(mesh);
 
-                    // save to local storage
-                    log(`converting to base64 and saving into local storage`);
+                    log(`converting ${filename} to base64 and saving into local storage`);
                     ServerApiClient.convertToBase64(file, (err, res) => {
                         if (!err) {
                             localStorage.setItem(mesh.id, res);
+                            log(`item ${mesh.id} has been saved`)
                         }
                     });
+
 
                 } else {
                     log('file parse error: ' + err);
@@ -96,7 +97,7 @@ class ModelSubmitter {
             });
             this.canBePerformed = false;
 
-        }  else {
+        } else {
             log('nothing to perform already performed');
         }
     }

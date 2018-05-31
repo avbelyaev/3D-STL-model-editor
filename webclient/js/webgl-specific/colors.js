@@ -34,6 +34,17 @@ const extendColorsToVertices = (colorsArray, positionsArray) => {
     return colorsExtended;
 };
 
+const extendRandomColors = (positionsArray) => {
+    const colorsExtended = [];
+    let i = 0;
+    const figureVertexNum = positionsArray.length / 3;
+    while (i < figureVertexNum) {
+        colorsExtended.push(...COLORS.RANDOM());
+        i++;
+    }
+    return colorsExtended;
+};
+
 /**
  * determines if there is a tricolor vector for each vertex (in other words: if each vertex has its color)
  * @param colorsArray
