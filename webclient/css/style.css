@@ -6,61 +6,93 @@ html body {
   height: calc(100% - 10px);
   margin: 2px;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
-  color: #969696;
+  color: #d0d0d0;
   box-sizing: border-box;
 }
-html body .editor {
+html body .page {
+  height: 100%;
+}
+html body .page .menu {
+  height: 22px;
+  width: 100%;
+  display: flex;
+  background-color: #000000;
+  border-bottom: 1px solid black;
+}
+html body .page .menu #logo {
+  width: 80px;
+}
+html body .page .menu .menu--item {
+  padding-left: 10px;
+  padding-right: 10px;
+  border-right: 1px solid #1a6bc1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+html body .page .menu .menu--item:hover {
+  background-color: #1a6bc1;
+  cursor: pointer;
+}
+html body .page .menu .menu--item:active {
+  background-color: #17395d;
+  cursor: pointer;
+}
+html body .page .menu .menu--item__first {
+  border-left: 1px solid #1a6bc1;
+}
+html body .page .editor {
+  width: 100%;
+  height: calc(100% - 22px);
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
-  width: 100%;
-  height: 100%;
 }
-html body .editor .view {
+html body .page .editor .view {
   width: 80%;
   height: 100%;
 }
-html body .editor .view #glCanvas {
+html body .page .editor .view #glCanvas {
   width: 100%;
   height: 85%;
   display: block;
 }
-html body .editor .view .log {
+html body .page .editor .view .log {
   height: 15%;
   width: calc(100% - 4px);
   margin: 2px 0 2px 0;
   background-color: #131111;
   padding: 2px;
 }
-html body .editor .view .log .log__content {
+html body .page .editor .view .log .log__content {
   height: 100%;
   overflow: auto;
   font-family: "Courier New", Courier, monospace;
   font-size: 14px;
 }
-html body .editor .view .log .log__content .log__content--error {
+html body .page .editor .view .log .log__content .log__content--error {
   color: red;
   font-size: 15px;
 }
-html body .editor .controls {
+html body .page .editor .controls {
   width: 20%;
   height: 100%;
 }
-html body .editor .controls .control {
+html body .page .editor .controls .control {
   background-color: #131111;
   margin: 0 0 2px 2px;
   padding: 4px;
 }
-html body .editor .controls .control .control-title {
+html body .page .editor .controls .control .control-title {
   background-color: #000000;
   padding: 4px 0 4px 4px;
   color: #716f6f;
 }
-html body .editor .controls .control .control-element {
+html body .page .editor .controls .control .control-element {
   padding-top: 4px;
 }
-html body .editor .controls .submit-button {
+html body .page .editor .controls .submit-button {
   width: 100%;
   height: 30px;
   background-color: #000000;
@@ -71,15 +103,15 @@ html body .editor .controls .submit-button {
   justify-content: center;
   align-items: center;
 }
-html body .editor .controls .submit-button:hover {
+html body .page .editor .controls .submit-button:hover {
+  background-color: #1a6bc1;
+  cursor: pointer;
+}
+html body .page .editor .controls .submit-button:active {
   background-color: #17395d;
   cursor: pointer;
 }
-html body .editor .controls .submit-button:active {
-  background-color: #081421;
-  cursor: pointer;
-}
-html body .editor .controls .figure-controller-item {
+html body .page .editor .controls .figure-controller-item {
   height: 24px;
   background-color: #131111;
   border: 1px solid #17395d;
@@ -90,13 +122,14 @@ html body .editor .controls .figure-controller-item {
   align-items: center;
   justify-content: left;
 }
-html body .editor .controls .figure-controller-item:hover {
-  background-color: #17395d;
+html body .page .editor .controls .figure-controller-item:hover {
+  background-color: #1a6bc1;
+  cursor: pointer;
 }
-html body .editor .controls .figure-controller-item .figure-controller-item-title {
+html body .page .editor .controls .figure-controller-item .figure-controller-item-title {
   margin-left: 4px;
 }
-html body .editor .controls .control-operation-item {
+html body .page .editor .controls .control-operation-item {
   height: 24px;
   background-color: #131111;
   border: 1px solid #17395d;
@@ -107,10 +140,11 @@ html body .editor .controls .control-operation-item {
   align-items: center;
   justify-content: left;
 }
-html body .editor .controls .control-operation-item:hover {
-  background-color: #17395d;
+html body .page .editor .controls .control-operation-item:hover {
+  background-color: #1a6bc1;
+  cursor: pointer;
 }
-html body .editor .controls .control-operation-item .control-operation-item-title {
+html body .page .editor .controls .control-operation-item .control-operation-item-title {
   margin-left: 4px;
 }
 

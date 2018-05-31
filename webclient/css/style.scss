@@ -1,14 +1,14 @@
 
 $color-light-black: #131111;
 $color-dark-black: #000000;
-$color-dark-white: #969696;
-$color-dark-blue: #17395d;
-$color-dark-dark-blue: #081421;
+$color-dark-blue: #1a6bc1;
+$color-light-blue: #17395d;
 
 $font-helvetica: "Trebuchet MS", Helvetica, sans-serif;
 $font-courier: "Courier New", Courier, monospace;
+$font-color: #d0d0d0;
 
-$border: 1px solid $color-dark-blue;
+$border: 1px solid $color-light-blue;
 
 $height-list-item: 24px;
 
@@ -20,6 +20,16 @@ $control-title-font-color: #716f6f;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@mixin hover-effect {
+  background-color: $color-dark-blue;
+  cursor: pointer;
+}
+
+@mixin active-effect {
+  background-color: $color-light-blue;
+  cursor: pointer;
 }
 
 @mixin list-item {
@@ -34,7 +44,22 @@ $control-title-font-color: #716f6f;
   justify-content: left;
 
   &:hover {
-    background-color: $color-dark-blue;
+    @include hover-effect;
+  }
+}
+
+@mixin menu-item {
+  padding-left: 10px;
+  padding-right: 10px;
+  border-right: 1px solid $color-dark-blue;
+  @include centered-text;
+
+  &:hover {
+    @include hover-effect;
+  }
+
+  &:active {
+    @include active-effect;
   }
 }
 
@@ -47,101 +72,123 @@ html {
     height: calc(100% - 10px);
     margin: 2px;
     font-family: $font-helvetica;
-    color: $color-dark-white;
+    color: $font-color;
     box-sizing: border-box;
 
-    .editor {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      align-items: flex-start;
-      width: 100%;
+    .page {
       height: 100%;
 
-      .view {
-        width: 80%;
-        height: 100%;
+      .menu {
+        height: 22px;
+        width: 100%;
+        display: flex;
+        background-color: $color-dark-black;
+        border-bottom: 1px solid black;
 
-        #glCanvas {
-          width: 100%;
-          height: 85%;
-          display: block;
+        #logo {
+          width: 80px;
         }
 
-        .log {
-          height: 15%;
-          width: calc(100% - 4px);
-          margin: 2px 0 2px 0;
-          background-color: $color-light-black;
-          padding: 2px;
+        .menu--item {
+          @include menu-item;
+        }
 
-          .log__content {
-            height: 100%;
-            overflow: auto;
-            font-family: $font-courier;
-            font-size: 14px;
-
-            .log__content--error {
-              color: red;
-              font-size: 15px;
-            }
-          }
+        .menu--item__first {
+          border-left: 1px solid $color-dark-blue;
         }
       }
 
-      .controls {
-        width: 20%;
-        height: 100%;
+      .editor {
+        width: 100%;
+        height: calc(100% - 22px); // 100% - menu.height
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
 
-        .control {
-          background-color: $control--background-color;
-          margin: 0 0 2px 2px;
-          padding: 4px;
+        .view {
+          width: 80%;
+          height: 100%;
 
-          .control-title {
-            background-color: $control-title--background-color;
-            padding: 4px 0 4px 4px;
-            color: $control-title-font-color;
+          #glCanvas {
+            width: 100%;
+            height: 85%;
+            display: block;
           }
 
-          .control-element {
-            padding-top: 4px;
-          }
-        }
+          .log {
+            height: 15%;
+            width: calc(100% - 4px);
+            margin: 2px 0 2px 0;
+            background-color: $color-light-black;
+            padding: 2px;
 
-        .submit-button {
-          width: 100%;
-          height: 30px;
-          background-color: $color-dark-black;
-          margin-top: 10px;
-          margin-bottom: 10px;
-          border: $border;
-          @include centered-text;
+            .log__content {
+              height: 100%;
+              overflow: auto;
+              font-family: $font-courier;
+              font-size: 14px;
 
-          &:hover {
-            background-color: $color-dark-blue;
-            cursor: pointer;
-          }
-
-          &:active {
-            background-color: $color-dark-dark-blue;
-            cursor: pointer;
-          }
-        }
-
-        .figure-controller-item {
-          @include list-item;
-
-          .figure-controller-item-title {
-            margin-left: 4px;
+              .log__content--error {
+                color: red;
+                font-size: 15px;
+              }
+            }
           }
         }
 
-        .control-operation-item {
-          @include list-item;
+        .controls {
+          width: 20%;
+          height: 100%;
 
-          .control-operation-item-title {
-            margin-left: 4px;
+          .control {
+            background-color: $control--background-color;
+            margin: 0 0 2px 2px;
+            padding: 4px;
+
+            .control-title {
+              background-color: $control-title--background-color;
+              padding: 4px 0 4px 4px;
+              color: $control-title-font-color;
+            }
+
+            .control-element {
+              padding-top: 4px;
+            }
+          }
+
+          .submit-button {
+            width: 100%;
+            height: 30px;
+            background-color: $color-dark-black;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border: $border;
+            @include centered-text;
+
+            &:hover {
+              @include hover-effect;
+            }
+
+            &:active {
+              @include active-effect;
+            }
+          }
+
+          .figure-controller-item {
+            @include list-item;
+
+            .figure-controller-item-title {
+              margin-left: 4px;
+            }
+          }
+
+          .control-operation-item {
+            @include list-item;
+
+            .control-operation-item-title {
+              margin-left: 4px;
+            }
           }
         }
       }

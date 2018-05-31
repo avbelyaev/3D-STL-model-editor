@@ -1,115 +1,136 @@
 <!doctype html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="css/style.css">
-    </head>
-    <body>
-        <!--WebGL-->
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!--WebGL-->
 
-        <!--libs-->
-        <script src="js/lib/interact.js"></script>  <!-- resizes log -->
-        <script src="js/lib/gl-matrix.js"></script>
-        <script src="js/lib/axios.min.js"></script>
+<!--libs-->
+<script src="js/lib/interact.js"></script>  <!-- resizes log -->
+<script src="js/lib/gl-matrix.js"></script>
+<script src="js/lib/axios.min.js"></script>
 
-        <!--math functions & utils-->
-        <script src="js/utils/indexed-db.js"></script>
-        <script src="js/utils/converters.js"></script>
-        <script src="js/utils/html-2-js-constants.js"></script>
-        <script src="js/utils/stl-loader.js"></script>
-        <script src="js/maths/numbers.js"></script>
-        <script src="js/maths/matrices.js"></script>
+<!--math functions & utils-->
+<script src="js/utils/indexed-db.js"></script>
+<script src="js/utils/converters.js"></script>
+<script src="js/utils/html-2-js-constants.js"></script>
+<script src="js/utils/stl-loader.js"></script>
+<script src="js/maths/numbers.js"></script>
+<script src="js/maths/matrices.js"></script>
 
-        <!--webgl-specific-->
-        <script src="js/webgl-specific/buffers.js"></script>
-        <script src="js/webgl-specific/shaders.js"></script>
-        <script src="js/webgl-specific/colors.js"></script>
+<!--webgl-specific-->
+<script src="js/webgl-specific/buffers.js"></script>
+<script src="js/webgl-specific/shaders.js"></script>
+<script src="js/webgl-specific/colors.js"></script>
 
-        <!--controls-->
-        <script src="js/controls/camera.js"></script><!-- Camera should be defined before controls -->
-        <script src="js/controls/mouse-controls.js"></script>
-        <script src="js/controls/gui-renderer.js"></script>
+<!--controls-->
+<script src="js/controls/camera.js"></script><!-- Camera should be defined before controls -->
+<script src="js/controls/mouse-controls.js"></script>
+<script src="js/controls/gui-renderer.js"></script>
+<script src="js/controls/menu.js"></script>
 
-        <!--figures-->
-        <script src="js/figures/figure-controller.js"></script>
-        <script src="js/figures/drawable.js"></script>
-        <script src="js/figures/line.js"></script>
-        <script src="js/figures/figure.js"></script>
-        <script src="js/figures/mesh.js"></script>
-        <script src="js/figures/grid.js"></script>
-        <script src="js/figures/predefined/letter-f.js"></script>
-        <script src="js/figures/predefined/axis.js"></script>
+<!--figures-->
+<script src="js/figures/figure-controller.js"></script>
+<script src="js/figures/drawable.js"></script>
+<script src="js/figures/line.js"></script>
+<script src="js/figures/figure.js"></script>
+<script src="js/figures/mesh.js"></script>
+<script src="js/figures/grid.js"></script>
+<script src="js/figures/predefined/letter-f.js"></script>
+<script src="js/figures/predefined/axis.js"></script>
 
-        <!--server-specific-->
-        <script src="js/server-specific/models-operations.js"></script>
-        <script src="js/server-specific/server-api-client.js"></script>
-        <script src="js/server-specific/operation-performer.js"></script>
+<!--server-specific-->
+<script src="js/server-specific/models-operations.js"></script>
+<script src="js/server-specific/server-api-client.js"></script>
+<script src="js/server-specific/operation-performer.js"></script>
 
 
-        <div class="editor">
-            <!-- left column -->
-            <div class="view">
-                <canvas id="glCanvas"></canvas>
-                <div class="log">
-                    <div class="log__content">
-                        <!-- logging goes here -->
-                    </div>
-                </div>
-            </div>
+<div class="page">
 
-            <!-- right column -->
-            <div class="controls">
-                <div id="control-addition" class="control">
-                    <div class="control-title">Добавление модели</div>
-                    <div class="control-element">
-                        <input class="control-addition--file" type="file" />
-                        <div class="submit-button" id="control-addition--button"
-                             onClick="operationPerformer.performAddition()">Добавить модель</div>
-                    </div>
-                </div>
+    <!-- top menu -->
+    <header>
+        <div class="menu">
+            <div id="logo">Logo</div>
+            <div class="menu--item menu--item__first">Файл</div>
+            <div class="menu--item">Правка</div>
+            <div class="menu--item">Вид</div>
+            <div class="menu--item">Помощь</div>
+            <div class="menu--item">О программе</div>
+        </div>
+    </header>
 
-                <div id="control-selection" class="control">
-                    <div class="control-title">Выбор активной модели</div>
-                    <div class="control-element">
-                        <!-- figure list goes here -->
-
-                        <div class="submit-button" id="control-selection--button"
-                             onClick="operationPerformer.performDownload()">Сохранить модель</div>
-                    </div>
-                </div>
-
-                <div id="control-adjustment" class="control">
-                    <div class="control-title">Настройка модели</div>
-                    <div class="control-element">
-                        <p>Поворот:<input id="figAngle" type="range" min="0" max="360" step="10" value="0"
-                                      oninput="updateFigure()"></p>
-                        <p>Масштаб:<input id="figScale" type="range" min="0.5" max="10" step="0.07" value="1"
-                                       oninput="updateFigure()"></p>
-                    </div>
-                </div>
-
-                <div id="control-operation" class="control">
-                    <div class="control-title">Операции</div>
-                    <div class="control-element">
-                        <!-- operation list goes here -->
-                        <div class="submit-button" id="control-operation--button"
-                             onClick="operationPerformer.performBoolOp()">Выполнить операцию</div>
-                    </div>
-                </div>
-
-                <div id="control-reserved" class="control">
-                    <div class="control-title">Сцена</div>
-                    <div class="control-element">
-                        <!-- reload(true) forces reload from server -->
-                        <div class="submit-button" id="control-reserved--button"
-                               onClick="window.location.reload(true)">Перезагрузить сцену</div>
-                    </div>
+    <!-- editor area -->
+    <div class="editor">
+        <!-- left column -->
+        <div class="view">
+            <canvas id="glCanvas"></canvas>
+            <div class="log">
+                <div class="log__content">
+                    <!-- logging goes here -->
                 </div>
             </div>
         </div>
 
-        <!-- only run main() when all page is rendered -->
-        <script src="js/main.js"></script>
+        <!-- right column -->
+        <div class="controls">
+            <div id="control-addition" class="control">
+                <div class="control-title">Добавление модели</div>
+                <div class="control-element">
+                    <input class="control-addition--file" type="file"/>
+                    <div class="submit-button" id="control-addition--button"
+                         onClick="operationPerformer.performAddition()">Добавить модель
+                    </div>
+                </div>
+            </div>
 
-    </body>
+            <div id="control-selection" class="control">
+                <div class="control-title">Выбор активной модели</div>
+                <div class="control-element">
+                    <!-- figure list goes here -->
+
+                    <div class="submit-button" id="control-selection--button"
+                         onClick="operationPerformer.performDownload()">Сохранить модель
+                    </div>
+                </div>
+            </div>
+
+            <div id="control-adjustment" class="control">
+                <div class="control-title">Настройка модели</div>
+                <div class="control-element">
+                    <p>Поворот:<input id="figAngle" type="range" min="0" max="360" step="10" value="0"
+                                      oninput="updateFigure()"></p>
+                    <p>Масштаб:<input id="figScale" type="range" min="0.5" max="10" step="0.07" value="1"
+                                      oninput="updateFigure()"></p>
+                </div>
+            </div>
+
+            <div id="control-operation" class="control">
+                <div class="control-title">Операции</div>
+                <div class="control-element">
+                    <!-- operation list goes here -->
+                    <div class="submit-button" id="control-operation--button"
+                         onClick="operationPerformer.performBoolOp()">Выполнить операцию
+                    </div>
+                </div>
+            </div>
+
+            <div id="control-reserved" class="control">
+                <div class="control-title">Сцена</div>
+                <div class="control-element">
+                    <!-- reload(true) forces reload from server -->
+                    <div class="submit-button" id="control-reserved--button"
+                         onClick="window.location.reload(true)">Перезагрузить сцену
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- only run main() when all page is rendered -->
+<script src="js/main.js"></script>
+
+</body>
 </html>
