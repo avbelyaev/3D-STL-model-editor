@@ -61,12 +61,12 @@ class Drawable {
     }
 
     __initProgram() {
-        log('initProgram');
+        // log('initProgram');
         this.program = initShaderProgram(this.gl, this.vsSource, this.fsSource);
     }
 
     __initBuffers() {
-        log('initBuffers');
+        // log('initBuffers');
 
         const posNumComponents = 3;
         this.positionBufferInfo = createBufferInfo(
@@ -81,7 +81,7 @@ class Drawable {
     }
 
     __initShaderArgLocations() {
-        log('initShaderArgLocations');
+        // log('initShaderArgLocations');
 
         this.attribLocations = {
             vertexPosition: this.gl.getAttribLocation(this.program, 'aPosition'),

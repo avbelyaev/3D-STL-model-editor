@@ -147,14 +147,11 @@ function main() {
     // gl.enable(gl.CULL_FACE); // dont draw back-facing (clockwise vertices) triangles
 
 
-    const axisY = new Line([0, -400, 0], [0, 400, 0], COLORS.GREEN, gl, vsSource, fsSource, 'axisY');
-    axisY.init();
-    figureController.addStaticFigure(axisY);
-
     const grid = new Grid(200, 10, COLORS.WHITE, gl, vsSource, fsSource, 'grid');
     grid.init();
     figureController.addStaticFigure(grid);
 
+    initAxis();
 
 
     const letterF = new Figure(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource, 'letter-F');

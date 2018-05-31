@@ -23,11 +23,11 @@ html body .editor .view {
 }
 html body .editor .view #glCanvas {
   width: 100%;
-  height: 80%;
+  height: 85%;
   display: block;
 }
 html body .editor .view .log {
-  height: 20%;
+  height: 15%;
   width: calc(100% - 4px);
   margin: 2px 0 2px 0;
   background-color: #131111;
