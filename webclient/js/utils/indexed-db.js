@@ -16,6 +16,8 @@ class IndexedDB {
         const indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.OIndexedDB;
         // IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.OIDBTransaction || window.msIDBTransaction;
 
+        IndexedDB.deleteDB();
+
         IndexedDB.operate((err, db, store, tx) => {
             if (!err) {
                 log(`IndexedDB ${DB_NAME} with store ${DB_STORE} has been created`);
@@ -56,4 +58,17 @@ class IndexedDB {
         };
 
     };
+
+    static deleteDB() {
+        const deleteDB = indexedDB.deleteDatabase(DB_NAME);
+        deleteDB.onsuccess = function () {
+            log("Database has been removed");
+        };
+        deleteDB.onerror = function () {
+            log("Couldn't delete database");
+        };
+        deleteDB.onblocked = function () {
+            log("Couldn't delete database due to the operation being blocked");
+        };
+    }
 }

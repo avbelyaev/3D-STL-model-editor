@@ -52,12 +52,12 @@ class OperationPerformer {
 
                                     store.put({
                                         id: base64Id,
-                                        data: res
+                                        modeldata: res
                                     });
                                     log(`item ${base64Id} has been saved to IndexedDB`);
 
                                 } else {
-                                    log('error on saving STL in db');
+                                    log('error while saving to db: ' + err.message);
                                 }
                             });
                         }
@@ -93,6 +93,7 @@ class OperationPerformer {
                         const boolOpResult = Figure.ofInnerRepresentation(data, 'boolOpResult');
                         boolOpResult.init();
                         figureController.addDynamicFigure(boolOpResult);
+
                     } catch (e) {
                         log('Error while performing bool op: ' + e.message + '\n' + e.stack);
                     }
@@ -114,35 +115,36 @@ class OperationPerformer {
             log(`Figure ${selectedFigureId} download in progress...`);
             const base64edFigureId = OperationPerformer.createIdForBase64Item(selectedFigureId);
 
-            try {
-                const base64edFigureData = localStorage.getItem(base64edFigureId);
-                if ("" !== base64edFigureData) {
-                    const mimeTypeStl = "application/sla";
+            IndexedDB.operate((err, db, store, tx) => {
+                    if (!err) {
+                        const getSTL = store.get(base64edFigureId);
 
-                    log('converting base64 to blob. generating download url');
-                    const blob = Converter.convertBase64ToBlob(base64edFigureData, mimeTypeStl, 512);
-                    const blobUrl = URL.createObjectURL(blob);
+                        getSTL.onsuccess = function () {
+                            const stlData = getSTL.result.modeldata;
 
-                    // assign name to blob via invisible link
-                    const link = document.createElement("a");
-                    document.body.appendChild(link);
-                    link.style = "display: none";
-                    link.href = blobUrl;
-                    link.download = selectedFigureId + ".stl";
-                    link.click();
+                            log('converting base64 to blob. generating download url');
+                            const mimeTypeStl = "application/sla";
+                            const blob = Converter.convertBase64ToBlob(stlData, mimeTypeStl, 512);
+                            const blobUrl = URL.createObjectURL(blob);
 
-                    // remove link, revoke url
-                    URL.revokeObjectURL(blobUrl);
-                    document.body.removeChild(link);
+                            // assign name to blob via invisible link
+                            const link = document.createElement("a");
+                            document.body.appendChild(link);
+                            link.style = "display: none";
+                            link.href = blobUrl;
+                            link.download = selectedFigureId + ".stl";
+                            link.click();
 
-                } else {
-                    log(`Error! Could not find item ${base64edFigureId} in local storage`);
-                }
+                            // remove link, revoke url
+                            URL.revokeObjectURL(blobUrl);
+                            document.body.removeChild(link);
+                        }
 
-            } catch (e) {
-                log('Error while downloading: ' + e.message + '\n' + e.stack);
-            }
-            this.canBeDownloaded = true;
+                    } else {
+                        log(`Error! Could not read ${base64edFigureId} from db: ${err.message}`);
+                    }
+                this.canBeDownloaded = true;
+            });
 
         } else {
             log(`nothing to download or download in progress`);
