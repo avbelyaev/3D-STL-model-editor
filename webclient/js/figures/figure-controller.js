@@ -58,9 +58,9 @@ class FigureController {
     }
 
     togglefigureOfTypeVisibility(ofType, isVisible) {
-        const elementsToToggle = Array.from(this.staticFigures.values())
-            .filter(f => f.type === ofType);
-        elementsToToggle.map(f => f.visible = isVisible);
+        Array.from(this.staticFigures.values())
+            .filter(f => f.type === ofType)
+            .map(f => f.visible = isVisible);
     }
 
     createFigureButton(groupName, idAttr) {
