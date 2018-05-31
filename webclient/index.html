@@ -33,14 +33,14 @@
         <script src="js/figures/predefined/letter-f.js"></script>
         <script src="js/figures/drawable.js"></script>
         <script src="js/figures/line.js"></script>
-        <script src="js/figures/polygon.js"></script>
+        <script src="js/figures/figure.js"></script>
         <script src="js/figures/mesh.js"></script>
         <script src="js/figures/grid.js"></script>
 
         <!--server-specific-->
-        <script src="js/server-specific/models.js"></script>
+        <script src="js/server-specific/models-operations.js"></script>
         <script src="js/server-specific/server-api-client.js"></script>
-        <script src="js/server-specific/model-submitter.js"></script>
+        <script src="js/server-specific/operation-performer.js"></script>
 
 
         <div class="editor">
@@ -57,46 +57,49 @@
             <!-- right column -->
             <div class="controls">
                 <div id="control-addition" class="control">
-                    <div class="control-title">Add figure</div>
+                    <div class="control-title">Добавление модели</div>
                     <div class="control-element">
                         <input class="control-addition--file" type="file" />
                         <div class="submit-button" id="control-addition--button"
-                             onClick="modelSubmitter.addModelFromFile()">Submit figure</div>
+                             onClick="operationPerformer.performAddition()">Добавить модель</div>
                     </div>
                 </div>
 
                 <div id="control-selection" class="control">
-                    <div class="control-title">Select figure</div>
+                    <div class="control-title">Выбор активной модели</div>
                     <div class="control-element">
                         <!-- figure list goes here -->
+
+                        <div class="submit-button" id="control-selection--button"
+                             onClick="operationPerformer.performDownload()">Сохранить модель</div>
                     </div>
                 </div>
 
                 <div id="control-adjustment" class="control">
-                    <div class="control-title">Adjust figure</div>
+                    <div class="control-title">Настройка модели</div>
                     <div class="control-element">
-                        <p>Ang:<input id="figAngle" type="range" min="0" max="360" step="10" value="0"
+                        <p>Поворот:<input id="figAngle" type="range" min="0" max="360" step="10" value="0"
                                       oninput="updateFigure()"></p>
-                        <p>Size:<input id="figScale" type="range" min="0.5" max="10" step="0.07" value="1"
+                        <p>Масштаб:<input id="figScale" type="range" min="0.5" max="10" step="0.07" value="1"
                                        oninput="updateFigure()"></p>
                     </div>
                 </div>
 
                 <div id="control-operation" class="control">
-                    <div class="control-title">Perform operation</div>
+                    <div class="control-title">Операции</div>
                     <div class="control-element">
                         <!-- operation list goes here -->
                         <div class="submit-button" id="control-operation--button"
-                             onClick="modelSubmitter.performBoolOp()">Perform operation</div>
+                             onClick="operationPerformer.performBoolOp()">Выполнить операцию</div>
                     </div>
                 </div>
 
                 <div id="control-reserved" class="control">
-                    <div class="control-title">Scene controls</div>
+                    <div class="control-title">Сцена</div>
                     <div class="control-element">
                         <!-- reload(true) forces reload from server -->
                         <div class="submit-button" id="control-reserved--button"
-                               onClick="window.location.reload(true)">Restore scene</div>
+                               onClick="window.location.reload(true)">Перезагрузить сцену</div>
                     </div>
                 </div>
             </div>

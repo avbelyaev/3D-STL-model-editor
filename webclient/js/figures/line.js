@@ -7,9 +7,8 @@ class Line extends Drawable {
     constructor(startPoint, endPoint, color, gl, vsSource, fsSource, id) {
         const positions = [...startPoint, ...endPoint];
         const colors = [...color, ...color];
-        const idWithPrefix = `line-${id}`;
 
-        super(positions, colors, gl, vsSource, fsSource, idWithPrefix);
+        super(positions, colors, gl, vsSource, fsSource, id);
         log(`constructing Line ${this.id}. pos: ${this.positions}, colors: ${this.colors}`);
 
         // draw mode

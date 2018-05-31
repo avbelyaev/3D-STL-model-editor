@@ -2,9 +2,12 @@
  * Created by anthony on 23.02.2018.
  */
 
-
+// Deprecated
 class Mesh {
     constructor(drawableFigures, originalTriangles, id) {
+        throw Error('Error! Deprecated');
+
+        // noinspection UnreachableCodeJS
         this.id = `mesh-${id}`;
         log(`constructing Mesh ${this.id}`);
 

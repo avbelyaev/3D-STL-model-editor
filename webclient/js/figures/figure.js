@@ -8,9 +8,8 @@ class Figure extends Drawable {
         const colorsExtended = isOneColored(colors, positions)
             ? extendColorsToVertices(colors, positions)
             : colors;
-        const idWithPrefix = `fig-${id}`;
 
-        super(positions, colorsExtended, gl, vsSource, fsSource, idWithPrefix);
+        super(positions, colorsExtended, gl, vsSource, fsSource, id);
         log(`constructing Figure ${this.id}`);
 
         this.drawMode = gl.TRIANGLES;

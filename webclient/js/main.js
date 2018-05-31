@@ -3,7 +3,7 @@ let cam;
 let selectedFigure;
 let idsOfFiguresToBeProcessed;
 let figureController;
-let modelSubmitter;
+let operationPerformer;
 let serverApiClient;
 
 let logr;
@@ -134,9 +134,9 @@ function main() {
     gl = initGLControls();
     cam = initCamera();
     figureController = new FigureController();
-    modelSubmitter = new ModelSubmitter();
+    operationPerformer = new OperationPerformer();
     serverApiClient = new ServerApiClient('localhost', 5000);
-    log("Camera, Controls, FigureController/Submitter have started");
+    log("Camera, Controls, FigureController, OperationPerformer have started");
 
 
     gl.clearColor(0.8, 0.8, 0.8, 1.0);
@@ -151,34 +151,15 @@ function main() {
     axisY.init();
     figureController.addStaticFigure(axisY);
 
-    const grid = new Grid(200, 10, COLORS.WHITE, gl, vsSource, fsSource, 'griddy');
+    const grid = new Grid(200, 10, COLORS.WHITE, gl, vsSource, fsSource, 'grid');
     grid.init();
     figureController.addStaticFigure(grid);
 
 
-    const trianglePositions = [
-        50, -50, 0,
-        -100, -50, 0,
-        0, -50, 100
-    ];
-    // const triangle = new Figure(trianglePositions, COLORS.RANDOM(), gl, vsSource, fsSource, 'triangle');
-    // triangle.init();
-    // figureController.addDynamicFigure(triangle);
 
     const letterF = new Figure(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource, 'letter-F');
     letterF.init();
     figureController.addDynamicFigure(letterF);
-
-
-    // add mesh stub from geometry server
-    // serverApiClient.meshStub(response => {
-    //     const data = response.data;
-    //     log(data);
-    //
-    //     const stub = Figure.ofInnerRepresentation(data, 'stub');
-    //     stub.init();
-    //     figureController.addDynamicFigure(stub);
-    // });
 
 
     log("Starting render loop");

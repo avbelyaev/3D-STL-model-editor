@@ -12,9 +12,8 @@ class GuiRenderer {
         const parentalControlElem = document.getElementById(H2JS_CONTROL_ADJUSTMENT);
         const controlElem = parentalControlElem.getElementsByClassName(H2JS_CONTROL_ELEMENT)[0];
 
-        const axisGroupName = "axe";
         GuiRenderer.axis().reverse().forEach(axis => {
-            const axisItem = GuiRenderer.createAxisItem(axis.label, axis.id, axisGroupName);
+            const axisItem = GuiRenderer.createAxisItem(axis.label, axis.id, "axe");
             controlElem.prepend(axisItem);
         })
     }
@@ -23,13 +22,12 @@ class GuiRenderer {
         const controlOperationElem = document.getElementById(H2JS_CONTROL_OPERATION);
         const operationListElement = controlOperationElem.getElementsByClassName(H2JS_CONTROL_ELEMENT)[0];
 
-        const operationsGroupName = "operations";
-        const operations = ModelSubmitter.operations();
-        operations.reverse().forEach(op => {
-            const opItem = GuiRenderer.createOperationItem(op.label, op.id, operationsGroupName);
+        Operations.operations().reverse().forEach(op => {
+            const opItem = GuiRenderer.createOperationItem(op.label, op.id, "operations");
             operationListElement.prepend(opItem);
         })
     }
+
 
     static createOperationItem(opLabel, opId, operationGroupName) {
         let selectedOperationButton = document.createElement('input');

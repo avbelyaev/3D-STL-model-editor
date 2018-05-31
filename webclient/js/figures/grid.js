@@ -4,12 +4,11 @@
 
 class Grid extends Drawable {
     constructor(cellWidth, gridElements, colors, gl, vsSource, fsSource, id) {
-        const idWithPrefix = `grid-${id}`;
 
         let positions = Grid.__count_grid_positions(cellWidth, gridElements);
         let colorsExtended = extendColorsToVertices(colors, positions);
 
-        super(positions, colorsExtended, gl, vsSource, fsSource, idWithPrefix);
+        super(positions, colorsExtended, gl, vsSource, fsSource, id);
         log(`constructing Grid ${this.id}. Cell w: ${cellWidth}, elements: ${gridElements}`);
 
         // draw mode
