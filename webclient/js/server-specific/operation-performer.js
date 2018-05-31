@@ -43,7 +43,7 @@ class OperationPerformer {
                     figureController.addDynamicFigure(mesh);
 
                     log(`saving ${filename} to local storage`);
-                    ServerApiClient.convertFileToBase64(file, (err, res) => {
+                    Converter.convertFileToBase64(file, (err, res) => {
                         if (!err) {
 
                             const base64Id = OperationPerformer.createIdForBase64Item(mesh.id);
@@ -110,7 +110,7 @@ class OperationPerformer {
                     const mimeTypeStl = "application/sla";
 
                     log('converting base64 to blob. generating download url');
-                    const blob = ServerApiClient.convertBase64ToBlob(base64edFigureData, mimeTypeStl, 512);
+                    const blob = Converter.convertBase64ToBlob(base64edFigureData, mimeTypeStl, 512);
                     const blobUrl = URL.createObjectURL(blob);
 
                     // assign name to blob via invisible link
