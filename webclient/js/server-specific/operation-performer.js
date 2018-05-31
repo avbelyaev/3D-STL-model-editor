@@ -45,11 +45,21 @@ class OperationPerformer {
                     log(`saving ${filename} to local storage`);
                     Converter.convertFileToBase64(file, (err, res) => {
                         if (!err) {
-
                             const base64Id = OperationPerformer.createIdForBase64Item(mesh.id);
-                            localStorage.setItem(base64Id, res);
-                            log(`item ${base64Id} has been saved`);
 
+                            IndexedDB.operate((err, db, store, tx) => {
+                                if (!err) {
+
+                                    store.put({
+                                        id: base64Id,
+                                        data: res
+                                    });
+                                    log(`item ${base64Id} has been saved to IndexedDB`);
+
+                                } else {
+                                    log('error on saving STL in db');
+                                }
+                            });
                         }
                     });
 

@@ -16,7 +16,7 @@ class IndexedDB {
         const indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.OIndexedDB;
         // IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.OIDBTransaction || window.msIDBTransaction;
 
-        IndexedDB.operate((err, db, tx, store) => {
+        IndexedDB.operate((err, db, store, tx) => {
             if (!err) {
                 log(`IndexedDB ${DB_NAME} with store ${DB_STORE} has been created`);
 
@@ -48,7 +48,7 @@ class IndexedDB {
             const transaction = db.transaction(DB_STORE, "readwrite");
             const store = transaction.objectStore(DB_STORE);
 
-            callback(null, db, transaction, store);
+            callback(null, db, store, transaction);
 
             transaction.oncomplete = function() {
                 db.close();
