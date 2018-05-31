@@ -108,36 +108,36 @@ const initCamera = () => {
     return new Camera(distance, horizontalAngleDeg, vertAngleDeg, lookAt);
 };
 
-const initGLControls = () => {
+const initGL = () => {
     const canvas = document.getElementById(H2JS_CANVAS);
     const gl = canvas.getContext("webgl");
     if (!gl) {
         throw new Error("Unable to initialize WebGL. Your browser or machine may not support it.");
     }
-
-    const controls = new MouseControls(canvas);
-
     return gl;
 };
 
-const renderGUI = () => {
+const renderUI = () => {
     logr = GuiRenderer.initLogger();
     GuiRenderer.renderOperations();
     GuiRenderer.renderAxis();
+
     menu = new Menu();
+    new MouseControls();
+    cam = initCamera();
+
     log("GUI has started");
 };
 
 
 function main() {
-    renderGUI();
+    renderUI();
     indexedDB = IndexedDB.init();
-    gl = initGLControls();
-    cam = initCamera();
+    gl = initGL();
     figureController = new FigureController();
     operationPerformer = new OperationPerformer();
     serverApiClient = new ServerApiClient('localhost', 5000);
-    log("Camera, Controls, FigureController, OperationPerformer have started");
+    log("FigureController, OperationPerformer have started");
 
 
     gl.clearColor(0.8, 0.8, 0.8, 1.0);

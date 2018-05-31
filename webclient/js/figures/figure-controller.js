@@ -4,7 +4,7 @@
 
 class FigureController {
     constructor() {
-        log('constructing Figure Controller');
+        log('starting Figure Controller');
 
         this.dynamicFigures = new Map();
         this.staticFigures = new Map();

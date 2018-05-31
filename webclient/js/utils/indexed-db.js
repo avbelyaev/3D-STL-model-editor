@@ -12,6 +12,7 @@ class IndexedDB {
             log('Error! This browser doesn\'t support IndexedDB');
             return;
         }
+        log(`Recreating database`);
 
         const indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.OIndexedDB;
         // IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.OIDBTransaction || window.msIDBTransaction;

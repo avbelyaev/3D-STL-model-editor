@@ -6,7 +6,7 @@ const MOUSE_BTN_LEFT = 0;
 const MOUSE_BTN_RIGHT_CHROME = 2;
 
 class MouseControls {
-    constructor(canvas) {
+    constructor() {
         // when this class'es functions are used as event handlers,
         // 'this' in these some functions start pointing to document, some to canvas
         // so mouse control's vars are static for encapsulation purpose
@@ -14,6 +14,7 @@ class MouseControls {
         MouseControls.lastMouseX = 0;
         MouseControls.lastMouseY = 0;
 
+        const canvas = document.getElementById(H2JS_CANVAS);
         MouseControls.__updateEventListeners(canvas);
     }
 

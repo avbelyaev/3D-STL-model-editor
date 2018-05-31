@@ -5,7 +5,7 @@
 
 class OperationPerformer {
     constructor() {
-        log(`constructing Model Submitter`);
+        log(`constructing Operation Performer`);
 
         // const controlAdditionElem = document.getElementById(H2JS_CONTROL_ADDITION);
         this.modelSubmitterElement = document.getElementsByClassName(H2JS_CONTROL_ADDITION_FILE)[0];

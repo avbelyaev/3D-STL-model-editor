@@ -12,7 +12,7 @@ const H2JS_EDIT_DROPDOWN = "edit-dropdown";
 const H2JS_FILE_DROPDOWN = "file-dropdown";
 const H2JS_VIEW_DROPDOWN = "view-dropdown";
 
-// controls
+// interface
 const H2JS_CONTROL_ELEMENT = "control-element";
 const H2JS_FIGURE_CONTROLLER_ITEM = "figure-controller-item";
 const H2JS_FIGURE_CONTROLLER_ITEM_TITLE = "figure-controller-item-title";
