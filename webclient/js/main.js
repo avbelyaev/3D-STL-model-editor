@@ -5,7 +5,6 @@ let idsOfFiguresToBeProcessed;
 let figureController;
 let operationPerformer;
 let serverApiClient;
-
 let logr;
 
 
@@ -131,6 +130,7 @@ const renderGUI = () => {
 
 function main() {
     renderGUI();
+    indexedDB = IndexedDB.init();
     gl = initGLControls();
     cam = initCamera();
     figureController = new FigureController();
