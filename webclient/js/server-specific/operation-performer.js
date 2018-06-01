@@ -47,7 +47,7 @@ class OperationPerformer {
                         if (!err) {
                             const base64Id = OperationPerformer.createIdForBase64Item(mesh.id);
 
-                            IndexedDB.operate((err, db, store, tx) => {
+                            IndexedDB.execute((err, db, store, tx) => {
                                 if (!err) {
 
                                     store.put({
@@ -115,7 +115,7 @@ class OperationPerformer {
             log(`Figure ${selectedFigureId} download in progress...`);
             const base64edFigureId = OperationPerformer.createIdForBase64Item(selectedFigureId);
 
-            IndexedDB.operate((err, db, store, tx) => {
+            IndexedDB.execute((err, db, store, tx) => {
                     if (!err) {
                         const getSTL = store.get(base64edFigureId);
 

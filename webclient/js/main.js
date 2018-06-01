@@ -118,9 +118,9 @@ const initGL = () => {
 };
 
 const renderUI = () => {
-    logr = GuiRenderer.initLogger();
-    GuiRenderer.renderOperations();
-    GuiRenderer.renderAxis();
+    logr = Sidebar.initLogger();
+    Sidebar.renderOperations();
+    Sidebar.renderAxis();
 
     menu = new Menu();
     new MouseControls();

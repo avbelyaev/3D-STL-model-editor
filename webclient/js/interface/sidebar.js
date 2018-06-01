@@ -3,7 +3,7 @@
  */
 
 
-class GuiRenderer {
+class Sidebar {
     constructor() {
         // empty
     }
@@ -12,8 +12,8 @@ class GuiRenderer {
         const parentalControlElem = document.getElementById(H2JS_CONTROL_ADJUSTMENT);
         const controlElem = parentalControlElem.getElementsByClassName(H2JS_CONTROL_ELEMENT)[0];
 
-        GuiRenderer.axis().reverse().forEach(axis => {
-            const axisItem = GuiRenderer.createAxisItem(axis.label, axis.id, "axe");
+        Sidebar.axis().reverse().forEach(axis => {
+            const axisItem = Sidebar.createAxisItem(axis.label, axis.id, "axe");
             controlElem.prepend(axisItem);
         })
     }
@@ -23,7 +23,7 @@ class GuiRenderer {
         const operationListElement = controlOperationElem.getElementsByClassName(H2JS_CONTROL_ELEMENT)[0];
 
         Operations.operations().reverse().forEach(op => {
-            const opItem = GuiRenderer.createOperationItem(op.label, op.id, "operations");
+            const opItem = Sidebar.createOperationItem(op.label, op.id, "operations");
             operationListElement.prepend(opItem);
         })
     }

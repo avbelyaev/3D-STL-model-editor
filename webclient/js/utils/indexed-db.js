@@ -19,7 +19,7 @@ class IndexedDB {
 
         IndexedDB.deleteDB();
 
-        IndexedDB.operate((err, db, store, tx) => {
+        IndexedDB.execute((err, db, store, tx) => {
             if (!err) {
                 log(`IndexedDB ${DB_NAME} with store ${DB_STORE} has been created`);
 
@@ -31,7 +31,7 @@ class IndexedDB {
         return indexedDB;
     }
 
-    static operate(callback) {
+    static execute(callback) {
         // access db and schema
         const open = indexedDB.open(DB_NAME, 1);
 
