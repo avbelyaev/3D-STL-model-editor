@@ -56,7 +56,8 @@ const fsSource = `
   `;
 
 const saveSelectedModel = () => {
-    figureController.selectedFigure.updatePositionsAndNormals();
+    console.log('saving selected model');
+    figureController.selectedFigure.updateFigure();
 
     const stlDataView = STLExporter.exportToBinaryStl(figureController.selectedFigure);
 
@@ -89,7 +90,7 @@ const updateFigure = () => {
 
     const selectedFigure = figureController.selectedFigure;
     selectedFigure.scaleBy(figureScale);
-    selectedFigure.rotateBy([figureAngleDeg, 0, 0], null); // TODO rotation point == translationVec?
+    selectedFigure.rotateBy([0, figureAngleDeg, 0], null); // TODO rotation point == translationVec?
 };
 
 const updateVisibility = (visibilityCheckbox) => {

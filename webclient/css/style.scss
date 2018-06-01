@@ -76,6 +76,12 @@ html {
     color: $font-color;
     box-sizing: border-box;
 
+    // disable text selection. its an editor after all :)
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+
     .page {
       height: 100%;
 

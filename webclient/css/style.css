@@ -9,6 +9,10 @@ html body {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   color: #d0d0d0;
   box-sizing: border-box;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 html body .page {
   height: 100%;

@@ -25,22 +25,22 @@ class STLExporter {
         let vertexIndex = 0;
         for (let j = 0, jl = triangles.length; j < jl; j++) {
 
-            output.setFloat32(offset, figure.normals[normalsIndex][0], true); // normal
+            output.setFloat32(offset, normals[normalsIndex][0], true); // normal
             offset += 4;
-            output.setFloat32(offset, figure.normals[normalsIndex][1], true);
+            output.setFloat32(offset, normals[normalsIndex][1], true);
             offset += 4;
-            output.setFloat32(offset, figure.normals[normalsIndex][2], true);
+            output.setFloat32(offset, normals[normalsIndex][2], true);
             offset += 4;
 
             normalsIndex++;
 
             for (let k = 0; k < 3; k++) {
 
-                output.setFloat32(offset, figure.vertices[vertexIndex][0], true); // vertices
+                output.setFloat32(offset, vertices[vertexIndex][0], true); // vertices
                 offset += 4;
-                output.setFloat32(offset, figure.vertices[vertexIndex][1], true);
+                output.setFloat32(offset, vertices[vertexIndex][1], true);
                 offset += 4;
-                output.setFloat32(offset, figure.vertices[vertexIndex][2], true);
+                output.setFloat32(offset, vertices[vertexIndex][2], true);
                 offset += 4;
 
                 vertexIndex++;

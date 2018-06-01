@@ -41,7 +41,7 @@ class Drawable {
             this.vertices = reduceArrayToTriples(this.worldPositions);
             this.triangles = reduceArrayToTriples(this.vertices);
 
-            this.updatePositionsAndNormals();
+            this.updateFigure();
         }
     }
 
@@ -79,9 +79,13 @@ class Drawable {
         this.__initShaderArgLocations();
     }
 
-    updatePositionsAndNormals() {
-        console.log('updating positions and normals');
+    updateFigure() {
+        console.log('updating figure');
         this.__updateNormals();
+
+        // update using recounted world positions
+        this.__updateVertices();
+        this.__updateTriangles();
     }
 
     __initProgram() {
@@ -127,6 +131,16 @@ class Drawable {
         this.mProj = makeProjectionMatrix();
     }
 
+    __updateVertices() {
+        console.log('updating vertices');
+        this.vertices = reduceArrayToTriples(this.worldPositions);
+    }
+
+    __updateTriangles() {
+        console.log('updating triangles');
+        this.triangles = reduceArrayToTriples(this.vertices);
+    }
+
     /**
      * model matrix places object to the right place in the world.
      * => to know where the object is situated at the moment we have to update worldPositions on every change.
@@ -135,6 +149,9 @@ class Drawable {
      */
     __updateWorldPositions() {
         console.log('updating world positions');
+
+        this.__updateVertices();
+        this.__updateTriangles();
 
         const modelMatrix = makeModelMatrix(true, this.scaleVec, this.translationVec, this.rotationVec);
 
