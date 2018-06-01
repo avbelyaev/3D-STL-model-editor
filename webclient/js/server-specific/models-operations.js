@@ -19,25 +19,21 @@ class Models {
     }
 }
 
-class Operations {
-    static operations() {
-        return [
-            {
-                id: "union",
-                label: "Объединение"
-            },
-            {
-                id: "intersection",
-                label: "Пересечение"
-            },
-            {
-                id: "difference_ab",
-                label: "Вычитание (a-b)"
-            },
-            {
-                id: "difference_ba",
-                label: "Вычитание (b-a)"
-            }
-        ];
+const Operations = Object.freeze({
+    UNION: {
+        id: "union",
+        label: "Объединение"
+    },
+    INTERSECT: {
+        id: "intersection",
+        label: "Пересечение"
+    },
+    DIFF_AB: {
+        id: "difference_ab",
+        label: "Вычитание (a-b)"
+    },
+    DIFF_BA: {
+        id: "difference_ba",
+        label: "Вычитание (b-a)"
     }
-}
+});

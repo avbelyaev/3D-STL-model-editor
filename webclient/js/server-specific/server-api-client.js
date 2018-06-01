@@ -35,4 +35,4 @@ class ServerApiClient {
                 callback(error, null);
             });
     }
-}
+    }

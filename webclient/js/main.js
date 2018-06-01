@@ -90,7 +90,7 @@ const updateFigure = () => {
 
     const selectedFigure = figureController.selectedFigure;
     selectedFigure.scaleBy(figureScale);
-    selectedFigure.rotateBy([0, figureAngleDeg, 0], null); // TODO rotation point == translationVec?
+    selectedFigure.rotateBy([figureAngleDeg, 0, 0], null); // TODO rotation point == translationVec?
 };
 
 const updateVisibility = (visibilityCheckbox) => {
@@ -180,16 +180,16 @@ function main() {
     initAxis();
 
 
-    const trianglePositions = [
-        50, -50, 0,
-        -100, -50, 0,
-        0, -50, 100
-    ];
-    const triangle = new Figure(trianglePositions, extendRandomColors(trianglePositions), gl, vsSource, fsSource, 'triangle');
-    console.log(triangle.positions);
-    console.log(triangle.translationVec);
-    triangle.init();
-    figureController.addDynamicFigure(triangle);
+    // const trianglePositions = [
+    //     50, -50, 0,
+    //     -100, -50, 0,
+    //     0, -50, 100
+    // ];
+    // const triangle = new Figure(trianglePositions, extendRandomColors(trianglePositions), gl, vsSource, fsSource, 'triangle');
+    // console.log(triangle.positions);
+    // console.log(triangle.translationVec);
+    // triangle.init();
+    // figureController.addDynamicFigure(triangle);
 
 
     // const letterF = new Figure(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource, 'letter-F');

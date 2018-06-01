@@ -23,10 +23,10 @@ class Sidebar {
         const controlOperationElem = document.getElementById(H2JS_CONTROL_OPERATION);
         const operationListElement = controlOperationElem.getElementsByClassName(H2JS_CONTROL_ELEMENT)[0];
 
-        Operations.operations().reverse().forEach(op => {
+        Array.from(Operations).reverse().forEach(op => {
             const opItem = Sidebar.createOperationItem(op.label, op.id, "operations");
             operationListElement.prepend(opItem);
-        })
+        });
     }
 
 

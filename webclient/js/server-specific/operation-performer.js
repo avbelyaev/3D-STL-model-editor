@@ -80,32 +80,63 @@ class OperationPerformer {
     }
 
     performBoolOp() {
-        const stl1 = localStorage.getItem(idsOfFiguresToBeProcessed[0]);
-        const stl2 = localStorage.getItem(idsOfFiguresToBeProcessed[1]);
-        const cmd = Models.performOnStlModel('union', stl1, stl2);
-
         if (this.canBePerformed) {
-            serverApiClient.performBoolOp(cmd, (err, res) => {
+            IndexedDB.execute((err, db, store, tx) => {
                 if (!err) {
-                    try {
-                        const data = res.data;
-                        log(data);
+                    const base64edStl1Id = OperationPerformer.createIdForBase64Item(idsOfFiguresToBeProcessed[0]);
+                    const getSTL1 = store.get(base64edStl1Id);
 
-                        const boolOpResult = Figure.ofInnerRepresentation(data, 'boolOpResult');
-                        boolOpResult.init();
-                        figureController.addDynamicFigure(boolOpResult);
+                    getSTL1.onsuccess = function () {
+                        const stl1Data = getSTL1.result.modeldata;
 
-                    } catch (e) {
-                        log('Error while performing bool op: ' + e.message + '\n' + e.stack);
+                        const base64edStl2Id = OperationPerformer.createIdForBase64Item(idsOfFiguresToBeProcessed[1]);
+                        const getSTL2 = store.get(base64edStl2Id);
+
+                        getSTL2.onsuccess = function () {
+                            const stl2Data = getSTL2.result.modeldata;
+
+                            const cmd = Models.performOnStlModel(Operations.DIFF_AB.id, stl1Data, stl2Data);
+                            operationPerformer.performRequest(cmd);
+                        };
                     }
+
+                } else {
+                    log(`Error! Could not access DB: ${err.message}`);
                 }
-                this.canBePerformed = true;
+                this.canBeDownloaded = true;
             });
-            this.canBePerformed = false;
 
         } else {
             log('nothing to perform already performed');
         }
+    }
+
+    performRequest(cmd) {
+        serverApiClient.performBoolOp(cmd, (err, response) => {
+            if (!err) {
+                log('converting base64 to blob. generating download url');
+
+                const res = response.data.res;
+                const mimeTypeStl = "application/sla";
+                const blob = B64Converter.convertBase64ToBlob(res, mimeTypeStl, 512);
+                const blobUrl = URL.createObjectURL(blob);
+
+                // assign name to blob via invisible link
+                const link = document.createElement("a");
+                document.body.appendChild(link);
+                link.style = "display: none";
+                link.href = blobUrl;
+                link.download = "result.stl";
+                link.click();
+
+                // remove link, revoke url
+                URL.revokeObjectURL(blobUrl);
+                document.body.removeChild(link);
+
+            } else {
+                log(`Error while processing request: ${err.message}`);
+            }
+        });
     }
 
     performDownload() {

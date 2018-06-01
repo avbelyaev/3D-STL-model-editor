@@ -10,7 +10,6 @@ const DRAWABLES = Object.freeze({
 
 class Drawable {
     constructor(positions, colors, gl, vsSource, fsSource, id, type) {
-        log(`constructing Drawable ${id}`);
         if (!id) {
             throw new Error('Drawable id is null or empty');
         }

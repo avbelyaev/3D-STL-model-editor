@@ -9,15 +9,17 @@ import (
 	"encoding/json"
 	"github.com/satori/go.uuid"
 	"encoding/base64"
+	"strings"
 )
 
 const (
-	HEADER_REQUEST_MODIFIED = "X-Request-Modified"
+	HEADER_REQUEST_MODIFIED  = "X-Request-Modified"
 	HEADER_RESPONSE_MODIFIED = "X-Response-Modified"
+	PATH_PERFORM             = "perform"
 )
 
 type ProxyTransport struct {
-	log    log.Logger
+	log log.Logger
 }
 
 func NewProxyTransport() *ProxyTransport {
@@ -26,28 +28,34 @@ func NewProxyTransport() *ProxyTransport {
 	}
 }
 
-func (t *ProxyTransport) RoundTrip(request *http.Request) (*http.Response, error)  {
-	request.Header.Set(HEADER_REQUEST_MODIFIED, "0")
-	if "POST" == request.Method {
-		modifyRequest(request)
-	}
-	request.Header.Set(HEADER_REQUEST_MODIFIED, "1")
+func (t *ProxyTransport) RoundTrip(request *http.Request) (*http.Response, error) {
+	if strings.Contains(request.RequestURI, PATH_PERFORM) {
+		request.Header.Set(HEADER_REQUEST_MODIFIED, "0")
+		if "POST" == request.Method {
+		    t.log.Info("modifying request")
 
+			modifyRequest(request)
+		}
+		request.Header.Set(HEADER_REQUEST_MODIFIED, "1")
+	}
 
 	// acquire response
 	var response, roundTripErr = http.DefaultTransport.RoundTrip(request)
-	response.Header.Set(HEADER_RESPONSE_MODIFIED, "0")
 
-	// only modify response for post (perform operation on STLs) request
-	if "POST" == request.Method {
-		modifyResponse(response)
+	if strings.Contains(request.RequestURI, PATH_PERFORM) {
+		response.Header.Set(HEADER_RESPONSE_MODIFIED, "0")
+		if "POST" == request.Method {
+		    t.log.Info("modifying response")
+
+			modifyResponse(response)
+		}
+		response.Header.Set(HEADER_RESPONSE_MODIFIED, "1")
 	}
-	response.Header.Set(HEADER_RESPONSE_MODIFIED, "1")
 
 	return response, roundTripErr
 }
 
-func modifyRequest(request *http.Request)  {
+func modifyRequest(request *http.Request) {
 	var originalMessage = readRequestBody(request)
 
 	var filepath1 = decodeFileAndSaveToDisk(originalMessage.Stl1)
@@ -60,7 +68,7 @@ func modifyRequest(request *http.Request)  {
 	modifyRequestBody(request, modMsgBytes)
 }
 
-func modifyResponse(response *http.Response)  {
+func modifyResponse(response *http.Response) {
 	var originalResponse = readResponseBody(response)
 
 	var fileContent, readErr = ioutil.ReadFile(originalResponse.Result)
