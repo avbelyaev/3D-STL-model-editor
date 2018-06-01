@@ -58,8 +58,8 @@ const makeProjectionMatrix = () => {
 };
 
 
-const makeMVPMatrix = (isMovable, scaleVec, translationVec, rotationVec) => {
-    let model = makeModelMatrix(isMovable, scaleVec, translationVec, rotationVec);
+const makeMVPMatrix = (scaleVec, translationVec, rotationVec) => {
+    let model = makeModelMatrix(true, scaleVec, translationVec, rotationVec);
     let view = makeViewMatrix();
     let projection = makeProjectionMatrix();
 
@@ -68,4 +68,15 @@ const makeMVPMatrix = (isMovable, scaleVec, translationVec, rotationVec) => {
     mat4.multiply(mvp, projection, mvp); // modelViewProjection
 
     return mvp;
+};
+
+
+const multiplyMat4ByVec4 = (m4, v4) => {
+    const c = vec4.create();
+    let j = 0;
+    for (let i = 0; i < 4; i++) {
+        j = i;
+        c[i] = m4[j]*v4[0] + m4[j+=4]*v4[1] + m4[j+=4]*v4[2] + m4[j+=4]*v4[3];
+    }
+    return c;
 };

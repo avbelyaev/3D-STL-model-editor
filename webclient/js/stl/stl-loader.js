@@ -14,7 +14,7 @@ class STLLoader {
         fileReader.onload = function() {
             const arrayBuffer = this.result;
 
-            const parsed = STLLoader.parseData(arrayBuffer);
+            const parsed = STLLoader.__parseData(arrayBuffer);
             callback(null, parsed);
         };
         fileReader.onerror = function (error) {
@@ -23,7 +23,7 @@ class STLLoader {
         fileReader.readAsArrayBuffer(file);
     }
 
-    static parseData(data) {
+    static __parseData(data) {
         const reader = new DataView( data );
         const faces = reader.getUint32( 80, true );
 
@@ -103,16 +103,6 @@ class STLLoader {
             }
 
         }
-
-        // geometry.addAttribute( 'position', new THREE.BufferAttribute( new Float32Array( vertices ), 3 ) );
-        // geometry.addAttribute( 'normal', new THREE.BufferAttribute( new Float32Array( normals ), 3 ) );
-
-        // if (hasColors) {
-        //
-        //     geometry.addAttribute( 'color', new THREE.BufferAttribute( new Float32Array( colors ), 3 ) );
-        //     geometry.hasColors = true;
-        //     geometry.alpha = alpha;
-        // }
 
         return {
             vertices,

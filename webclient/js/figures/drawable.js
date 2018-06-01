@@ -20,8 +20,11 @@ class Drawable {
         this.vsSource = vsSource;
         this.fsSource = fsSource;
 
-        this.positions = positions;
+        this.positions = positions.slice();
+        this.worldPositions = positions.slice();
+        this.normals = null;
         this.colors = colors;
+
 
         // args for further model matrix creation
         this.movable = true;
@@ -30,6 +33,10 @@ class Drawable {
         this.rotationVec = [0, 0, 0];
 
         this.type = type;
+
+        // stats
+        this.stats = {};
+        this.stats.trianglesNum = parseInt("" + this.positions.length / 9);
 
         this.visible = true;
     }
@@ -66,6 +73,10 @@ class Drawable {
         this.__initProgram();
         this.__initBuffers();
         this.__initShaderArgLocations();
+    }
+
+    setNormals(normalsVec) {
+        this.normals = normalsVec;
     }
 
     __initProgram() {

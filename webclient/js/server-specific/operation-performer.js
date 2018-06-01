@@ -37,13 +37,13 @@ class OperationPerformer {
                     // log(`multiplying by ${multiplyCoeff}`);
                     // vertices.map(vertex => parseInt(vertex) * multiplyCoeff);
 
-                    const mesh = new Figure(vertices, extendRandomColors(vertices), gl,
-                        vsSource, fsSource, filename);
+                    const mesh = new Figure(vertices, extendRandomColors(vertices), gl, vsSource, fsSource, filename);
+                    mesh.setNormals(meshData.normals);
                     mesh.init();
                     figureController.addDynamicFigure(mesh);
 
                     log(`saving ${filename} to local storage`);
-                    Converter.convertFileToBase64(file, (err, res) => {
+                    B64Converter.convertFileToBase64(file, (err, res) => {
                         if (!err) {
                             const base64Id = OperationPerformer.createIdForBase64Item(mesh.id);
 
@@ -124,7 +124,7 @@ class OperationPerformer {
 
                             log('converting base64 to blob. generating download url');
                             const mimeTypeStl = "application/sla";
-                            const blob = Converter.convertBase64ToBlob(stlData, mimeTypeStl, 512);
+                            const blob = B64Converter.convertBase64ToBlob(stlData, mimeTypeStl, 512);
                             const blobUrl = URL.createObjectURL(blob);
 
                             // assign name to blob via invisible link

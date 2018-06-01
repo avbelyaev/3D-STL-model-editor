@@ -47,8 +47,21 @@ class MouseControls {
         if (MOUSE_BTN_LEFT === event.button) {
             if (event.shiftKey) {
                 // apply to figure
-                figureController.selectedFigure.translateByX(deltaX);
-                figureController.selectedFigure.translateByZ(deltaY);
+                const selectedFigure = figureController.selectedFigure;
+                selectedFigure.translateByX(deltaX);
+                selectedFigure.translateByZ(deltaY);
+
+                // console.log(selectedFigure.positions);
+                // console.log(selectedFigure.translationVec);
+                const tmp = [];
+                for (let i = 0; i <= selectedFigure.positions.length - 3; i+=3) {
+                    const x = selectedFigure.positions[i] + selectedFigure.translationVec[0];
+                    const y = selectedFigure.positions[i + 1] + selectedFigure.translationVec[1];
+                    const z = selectedFigure.positions[i + 2] + selectedFigure.translationVec[2];
+                    tmp.push(x, y, z);
+                }
+                // console.log('----------- Translate -----------');
+                // console.log(tmp);
 
             } else {
                 // apply to camera
@@ -71,7 +84,7 @@ class MouseControls {
 
             if (event.shiftKey) {
                 // apply to figure
-                figureController.selectedFigure.translateByY(-1 * parseInt(delta));
+                figureController.selectedFigure.translateByY(parseInt(delta));
 
             } else {
                 // apply to camera

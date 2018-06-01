@@ -12,6 +12,7 @@ class Sidebar {
         const parentalControlElem = document.getElementById(H2JS_CONTROL_ADJUSTMENT);
         const controlElem = parentalControlElem.getElementsByClassName(H2JS_CONTROL_ELEMENT)[0];
 
+        // reverse array since items need to be prepended (not appended)
         Sidebar.axis().reverse().forEach(axis => {
             const axisItem = Sidebar.createAxisItem(axis.label, axis.id, "axe");
             controlElem.prepend(axisItem);

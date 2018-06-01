@@ -2,10 +2,7 @@
  * Created by anthony on 31.05.2018.
  */
 
-class Converter {
-    constructor() {
-        // empty
-    }
+class B64Converter {
 
     static convertFileToBase64(file, callback) {
         const reader = new FileReader();
