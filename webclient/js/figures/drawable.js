@@ -22,7 +22,6 @@ class Drawable {
 
         this.positions = positions.slice();
         this.worldPositions = positions.slice();
-        this.normals = null;
         this.colors = colors;
 
 
@@ -34,11 +33,16 @@ class Drawable {
 
         this.type = type;
 
-        // stats
-        this.stats = {};
-        this.stats.trianglesNum = parseInt("" + this.positions.length / 9);
-
         this.visible = true;
+
+        // only for objects made of triangles
+        if (DRAWABLES.FIGURE === this.type) {
+            // update world positions -> vertices -> triangles -> normals
+            this.vertices = reduceArrayToTriples(this.worldPositions);
+            this.triangles = reduceArrayToTriples(this.vertices);
+
+            this.updatePositionsAndNormals();
+        }
     }
 
     draw() {
@@ -75,8 +79,9 @@ class Drawable {
         this.__initShaderArgLocations();
     }
 
-    setNormals(normalsVec) {
-        this.normals = normalsVec;
+    updatePositionsAndNormals() {
+        console.log('updating positions and normals');
+        this.__updateNormals();
     }
 
     __initProgram() {
@@ -128,22 +133,41 @@ class Drawable {
      * worldPositions are counted like this: position_row<vec4> * ModelMatrix<mat4>
      * FYI shader counts position like this: MVPMatrix<mat4> * position_col<vec4>
      */
-    __updateWorldPosition() {
+    __updateWorldPositions() {
+        console.log('updating world positions');
+
         const modelMatrix = makeModelMatrix(true, this.scaleVec, this.translationVec, this.rotationVec);
-        for (let i = 0; i <= this.worldPositions.length - 3; i+=3) {
-            const x = this.positions[i];
-            const y = this.positions[i + 1];
-            const z = this.positions[i + 2];
-            const originPosition = vec4.fromValues(x, y, z, 1);
+
+        this.worldPositions = new Array(this.positions.length);
+        let j = 0;
+        this.vertices.forEach(vertex => {
+            const originPosition = vec4.fromValues(vertex[0], vertex[1], vertex[2], 1);
 
             const positionInTheWorld = multiplyVec4ByMat4(originPosition, modelMatrix);
 
-            this.worldPositions[i] = positionInTheWorld[0];
-            this.worldPositions[i + 1] = positionInTheWorld[1];
-            this.worldPositions[i + 2] = positionInTheWorld[2];
-        }
+            this.worldPositions[j++] = positionInTheWorld[0];
+            this.worldPositions[j++] = positionInTheWorld[1];
+            this.worldPositions[j++] = positionInTheWorld[2];
+        });
+
         console.log("---------- World Positions ----------");
         console.log(this.worldPositions);
+    }
+
+    __updateNormals() {
+        console.log('updating normals');
+
+        this.__updateWorldPositions();
+
+        this.normals = new Array(Math.round(this.positions.length / 9));
+        let j = 0;
+        this.triangles.forEach(triangle => {
+            this.normals[j++] = Surface.countNormal(triangle[0], triangle[1], triangle[2]);
+        });
+        console.log("----- normals -----");
+        console.log(this.normals);
+
+        return this.normals;
     }
 
     static __throwNotImplementedError() {

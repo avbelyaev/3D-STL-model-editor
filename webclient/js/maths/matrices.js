@@ -48,7 +48,7 @@ const makeViewMatrix = () => {
 const makeProjectionMatrix = () => {
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     const zNear = 1;
-    const zFar = 2500;
+    const zFar = 5000;
     const fieldOfViewRadians = Math.PI / 3;
 
     const perspective = mat4.create();

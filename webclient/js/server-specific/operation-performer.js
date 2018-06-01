@@ -38,7 +38,8 @@ class OperationPerformer {
                     // vertices.map(vertex => parseInt(vertex) * multiplyCoeff);
 
                     const mesh = new Figure(vertices, extendRandomColors(vertices), gl, vsSource, fsSource, filename);
-                    mesh.setNormals(meshData.normals);
+                    // TODO count by myself or just take from file
+                    // mesh.normals = meshData.normals;
                     mesh.init();
                     figureController.addDynamicFigure(mesh);
 

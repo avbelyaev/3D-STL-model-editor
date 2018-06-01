@@ -15,3 +15,17 @@ function getRandomInt(min, max) {
 }
 
 const degToRad = (x) => x * Math.PI / 180;
+
+
+const reduceArrayToTriples = (arr) => {
+    if (!arr) {
+        throw Error('array is null!');
+    }
+
+    const triples = new Array(Math.round(arr.length / 3));
+    let j = 0;
+    for (let i = 0; i <= arr.length - 3; i += 3) {
+        triples[j++] = [arr[i], arr[i + 1], arr[i + 2]];
+    }
+    return triples;
+};
