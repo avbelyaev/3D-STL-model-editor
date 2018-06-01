@@ -71,12 +71,18 @@ const makeMVPMatrix = (scaleVec, translationVec, rotationVec) => {
 };
 
 
-const multiplyMat4ByVec4 = (m4, v4) => {
+/**
+ * multiplies vector-row (vec4) by matrix (mat4)
+ */
+const multiplyVec4ByMat4 = (v4, m4) => {
     const c = vec4.create();
-    let j = 0;
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0, j = 0; i < 4; i++) {
         j = i;
-        c[i] = m4[j]*v4[0] + m4[j+=4]*v4[1] + m4[j+=4]*v4[2] + m4[j+=4]*v4[3];
+        // multiply vector-row by matrix's column
+        c[i] = m4[j]*v4[0]
+            + m4[j+=4]*v4[1]
+            + m4[j+=4]*v4[2]
+            + m4[j+=4]*v4[3];
     }
     return c;
 };

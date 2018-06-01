@@ -55,6 +55,10 @@ const fsSource = `
     }
   `;
 
+const saveSelectedModel = () => {
+    figureController.selectedFigure.__updateWorldPosition();
+};
+
 const updateFigure = () => {
     const figAngleElem = document.getElementById("figAngle");
     figureAngleDeg = figAngleElem.value;
@@ -66,42 +70,7 @@ const updateFigure = () => {
 
     const selectedFigure = figureController.selectedFigure;
     selectedFigure.scaleBy(figureScale);
-
-    // console.log(selectedFigure.positions);
-    // console.log(selectedFigure.scaleVec);
-    // let tmp = [];
-    // for (let i = 0; i <= selectedFigure.positions.length - 3; i+=3) {
-    //     const x = selectedFigure.positions[i] * selectedFigure.scaleVec[0] + selectedFigure.translationVec[0];
-    //     const y = selectedFigure.positions[i + 1] * selectedFigure.scaleVec[1];
-    //     const z = selectedFigure.positions[i + 2] * selectedFigure.scaleVec[2];
-    //     tmp.push(x, y, z);
-    // }
-    // console.log('------ Scale + Translate ------');
-    // console.log(tmp);
-
-    const modelMatrix = makeModelMatrix(true, selectedFigure.scaleVec, selectedFigure.translationVec,
-        selectedFigure.rotationVec);
-
-    let tmp = [];
-    for (let i = 0; i <= selectedFigure.worldPositions.length - 3; i+=3) {
-        const x = selectedFigure.positions[i];
-        const y = selectedFigure.positions[i + 1];
-        const z = selectedFigure.positions[i + 2];
-        const coord = vec4.fromValues(x, y, z, 1);
-
-        // mat4.transpose(modelMatrix, modelMatrix);
-        const multiplyResult = multiplyMat4ByVec4(modelMatrix, coord);
-        tmp.push(multiplyResult[0], multiplyResult[1], multiplyResult[2]);
-
-        selectedFigure.worldPositions[i] = multiplyResult[0];
-        selectedFigure.worldPositions[i + 1] = multiplyResult[1];
-        selectedFigure.worldPositions[i + 2] = multiplyResult[2];
-    }
-    console.log("---------- MVP ----------");
-    console.log(tmp);
-
-    // TODO rotation point == translationVec?
-    selectedFigure.rotateBy([0, figureAngleDeg, 0], null);
+    selectedFigure.rotateBy([figureAngleDeg, figureAngleDeg, 0], null); // TODO rotation point == translationVec?
 };
 
 const updateVisibility = (visibilityCheckbox) => {
@@ -136,7 +105,7 @@ function drawScene() {
 
 
 const initCamera = () => {
-    const distance = 200;
+    const distance = 300;
     const horizontalAngleDeg = 30;
     const vertAngleDeg = 30;
     const lookAt = [0, 10, 0];
@@ -191,13 +160,11 @@ function main() {
     initAxis();
 
 
-    // const trianglePositions = [
-    //     50, -50, 0,
-    //     -100, -50, 0,
-    //     0, -50, 100
-    // ];
-    // const trianglePositions = [296, -50, -275, 146, -50, -275, 246, -50, -175];
-    const trianglePositions = [196.5, 3.930004596710205, 0, -393, 3.930004596710205, 0, 0, 3.930004596710205, 393];
+    const trianglePositions = [
+        50, -50, 0,
+        -100, -50, 0,
+        0, -50, 100
+    ];
     const triangle = new Figure(trianglePositions, extendRandomColors(trianglePositions), gl, vsSource, fsSource, 'triangle');
     console.log(triangle.positions);
     console.log(triangle.translationVec);

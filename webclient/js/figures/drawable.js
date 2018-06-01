@@ -113,10 +113,37 @@ class Drawable {
         };
     }
 
+    /**
+     * all matrices are updated here to render object relatively to world+camera+frustum
+     */
     __updateMatrices() {
         this.mModel = makeModelMatrix(this.movable, this.scaleVec, this.translationVec, this.rotationVec);
         this.mView = makeViewMatrix();
         this.mProj = makeProjectionMatrix();
+    }
+
+    /**
+     * model matrix places object to the right place in the world.
+     * => to know where the object is situated at the moment we have to update worldPositions on every change.
+     * worldPositions are counted like this: position_row<vec4> * ModelMatrix<mat4>
+     * FYI shader counts position like this: MVPMatrix<mat4> * position_col<vec4>
+     */
+    __updateWorldPosition() {
+        const modelMatrix = makeModelMatrix(true, this.scaleVec, this.translationVec, this.rotationVec);
+        for (let i = 0; i <= this.worldPositions.length - 3; i+=3) {
+            const x = this.positions[i];
+            const y = this.positions[i + 1];
+            const z = this.positions[i + 2];
+            const originPosition = vec4.fromValues(x, y, z, 1);
+
+            const positionInTheWorld = multiplyVec4ByMat4(originPosition, modelMatrix);
+
+            this.worldPositions[i] = positionInTheWorld[0];
+            this.worldPositions[i + 1] = positionInTheWorld[1];
+            this.worldPositions[i + 2] = positionInTheWorld[2];
+        }
+        console.log("---------- World Positions ----------");
+        console.log(this.worldPositions);
     }
 
     static __throwNotImplementedError() {
