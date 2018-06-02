@@ -161,6 +161,10 @@ html body .page .editor .controls .control .control-element .control-operation--
   margin-top: 4px;
   padding-left: 4px;
 }
+html body .page .editor .controls .control .control-element__scrollable {
+  overflow-y: scroll;
+  height: 160px;
+}
 html body .page .editor .controls .submit-button {
   width: 100%;
   height: 30px;
@@ -190,6 +194,9 @@ html body .page .editor .controls .figure-controller-item {
   justify-content: center;
   align-items: center;
   justify-content: left;
+  justify-content: space-between;
+  border: none;
+  padding-right: 4px;
 }
 html body .page .editor .controls .figure-controller-item:hover {
   background-color: #1a6bc1;
@@ -197,6 +204,10 @@ html body .page .editor .controls .figure-controller-item:hover {
 }
 html body .page .editor .controls .figure-controller-item .figure-controller-item-title {
   margin-left: 4px;
+}
+html body .page .editor .controls .figure-controller-item:hover {
+  background-color: #1a6bc1;
+  cursor: pointer;
 }
 html body .page .editor .controls .control-operation-item {
   height: 24px;

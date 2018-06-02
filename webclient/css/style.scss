@@ -221,6 +221,11 @@ html {
                 padding-left: 4px;
               }
             }
+
+            .control-element__scrollable {
+              overflow-y: scroll;
+              height: 160px;
+            }
           }
 
           .submit-button {
@@ -243,9 +248,16 @@ html {
 
           .figure-controller-item {
             @include list-item;
+            justify-content: space-between;
+            border: none;
+            padding-right: 4px;
 
             .figure-controller-item-title {
               margin-left: 4px;
+            }
+
+            &:hover {
+              @include hover-effect;
             }
           }
 

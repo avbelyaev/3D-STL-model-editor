@@ -64,9 +64,9 @@ function drawScene() {
 
 
 const initCamera = () => {
-    const distance = 300;
-    const horizontalAngleDeg = 30;
-    const vertAngleDeg = 30;
+    const distance = 600;
+    const horizontalAngleDeg = 0; //angle = AOZ where A is a cam vec
+    const vertAngleDeg = 60;
     const lookAt = [0, 10, 0];
 
     return new Camera(distance, horizontalAngleDeg, vertAngleDeg, lookAt);
@@ -117,9 +117,13 @@ function main() {
     initAxis();
 
 
-    // const letterF = new Figure(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource, 'letter-F');
-    // letterF.init();
-    // figureController.addDynamicFigure(letterF);
+    const letterF = new Figure(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource, 'letter-F');
+    letterF.init();
+    figureController.addDynamicFigure(letterF);
+
+    const letterFF = new Figure(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource, 'letter-F');
+    letterFF.init();
+    figureController.addDynamicFigure(letterFF);
 
 
     log("Starting render loop");

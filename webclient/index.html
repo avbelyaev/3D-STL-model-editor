@@ -58,8 +58,9 @@
             <div class="dropdown">
                 <div id="menu-file" onclick="Menu.toggleFile()" class="dropbtn">Файл</div>
                 <div class="dropdown-content" id="file-dropdown">
-                    <div class="dropdown-content--item ">Добавить модель</div>
-                    <div class="dropdown-content--item ">Сохранить модель</div>
+                    <div class="dropdown-content--item">Добавить модель</div>
+                    <div class="dropdown-content--item"
+                         onClick="operationPerformer.performDownload()">Сохранить модель</div>
                 </div>
             </div>
 
@@ -156,7 +157,7 @@
 
             <div id="control-selection" class="control">
                 <div class="control-title">Выбор активной модели</div>
-                <div class="control-element">
+                <div class="control-element control-element__scrollable">
                     <div class="control-selection__empty">Нет моделей</div>
                     <!-- figure list goes here -->
 
@@ -206,9 +207,6 @@
 
                     <div class="submit-button" id="control-adjustment--button__fix"
                          onClick="sidebar.fixSelectedModel()">Зафиксировать положение
-                    </div>
-                    <div class="submit-button" id="control-selection--button"
-                         onClick="operationPerformer.performDownload()">Сохранить модель
                     </div>
                 </div>
             </div>
