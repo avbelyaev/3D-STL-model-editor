@@ -29,6 +29,7 @@ const H2JS_CONTROL_ADDITION = "control-addition";
 const H2JS_CONTROL_ADDITION_FILE = "control-addition--file";
 
 const H2JS_CONTROL_SELECTION = "control-selection";
+const H2JS_CONTROL_SELECTION_EMPTY = "control-selection__empty";
 
 const H2JS_CONTROL_ADJUSTMENT = "control-adjustment";
 

@@ -23,7 +23,6 @@ class Drawable {
         this.worldPositions = positions.slice();
         this.colors = colors;
 
-
         // args for further model matrix creation
         this.movable = true;
         this.translationVec = [0, 0, 0];
@@ -39,6 +38,7 @@ class Drawable {
             // update world positions -> vertices -> triangles -> normals
             this.vertices = reduceArrayToTriples(this.worldPositions);
             this.triangles = reduceArrayToTriples(this.vertices);
+            this.normals = [];
 
             this.updateFigure();
         }
@@ -165,9 +165,6 @@ class Drawable {
             this.worldPositions[j++] = positionInTheWorld[1];
             this.worldPositions[j++] = positionInTheWorld[2];
         });
-
-        console.log("---------- World Positions ----------");
-        console.log(this.worldPositions);
     }
 
     __updateNormals() {
@@ -180,8 +177,6 @@ class Drawable {
         this.triangles.forEach(triangle => {
             this.normals[j++] = Surface.countNormal(triangle[0], triangle[1], triangle[2]);
         });
-        console.log("----- normals -----");
-        console.log(this.normals);
 
         return this.normals;
     }

@@ -18,6 +18,10 @@ class FigureController {
     }
 
     addDynamicFigure(dynamicFigure) {
+        if (0 === this.dynamicFigures.size) {
+            sidebar.removePlaceholderOnEmptyList();
+        }
+
         log(`adding dynamic figure ${dynamicFigure.id}`);
         this.dynamicFigures.set(dynamicFigure.id, dynamicFigure);
 
@@ -41,12 +45,17 @@ class FigureController {
     get selectedFigure() {
         const checked = Array.from(document.getElementsByClassName(this.selectedFigureClass))
             .find(radioButton => radioButton.checked);
-        const selectedFigureId = checked.getAttribute(this.figureIdAttrName);
 
-        return this.dynamicFigures.get(selectedFigureId);
+        if (checked) {
+            const selectedFigureId = checked.getAttribute(this.figureIdAttrName);
+            return this.dynamicFigures.get(selectedFigureId);
+
+        } else {
+            return null;
+        }
     }
 
-    get figuresToBeProcessed() {
+    get processedFigures() {
         return Array.from(document.getElementsByClassName(this.processedFiguresClass))
             .filter(checkbox => checkbox.checked)
             .map(checkedCheckBox => checkedCheckBox.getAttribute(this.figureIdAttrName));
@@ -83,7 +92,7 @@ class FigureController {
 
         let wrapper = document.createElement('div');
         wrapper.setAttribute('class', H2JS_FIGURE_CONTROLLER_ITEM);
-        wrapper.setAttribute('onclick', 'updateFigure()');
+        wrapper.setAttribute('onclick', 'sidebar.updateOperation()');
         wrapper.appendChild(selectedFigureButton);
         wrapper.appendChild(figureIdLabel);
         wrapper.appendChild(boolOpCheckbox);

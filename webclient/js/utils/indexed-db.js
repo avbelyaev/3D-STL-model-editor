@@ -60,6 +60,13 @@ class IndexedDB {
 
     };
 
+    static storeItem(id, data) {
+        return {
+            id: id,
+            modeldata: data
+        };
+    }
+
     static deleteDB() {
         const deleteDB = indexedDB.deleteDatabase(DB_NAME);
         deleteDB.onsuccess = function () {

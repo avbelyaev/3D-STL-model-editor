@@ -29,7 +29,10 @@ class ServerApiClient {
 
     performBoolOp(boolOpCommand, callback) {
         axios.post(`${this.stlUrl}/perform`, boolOpCommand)
-            .then(response => callback(null, response))
+            .then(response => {
+                // TODO gzip
+                callback(null, response);
+            })
             .catch(error => {
                 log(`Error occurred while performing bool op on STLs: ${error}`);
                 callback(error, null);

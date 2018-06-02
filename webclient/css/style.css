@@ -154,6 +154,12 @@ html body .page .editor .controls .control .control-element .control-element--co
   flex-direction: row;
   justify-content: space-between;
   margin-top: 10px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+html body .page .editor .controls .control .control-element .control-operation--stats {
+  margin-top: 4px;
+  padding-left: 4px;
 }
 html body .page .editor .controls .submit-button {
   width: 100%;
@@ -209,6 +215,10 @@ html body .page .editor .controls .control-operation-item:hover {
 }
 html body .page .editor .controls .control-operation-item .control-operation-item-title {
   margin-left: 4px;
+}
+html body .page .editor .controls .control-selection__empty {
+  margin-top: 4px;
+  padding-left: 4px;
 }
 
 /*# sourceMappingURL=style.css.map */

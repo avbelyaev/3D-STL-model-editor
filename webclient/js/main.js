@@ -1,6 +1,5 @@
 let gl;
 let cam;
-let idsOfFiguresToBeProcessed;
 let figureController;
 let operationPerformer;
 let serverApiClient;
@@ -8,11 +7,7 @@ let logr;
 let menu;
 let sidebar;
 
-
 const log = (text) => Menu.log(text);
-
-let figureAngleDeg = 0;
-let figureScale = 1;
 
 const vsSource = `
     attribute vec3 aPosition;
@@ -42,30 +37,6 @@ const fsSource = `
       // gl_FragColor = vec4(1.0, 0.0, 0, 0);
     }
   `;
-
-const saveSelectedModel = () => {
-    console.log('saving selected model');
-    figureController.selectedFigure.updateFigure();
-
-    const stlDataView = STLExporter.exportToBinaryStl(figureController.selectedFigure);
-
-    const mimeTypeStl = "application/sla";
-    const blob = new Blob([stlDataView], { type: mimeTypeStl });
-
-    const blobUrl = URL.createObjectURL(blob);
-
-    // assign name to blob via invisible link
-    const link = document.createElement("a");
-    document.body.appendChild(link);
-    link.style = "display: none";
-    link.href = blobUrl;
-    link.download = figureController.selectedFigure.id + ".stl";
-    link.click();
-
-    // remove link, revoke url
-    URL.revokeObjectURL(blobUrl);
-    document.body.removeChild(link);
-};
 
 const resizeCanvas = () => {
     const width = gl.canvas.clientWidth;
@@ -112,7 +83,7 @@ const initGL = () => {
 
 const renderUI = () => {
     menu = new Menu();
-    logr = menu.createLogger();
+    logr = menu.getLogger();
     new MouseControls();
     cam = initCamera();
     sidebar = new Sidebar();
@@ -144,18 +115,6 @@ function main() {
     figureController.addStaticFigure(grid);
 
     initAxis();
-
-
-    // const trianglePositions = [
-    //     50, -50, 0,
-    //     -100, -50, 0,
-    //     0, -50, 100
-    // ];
-    // const triangle = new Figure(trianglePositions, extendRandomColors(trianglePositions), gl, vsSource, fsSource, 'triangle');
-    // console.log(triangle.positions);
-    // console.log(triangle.translationVec);
-    // triangle.init();
-    // figureController.addDynamicFigure(triangle);
 
 
     // const letterF = new Figure(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource, 'letter-F');

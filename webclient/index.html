@@ -112,7 +112,7 @@
                          onclick="menu.viewToggleGridVisibility(event)">Показать/скрыть сетку
                     </div>
                     <div class="dropdown-content--item "
-                         onclick="menu.viewToggleGridVisibility(event)">Показать/скрыть лог
+                         onclick="menu.viewToggleLogVisibility(event)">Показать/скрыть лог
                     </div>
                 </div>
             </div>
@@ -157,11 +157,10 @@
             <div id="control-selection" class="control">
                 <div class="control-title">Выбор активной модели</div>
                 <div class="control-element">
+                    <div class="control-selection__empty">Нет моделей</div>
                     <!-- figure list goes here -->
 
-                    <div class="submit-button" id="control-selection--button"
-                         onClick="operationPerformer.performDownload()">Сохранить модель
-                    </div>
+
                 </div>
             </div>
 
@@ -172,7 +171,7 @@
                         <div class="control-element--item">Оси:</div>
                         <div class="control-element--item">
                             Х: <input class="control-element--axis__checkbox" type="checkbox"
-                                      oninput="sidebar.toggleAxis(AXIS.X)" checked></div>
+                                      oninput="sidebar.toggleAxis(AXIS.X)"></div>
                         <div class="control-element--item">
                             Y: <input class="control-element--axis__checkbox" type="checkbox"
                                       oninput="sidebar.toggleAxis(AXIS.Y)"></div>
@@ -206,7 +205,10 @@
                     </div>
 
                     <div class="submit-button" id="control-adjustment--button__fix"
-                         onClick="saveSelectedModel()">Зафиксировать и сохранить
+                         onClick="sidebar.fixSelectedModel()">Зафиксировать положение
+                    </div>
+                    <div class="submit-button" id="control-selection--button"
+                         onClick="operationPerformer.performDownload()">Сохранить модель
                     </div>
                 </div>
             </div>
@@ -214,9 +216,9 @@
             <div id="control-operation" class="control">
                 <div class="control-title">Текущая операция</div>
                 <div class="control-element">
-                    <div class="control-operation--current-op">Операция не выбрана</div>
-                    <div class="control-operation--model-a">Модель не выбрана</div>
-                    <div class="control-operation--model-b">Модель не выбрана</div>
+                    <div class="control-operation--stats control-operation--current-op">Операция не выбрана</div>
+                    <div class="control-operation--stats control-operation--model-a">Модель 'A' не выбрана</div>
+                    <div class="control-operation--stats control-operation--model-b">Модель 'B' не выбрана</div>
 
                     <div class="submit-button" id="control-operation--button"
                          onClick="operationPerformer.performBoolOp()">Выполнить операцию

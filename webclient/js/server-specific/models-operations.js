@@ -22,18 +22,18 @@ class Models {
 const Operations = Object.freeze({
     UNION: {
         id: "difference_ba",
-        label: "Объединение"
+        label: "Объединение" // объединение +++
     },
     INTERSECT: {
-        id: "differece_ab",
-        label: "Пересечение"
+        id: "difference_ab",
+        label: "Пересечение" // пересечение +++
     },
     DIFF_AB: {
         id: "intersection",
-        label: "Вычитание (a-b)"
+        label: "Дополнение (a-b)" // А-Б (куб-нога)
     },
     DIFF_BA: {
         id: "union",
-        label: "Вычитание (b-a)"
+        label: "Дополнение (b-a)" // Б-А (нога - куб) +++
     }
 });

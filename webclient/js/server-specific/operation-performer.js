@@ -5,7 +5,7 @@
 
 class OperationPerformer {
     constructor() {
-        log(`constructing Operation Performer`);
+        log(`starting Operation Performer`);
 
         // const controlAdditionElem = document.getElementById(H2JS_CONTROL_ADDITION);
         this.modelSubmitterElement = document.getElementsByClassName(H2JS_CONTROL_ADDITION_FILE)[0];
@@ -18,7 +18,7 @@ class OperationPerformer {
 
     performAddition() {
         if (0 === this.modelSubmitterElement.files.length) {
-            log('nothing to submit');
+            log('Error! nothing to submit. select file first!');
             return;
         }
 
@@ -52,11 +52,7 @@ class OperationPerformer {
 
                             IndexedDB.execute((err, db, store, tx) => {
                                 if (!err) {
-
-                                    store.put({
-                                        id: base64Id,
-                                        modeldata: res
-                                    });
+                                    store.put(IndexedDB.storeItem(base64Id, res));
                                     log(`item ${base64Id} has been saved to IndexedDB`);
 
                                 } else {
@@ -77,28 +73,28 @@ class OperationPerformer {
             this.canBeSubmitted = false;
 
         } else {
-            log('nothing to submit or already submitted');
+            log('Error! nothing to submit or already submitted');
         }
     }
 
     performBoolOp() {
-        if (this.canBePerformed) {
+        if (this.canBePerformed && 1 < figureController.processedFigures.length
+        && null != this.selectedOperation) {
             IndexedDB.execute((err, db, store, tx) => {
                 if (!err) {
-                    const base64edStl1Id = OperationPerformer.createIdForBase64Item(idsOfFiguresToBeProcessed[0]);
+                    const base64edStl1Id = OperationPerformer.createIdForBase64Item(figureController.processedFigures[0]);
                     const getSTL1 = store.get(base64edStl1Id);
 
                     getSTL1.onsuccess = function () {
                         const stl1Data = getSTL1.result.modeldata;
 
-                        const base64edStl2Id = OperationPerformer.createIdForBase64Item(idsOfFiguresToBeProcessed[1]);
+                        const base64edStl2Id = OperationPerformer.createIdForBase64Item(figureController.processedFigures[1]);
                         const getSTL2 = store.get(base64edStl2Id);
 
                         getSTL2.onsuccess = function () {
                             const stl2Data = getSTL2.result.modeldata;
 
-                            const cmd = Models
-                                .performOnStlModel(sidebar.selectedOperation.id, stl1Data, stl2Data);
+                            const cmd = Models.performOnStlModel(operationPerformer.selectedOperation.id, stl1Data, stl2Data);
                             operationPerformer.performRequest(cmd);
                         };
                     }
@@ -110,31 +106,45 @@ class OperationPerformer {
             });
 
         } else {
-            log('nothing to perform already performed');
+            log('Error! nothing to perform or already performed');
         }
     }
 
     performRequest(cmd) {
         serverApiClient.performBoolOp(cmd, (err, response) => {
             if (!err) {
-                log('converting base64 to blob. generating download url');
+                log('converting base64 to blob and then to a file');
 
                 const res = response.data.res;
                 const mimeTypeStl = "application/sla";
                 const blob = B64Converter.convertBase64ToBlob(res, mimeTypeStl, 512);
-                const blobUrl = URL.createObjectURL(blob);
+                const filename = "result.stl";
+                const file = new File([blob], filename);
 
-                // assign name to blob via invisible link
-                const link = document.createElement("a");
-                document.body.appendChild(link);
-                link.style = "display: none";
-                link.href = blobUrl;
-                link.download = "result.stl";
-                link.click();
+                STLLoader.parseBinarySTL(file, (err, meshData) => {
+                    if (!err) {
+                        log('Result has been successfully parsed');
 
-                // remove link, revoke url
-                URL.revokeObjectURL(blobUrl);
-                document.body.removeChild(link);
+                        const mesh = new Figure(meshData.vertices, extendRandomColors(meshData.vertices), gl, vsSource, fsSource, filename);
+                        mesh.init();
+                        figureController.addDynamicFigure(mesh);
+
+                        //save into DB
+                        const base64Id = OperationPerformer.createIdForBase64Item(mesh.id);
+                        IndexedDB.execute((err, db, store, tx) => {
+                            if (!err) {
+                                store.put(IndexedDB.storeItem(base64Id, res));
+                                log(`item ${base64Id} has been saved to IndexedDB`);
+
+                            } else {
+                                log('error while saving to db: ' + err.message);
+                            }
+                        });
+
+                    } else {
+                        log('Error occurred while parsing STL result');
+                    }
+                });
 
             } else {
                 log(`Error while processing request: ${err.message}`);
@@ -143,7 +153,7 @@ class OperationPerformer {
     }
 
     performDownload() {
-        if (this.canBeDownloaded) {
+        if (this.canBeDownloaded && null !== figureController.selectedFigure) {
             this.canBeDownloaded = false;
 
             const selectedFigureId = figureController.selectedFigure.id;
@@ -182,7 +192,7 @@ class OperationPerformer {
             });
 
         } else {
-            log(`nothing to download or download in progress`);
+            log(`Error! nothing to download or download in progress`);
         }
     }
 

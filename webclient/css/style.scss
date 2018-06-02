@@ -204,6 +204,7 @@ html {
             }
 
             .control-element {
+              //padding-left: 4px;
 
               .control-element--container {
                 width: 100%;
@@ -211,10 +212,13 @@ html {
                 flex-direction: row;
                 justify-content: space-between;
                 margin-top: 10px;
+                padding-left: 4px;
+                padding-right: 4px;
+              }
 
-                .control-element--item {
-                  //width: 25%;
-                }
+              .control-operation--stats {
+                margin-top: 4px;
+                padding-left: 4px;
               }
             }
           }
@@ -251,6 +255,11 @@ html {
             .control-operation-item-title {
               margin-left: 4px;
             }
+          }
+
+          .control-selection__empty {
+            margin-top: 4px;
+            padding-left: 4px;
           }
         }
       }
