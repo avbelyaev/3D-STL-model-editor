@@ -66,6 +66,7 @@ $control-title-font-color: #716f6f;
 
 html {
   height: 100%;
+  min-width: 1280px;
   background-color: black;
   cursor: default;
 
@@ -91,7 +92,10 @@ html {
         background-color: $color-dark-black;
 
         #logo {
-          width: 80px;
+          height: 22px;
+          padding-left: 10px;
+          padding-right: 10px;
+          @include centered-text;
         }
 
         .dropdown {
@@ -200,7 +204,18 @@ html {
             }
 
             .control-element {
-              padding-top: 4px;
+
+              .control-element--container {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                margin-top: 10px;
+
+                .control-element--item {
+                  //width: 25%;
+                }
+              }
             }
           }
 

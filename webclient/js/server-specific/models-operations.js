@@ -21,19 +21,19 @@ class Models {
 
 const Operations = Object.freeze({
     UNION: {
-        id: "union",
+        id: "difference_ba",
         label: "Объединение"
     },
     INTERSECT: {
-        id: "intersection",
+        id: "differece_ab",
         label: "Пересечение"
     },
     DIFF_AB: {
-        id: "difference_ab",
+        id: "intersection",
         label: "Вычитание (a-b)"
     },
     DIFF_BA: {
-        id: "difference_ba",
+        id: "union",
         label: "Вычитание (b-a)"
     }
 });

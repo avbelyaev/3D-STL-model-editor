@@ -26,11 +26,13 @@ pub fn perform_on_stls(operation_name: &str, stl1_filepath: &str, stl2_filepath:
     let result = BoolOpResult::new(&mesh1, &mesh2)
         .expect("The error was raised in a constructor of <BoolOpResult>!");
 
+    println!("operation: {}", operation_name);
     if "union" == operation_name {
         let single_mesh_result = result.union();
         // write STL to file since geometry_kernel uses it's own Number impl
         // and it's easier to parse output file to extract Mesh of my own type
 
+        println!("writing to file1");
         single_mesh_result.write_stl(&mut f_res);
 
 //        binary_stl_reader::mesh_from_binary_stl_file(res_path)
@@ -46,6 +48,7 @@ pub fn perform_on_stls(operation_name: &str, stl1_filepath: &str, stl2_filepath:
 
         // write STL to file since geometry_kernel uses it's own Number impl
         // and it's easier to parse output file to extract Mesh of my own type
+        println!("writing to file2");
         multi_mesh_result[0].write_stl(&mut f_res);
 
 //        binary_stl_reader::mesh_from_binary_stl_file(res_path)

@@ -9,6 +9,8 @@ class Menu {
 
         this.file = {};
 
+        this.edit = {};
+
         this.view = {
             allModelsHidden: false,
             axisHidden: false,
@@ -33,6 +35,32 @@ class Menu {
     static toggleEdit() {
         Menu.__hideAllDropdownsExceptElement(H2JS_EDIT_DROPDOWN);
     };
+
+
+    // ===================================
+    // ------------ Operation ------------
+    // ===================================
+    static toggleOperation() {
+        Menu.__hideAllDropdownsExceptElement(H2JS_OPERATION_DROPDOWN);
+    };
+
+    updateSelectedOperation(operation) {
+        const opElem = document.getElementsByClassName(H2JS_CONTROL_OPERATION_CURRENT_OP)[0];
+        opElem.innerText = null != operation ? operation.label : "Не выбрано";
+
+        operationPerformer.selectedOperation = operation;
+    }
+
+    declineOperation() {
+        const opElem = document.getElementsByClassName(H2JS_CONTROL_OPERATION_CURRENT_OP)[0];
+        opElem.innerText = "Не выбрано";
+        const modelAElem = document.getElementsByClassName(H2JS_CONTROL_OPERATION_MODEL_A)[0];
+        modelAElem.innerHTML = "Модель A не выбрана";
+        const modelBElem = document.getElementsByClassName(H2JS_CONTROL_OPERATION_MODEL_B)[0];
+        modelBElem.innerHTML = "Модель B не выбрана";
+
+        operationPerformer.selectedOperation = null;
+    }
 
     // ===================================
     // ------------- View ----------------
@@ -72,6 +100,49 @@ class Menu {
 
 
 
+    createLogger() {
+        const logElement = document.getElementsByClassName(H2JS_LOG)[0];
+        const logContentHolder = logElement.getElementsByClassName(H2JS_LOG_CONTENT)[0];
+
+        // make logger resizable
+        const logElementClass = '.' + H2JS_LOG;
+        interact(logElementClass)
+            .resizable({
+                edges: {
+                    top: true,
+                    bottom: false
+                },
+                restrictEdges: {
+                    outer: 'parent',
+                    endOnly: true,
+                },
+                restrictSize: {
+                    min: {
+                        height: 170
+                    },
+                    max: {
+                        height: 728
+                    }
+                }
+            })
+            .on('resizemove', function (event) {
+                const target = event.target;
+                let y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+                // update the element's style
+                target.style.height = event.rect.height + 'px';
+
+                // translate when resizing from top or left edges
+                y += event.deltaRect.top;
+
+                target.style.webkitTransform = target.style.transform =
+                    'translate(' + 0 + 'px,' + y + 'px)';
+
+                target.setAttribute('data-y', y);
+            });
+
+        return logContentHolder;
+    };
 
 
     static __handleClick() {

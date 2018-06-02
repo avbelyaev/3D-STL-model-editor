@@ -9,17 +9,19 @@ const H2JS_CANVAS = "glCanvas";
 const H2JS_DROPDOWN_CONTENT = "dropdown-content";
 const H2JS_DROPDOWN_SHOW = "dropdown-show";
 const H2JS_EDIT_DROPDOWN = "edit-dropdown";
+const H2JS_OPERATION_DROPDOWN = "operation-dropdown";
 const H2JS_FILE_DROPDOWN = "file-dropdown";
 const H2JS_VIEW_DROPDOWN = "view-dropdown";
-
 // interface
 const H2JS_CONTROL_ELEMENT = "control-element";
+
 const H2JS_FIGURE_CONTROLLER_ITEM = "figure-controller-item";
 const H2JS_FIGURE_CONTROLLER_ITEM_TITLE = "figure-controller-item-title";
-
 const H2JS_CONTROL_OPERATION = "control-operation";
-const H2JS_CONTROL_OPERATION_ITEM = "control-operation-item";
-const H2JS_CONTROL_OPERATION_ITEM_TITLE = "control-operation-item-title";
+
+const H2JS_CONTROL_OPERATION_CURRENT_OP = "control-operation--current-op";
+const H2JS_CONTROL_OPERATION_MODEL_A = "control-operation--model-a";
+const H2JS_CONTROL_OPERATION_MODEL_B = "control-operation--model-b";
 
 const H2JS_CONTROL_ADDITION = "control-addition";
 const H2JS_CONTROL_ADDITION_FILE = "control-addition--file";

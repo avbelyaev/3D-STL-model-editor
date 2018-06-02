@@ -13,7 +13,6 @@ class FigureController {
         this.figureControllerElement = controlSelectionElem.getElementsByClassName(H2JS_CONTROL_ELEMENT)[0];
         this.selectedFigureClass = 'figure-controller__selected-figure';
         this.processedFiguresClass = 'figure-controller__bool-op';
-        this.visibilityCheckboxClass = 'figure-controller__visibility';
         this.childElementsGroupName = 'figure-controller-group';
         this.figureIdAttrName = 'figureId';
     }
@@ -81,16 +80,6 @@ class FigureController {
         boolOpCheckbox.setAttribute('class', this.processedFiguresClass);
         boolOpCheckbox.setAttribute(this.figureIdAttrName, idAttr);
 
-        const visibilityLabel = document.createElement('label');
-        visibilityLabel.innerHTML += 'visible';
-
-        const visibilityCheckbox = document.createElement('input');
-        visibilityCheckbox.type = "checkbox";
-        visibilityCheckbox.name = groupName;
-        visibilityCheckbox.setAttribute('class', this.visibilityCheckboxClass);
-        visibilityCheckbox.setAttribute(this.figureIdAttrName, idAttr);
-        visibilityCheckbox.setAttribute('onclick', 'updateVisibility(this)');
-        visibilityCheckbox.setAttribute('checked', 'checked');
 
         let wrapper = document.createElement('div');
         wrapper.setAttribute('class', H2JS_FIGURE_CONTROLLER_ITEM);
@@ -98,8 +87,6 @@ class FigureController {
         wrapper.appendChild(selectedFigureButton);
         wrapper.appendChild(figureIdLabel);
         wrapper.appendChild(boolOpCheckbox);
-        wrapper.appendChild(visibilityLabel);
-        wrapper.appendChild(visibilityCheckbox);
 
         return wrapper;
     };

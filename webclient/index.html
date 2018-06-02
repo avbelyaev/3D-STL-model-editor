@@ -30,7 +30,6 @@
 <!--interface-->
 <script src="js/interface/camera.js"></script><!-- Camera should be defined before interface -->
 <script src="js/interface/mouse-controls.js"></script>
-<script src="js/interface/sidebar.js"></script>
 <script src="js/interface/menu.js"></script>
 
 <!--figures-->
@@ -53,37 +52,64 @@
     <!-- top menu -->
     <header>
         <div class="menu">
-            <div id="logo">Logo</div>
+            <div id="logo">STL-Редактор</div>
 
-                <div class="dropdown">
-                    <div id="menu-file" onclick="Menu.toggleFile()" class="dropbtn">Файл</div>
-                    <div class="dropdown-content" id="file-dropdown">
-                        <a class="dropdown-content--item dropdown-content__first" href="#">Link 1</a>
-                        <a class="dropdown-content--item" href="#">Link 2</a>
-                        <a class="dropdown-content--item dropdown-content__last" href="#">Link 3</a>
+            <div class="dropdown">
+                <div id="menu-file" onclick="Menu.toggleFile()" class="dropbtn">Файл</div>
+                <div class="dropdown-content" id="file-dropdown">
+                    <div class="dropdown-content--item ">Добавить модель</div>
+                    <div class="dropdown-content--item ">Сохранить модель</div>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <div id="menu-edit" onclick="Menu.toggleEdit()" class="dropbtn">Правка</div>
+                <div class="dropdown-content" id="edit-dropdown">
+
+                    <div class="dropdown-content--item ">Зафиксировать активную модель</div>
+                    <div class="dropdown-content--item ">Удалить активную модель</div>
+
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <div id="menu-operation" onclick="Menu.toggleOperation()" class="dropbtn">Операция</div>
+                <div class="dropdown-content" id="operation-dropdown">
+
+                    <div class="dropdown-content--item">Выполнить</div>
+                    <div class="dropdown-content--item"
+                         onclick="menu.declineOperation()">Отменить
+                    </div>
+                    <div class="dropdown-content--item"
+                         onclick="menu.updateSelectedOperation(Operations.UNION)">Объединение
+                    </div>
+                    <div class="dropdown-content--item"
+                         onclick="menu.updateSelectedOperation(Operations.INTERSECT)">Пересечение
+                    </div>
+                    <div class="dropdown-content--item"
+                         onclick="menu.updateSelectedOperation(Operations.DIFF_AB)">Вычитание (a-b)
+                    </div>
+                    <div class="dropdown-content--item"
+                         onclick="menu.updateSelectedOperation(Operations.DIFF_BA)">Вычитание (b-a)
                     </div>
                 </div>
-
-                <div class="dropdown">
-                    <div id="menu-edit" onclick="Menu.toggleEdit()" class="dropbtn">Правка</div>
-                    <div class="dropdown-content" id="edit-dropdown">
-                        <a class="dropdown-content--item dropdown-content__first" href="#">Link 1</a>
-                        <a class="dropdown-content--item" href="#">Link 2</a>
-                        <a class="dropdown-content--item dropdown-content__last" href="#">Link 3</a>
-                    </div>
-                </div>
+            </div>
 
             <div class="dropdown">
                 <div id="menu-view" onclick="Menu.toggleView()" class="dropbtn">Вид</div>
                 <div class="dropdown-content" id="view-dropdown">
-                    <div class="dropdown-content--item dropdown-content__first"
-                         onClick="menu.viewRefreshScene()">Перезагрузить сцену</div>
+                    <div class="dropdown-content--item "
+                         onClick="menu.viewRefreshScene()">Перезагрузить сцену
+                    </div>
                     <div class="dropdown-content--item"
-                        onclick="menu.viewToggleModelsVisibility(event)">Показать/скрыть все модели</div>
-                    <div class="dropdown-content--item dropdown-content__last"
-                         onclick="menu.viewToggleAxisVisibility(event)">Показать/скрыть оси координат</div>
-                    <div class="dropdown-content--item dropdown-content__last"
-                         onclick="menu.viewToggleGridVisibility(event)">Показать/скрыть сетку</div>
+                         onclick="menu.viewToggleModelsVisibility(event)">Показать/скрыть все модели
+                    </div>
+                    <div class="dropdown-content--item "
+                         onclick="menu.viewToggleAxisVisibility(event)">Показать/скрыть оси координат
+                    </div>
+                    <div class="dropdown-content--item "
+                         onclick="menu.viewToggleGridVisibility(event)">Показать/скрыть сетку
+                    </div>
                 </div>
             </div>
 
@@ -98,9 +124,7 @@
     </header>
 
 
-
     <!-- editor area -->
-
 
 
     <div class="editor">
@@ -140,19 +164,48 @@
             <div id="control-adjustment" class="control">
                 <div class="control-title">Настройка модели</div>
                 <div class="control-element">
-                    <p>Поворот:<input id="figAngle" type="range" min="0" max="360" step="10" value="0"
-                                      oninput="updateFigure()"></p>
-                    <p>Масштаб:<input id="figScale" type="range" min="0.5" max="10" step="0.07" value="1"
-                                      oninput="updateFigure()"></p>
+                    <div class="control-element--container">
+                        <div class="control-element--item">Оси:</div>
+                        <div class="control-element--item">
+                            Х: <input class="control-element--axis__checkbox" type="checkbox"></div>
+                        <div class="control-element--item">
+                            Y: <input class="control-element--axis__checkbox" type="checkbox"></div>
+                        <div class="control-element--item">
+                            Z: <input class="control-element--axis__checkbox" type="checkbox"></div>
+                    </div>
+
+                    <div class="control-element--container">
+                        <div class="control-element--item">Угол:</div>
+                        <div class="control-element--item">0<input id="figAngle" type="range" min="0" max="360" step="10" value="0"
+                                                                   oninput="updateFigure()">360</div>
+                    </div>
+
+                    <div class="control-element--container">
+                        <div class="control-element--item">Масшт.:</div>
+                        <div class="control-element--item">0.5<input id="figScale" type="range" min="0.5" max="10" step="0.07" value="1"
+                                                                     oninput="updateFigure()">10</div>
+                    </div>
+
+
+                    <div class="control-element--container">
+                        <div class="control-element--item">Видимость:
+                            <input class="control-element--axis__checkbox" type="checkbox">
+                        </div>
+                    </div>
+
                     <div class="submit-button" id="control-adjustment--button__fix"
                          onClick="saveSelectedModel()">Зафиксировать и сохранить
+                    </div>
                 </div>
             </div>
 
             <div id="control-operation" class="control">
-                <div class="control-title">Операции</div>
+                <div class="control-title">Текущая операция</div>
                 <div class="control-element">
-                    <!-- operation list goes here -->
+                    <div class="control-operation--current-op">Операция не выбрана</div>
+                    <div class="control-operation--model-a">Модель не выбрана</div>
+                    <div class="control-operation--model-b">Модель не выбрана</div>
+
                     <div class="submit-button" id="control-operation--button"
                          onClick="operationPerformer.performBoolOp()">Выполнить операцию
                     </div>

@@ -1,6 +1,6 @@
 let gl;
 let cam;
-let selectedFigure;
+let sidebar;
 let idsOfFiguresToBeProcessed;
 let figureController;
 let operationPerformer;
@@ -143,11 +143,8 @@ const initGL = () => {
 };
 
 const renderUI = () => {
-    logr = Sidebar.initLogger();
-    Sidebar.renderOperations();
-    Sidebar.renderAxis();
-
     menu = new Menu();
+    logr = menu.createLogger();
     new MouseControls();
     cam = initCamera();
 

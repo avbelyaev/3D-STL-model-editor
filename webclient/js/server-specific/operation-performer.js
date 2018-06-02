@@ -12,6 +12,8 @@ class OperationPerformer {
         this.canBeSubmitted = true;
         this.canBePerformed = true;
         this.canBeDownloaded = true;
+
+        this.selectedOperation = null;
     }
 
     performAddition() {
@@ -95,7 +97,8 @@ class OperationPerformer {
                         getSTL2.onsuccess = function () {
                             const stl2Data = getSTL2.result.modeldata;
 
-                            const cmd = Models.performOnStlModel(Operations.DIFF_AB.id, stl1Data, stl2Data);
+                            const cmd = Models
+                                .performOnStlModel(sidebar.selectedOperation.id, stl1Data, stl2Data);
                             operationPerformer.performRequest(cmd);
                         };
                     }
