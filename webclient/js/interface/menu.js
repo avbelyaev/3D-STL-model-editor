@@ -105,44 +105,58 @@ class Menu {
         const logContentHolder = logElement.getElementsByClassName(H2JS_LOG_CONTENT)[0];
 
         // make logger resizable
-        const logElementClass = '.' + H2JS_LOG;
-        interact(logElementClass)
-            .resizable({
-                edges: {
-                    top: true,
-                    bottom: false
-                },
-                restrictEdges: {
-                    outer: 'parent',
-                    endOnly: true,
-                },
-                restrictSize: {
-                    min: {
-                        height: 170
-                    },
-                    max: {
-                        height: 728
-                    }
-                }
-            })
-            .on('resizemove', function (event) {
-                const target = event.target;
-                let y = (parseFloat(target.getAttribute('data-y')) || 0);
-
-                // update the element's style
-                target.style.height = event.rect.height + 'px';
-
-                // translate when resizing from top or left edges
-                y += event.deltaRect.top;
-
-                target.style.webkitTransform = target.style.transform =
-                    'translate(' + 0 + 'px,' + y + 'px)';
-
-                target.setAttribute('data-y', y);
-            });
+        // const logElementClass = '.' + H2JS_LOG;
+        // interact(logElementClass)
+        //     .resizable({
+        //         edges: {
+        //             top: true,
+        //             bottom: false
+        //         },
+        //         restrictEdges: {
+        //             outer: 'parent',
+        //             endOnly: true,
+        //         },
+        //         restrictSize: {
+        //             min: {
+        //                 height: 170
+        //             },
+        //             max: {
+        //                 height: 728
+        //             }
+        //         }
+        //     })
+        //     .on('resizemove', function (event) {
+        //         const target = event.target;
+        //         let y = (parseFloat(target.getAttribute('data-y')) || 0);
+        //
+        //         // update the element's style
+        //         target.style.height = event.rect.height + 'px';
+        //
+        //         // translate when resizing from top or left edges
+        //         y += event.deltaRect.top;
+        //
+        //         target.style.webkitTransform = target.style.transform =
+        //             'translate(' + 0 + 'px,' + y + 'px)';
+        //
+        //         target.setAttribute('data-y', y);
+        //     });
 
         return logContentHolder;
     };
+
+    static log(text) {
+        const dateTimeNow = new Date();
+        const currentTime = dateTimeNow.getHours() + ":" +
+            dateTimeNow.getMinutes() + ":" +
+            dateTimeNow.getSeconds() + ":" +
+            dateTimeNow.getMilliseconds();
+
+        if ('string' === typeof text && text.toLowerCase().includes('error')) {
+            text = `<span class=${H2JS_LOG_CONTENT_ERROR}>${text}</span>`;
+        }
+
+        logr.innerHTML += currentTime + "\t" + text + "<br>";
+    }
 
 
     static __handleClick() {

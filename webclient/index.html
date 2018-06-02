@@ -31,6 +31,7 @@
 <script src="js/interface/camera.js"></script><!-- Camera should be defined before interface -->
 <script src="js/interface/mouse-controls.js"></script>
 <script src="js/interface/menu.js"></script>
+<script src="js/interface/sidebar.js"></script>
 
 <!--figures-->
 <script src="js/figures/figure-controller.js"></script>
@@ -102,13 +103,16 @@
                          onClick="menu.viewRefreshScene()">Перезагрузить сцену
                     </div>
                     <div class="dropdown-content--item"
-                         onclick="menu.viewToggleModelsVisibility(event)">Показать/скрыть все модели
+                         onclick="menu.viewToggleModelsVisibility(event)">Отобразить/скрыть все модели
                     </div>
                     <div class="dropdown-content--item "
                          onclick="menu.viewToggleAxisVisibility(event)">Показать/скрыть оси координат
                     </div>
                     <div class="dropdown-content--item "
                          onclick="menu.viewToggleGridVisibility(event)">Показать/скрыть сетку
+                    </div>
+                    <div class="dropdown-content--item "
+                         onclick="menu.viewToggleGridVisibility(event)">Показать/скрыть лог
                     </div>
                 </div>
             </div>
@@ -167,29 +171,37 @@
                     <div class="control-element--container">
                         <div class="control-element--item">Оси:</div>
                         <div class="control-element--item">
-                            Х: <input class="control-element--axis__checkbox" type="checkbox"></div>
+                            Х: <input class="control-element--axis__checkbox" type="checkbox"
+                                      oninput="sidebar.toggleAxis(AXIS.X)" checked></div>
                         <div class="control-element--item">
-                            Y: <input class="control-element--axis__checkbox" type="checkbox"></div>
+                            Y: <input class="control-element--axis__checkbox" type="checkbox"
+                                      oninput="sidebar.toggleAxis(AXIS.Y)"></div>
                         <div class="control-element--item">
-                            Z: <input class="control-element--axis__checkbox" type="checkbox"></div>
+                            Z: <input class="control-element--axis__checkbox" type="checkbox"
+                                      oninput="sidebar.toggleAxis(AXIS.Z)"></div>
                     </div>
 
                     <div class="control-element--container">
                         <div class="control-element--item">Угол:</div>
-                        <div class="control-element--item">0<input id="figAngle" type="range" min="0" max="360" step="10" value="0"
-                                                                   oninput="updateFigure()">360</div>
+                        <div class="control-element--item">0
+                            <input id="control-adjustment--angle" type="range"
+                                   min="0" max="360" step="10" value="0" oninput="sidebar.toggleAngle()">360
+                        </div>
                     </div>
 
                     <div class="control-element--container">
                         <div class="control-element--item">Масшт.:</div>
-                        <div class="control-element--item">0.5<input id="figScale" type="range" min="0.5" max="10" step="0.07" value="1"
-                                                                     oninput="updateFigure()">10</div>
+                        <div class="control-element--item">0.5
+                            <input id="control-adjustment--scale" type="range" min="0.5" max="10"
+                                   step="0.07" value="1" oninput="sidebar.toggleScale()">10
+                        </div>
                     </div>
 
 
                     <div class="control-element--container">
                         <div class="control-element--item">Видимость:
-                            <input class="control-element--axis__checkbox" type="checkbox">
+                            <input class="control-element--axis__checkbox" type="checkbox"
+                                   oninput="sidebar.toggleVisibility()" checked>
                         </div>
                     </div>
 

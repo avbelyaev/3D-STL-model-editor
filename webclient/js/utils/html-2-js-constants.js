@@ -17,11 +17,13 @@ const H2JS_CONTROL_ELEMENT = "control-element";
 
 const H2JS_FIGURE_CONTROLLER_ITEM = "figure-controller-item";
 const H2JS_FIGURE_CONTROLLER_ITEM_TITLE = "figure-controller-item-title";
-const H2JS_CONTROL_OPERATION = "control-operation";
 
+const H2JS_CONTROL_OPERATION = "control-operation";
 const H2JS_CONTROL_OPERATION_CURRENT_OP = "control-operation--current-op";
 const H2JS_CONTROL_OPERATION_MODEL_A = "control-operation--model-a";
 const H2JS_CONTROL_OPERATION_MODEL_B = "control-operation--model-b";
+const H2JS_CONTROL_ADJUSTMENT_SCALE = "control-adjustment--scale";
+const H2JS_CONTROL_ADJUSTMENT_ANGLE = "control-adjustment--angle";
 
 const H2JS_CONTROL_ADDITION = "control-addition";
 const H2JS_CONTROL_ADDITION_FILE = "control-addition--file";

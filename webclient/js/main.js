@@ -1,27 +1,15 @@
 let gl;
 let cam;
-let sidebar;
 let idsOfFiguresToBeProcessed;
 let figureController;
 let operationPerformer;
 let serverApiClient;
 let logr;
 let menu;
+let sidebar;
 
 
-const log = (text) => {
-    const dateTimeNow = new Date();
-    const currentTime = dateTimeNow.getHours() + ":" +
-        dateTimeNow.getMinutes() + ":" +
-        dateTimeNow.getSeconds() + ":" +
-        dateTimeNow.getMilliseconds();
-
-    if ('string' === typeof text && text.toLowerCase().includes('error')) {
-        text = `<span class=${H2JS_LOG_CONTENT_ERROR}>${text}</span>`;
-    }
-
-    logr.innerHTML += currentTime + "\t" + text + "<br>";
-};
+const log = (text) => Menu.log(text);
 
 let figureAngleDeg = 0;
 let figureScale = 1;
@@ -79,27 +67,7 @@ const saveSelectedModel = () => {
     document.body.removeChild(link);
 };
 
-const updateFigure = () => {
-    const figAngleElem = document.getElementById("figAngle");
-    figureAngleDeg = figAngleElem.value;
-
-    const figScaleElem = document.getElementById("figScale");
-    figureScale = figScaleElem.value;
-
-    idsOfFiguresToBeProcessed = figureController.figuresToBeProcessed;
-
-    const selectedFigure = figureController.selectedFigure;
-    selectedFigure.scaleBy(figureScale);
-    selectedFigure.rotateBy([figureAngleDeg, 0, 0], null); // TODO rotation point == translationVec?
-};
-
-const updateVisibility = (visibilityCheckbox) => {
-    const figureId = visibilityCheckbox.getAttribute(figureController.figureIdAttrName);
-    const figure = figureController.dynamicFigures.get(figureId);
-    figure.visible = !figure.visible;
-};
-
-const resize = () => {
+const resizeCanvas = () => {
     const width = gl.canvas.clientWidth;
     const height = gl.canvas.clientHeight;
     if (gl.canvas.width !== width || gl.canvas.height !== height) {
@@ -110,7 +78,7 @@ const resize = () => {
 
 
 function drawScene() {
-    resize();
+    resizeCanvas();
 
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.clearColor(0.5, 0.5, 0.5, 1.0);
@@ -147,6 +115,7 @@ const renderUI = () => {
     logr = menu.createLogger();
     new MouseControls();
     cam = initCamera();
+    sidebar = new Sidebar();
 
     log("GUI has started");
 };
