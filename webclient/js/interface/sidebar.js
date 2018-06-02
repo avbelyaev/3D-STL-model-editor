@@ -72,7 +72,7 @@ class Sidebar {
     }
 
     // this function is used in figure-controller. its a handle for models-list item
-    updateOperation() {
+    updateOperationAndSelectedModel() {
         const modelAElem = document.getElementsByClassName(H2JS_CONTROL_OPERATION_MODEL_A)[0];
         modelAElem.innerText = 0 !== figureController.processedFigures.length
             ? `Модель 'A': ${figureController.processedFigures[0]}`
@@ -81,6 +81,10 @@ class Sidebar {
         modelBElem.innerText = 1 < figureController.processedFigures.length
             ? `Модель 'B': ${figureController.processedFigures[1]}`
             : 'Модель \'B\' не выбрана';
+        const selectedModelElem = document.getElementsByClassName(H2JS_CONTROL_ADJUSTMENT_CURRENT_MODEL)[0];
+        selectedModelElem.innerText = null !== figureController.selectedFigure
+            ? `Модель: ${figureController.selectedFigure.id}`
+            : 'Нет активной модели';
     }
 
     removePlaceholderOnEmptyList() {

@@ -14,8 +14,13 @@ class STLLoader {
         fileReader.onload = function() {
             const arrayBuffer = this.result;
 
-            const parsed = STLLoader.__parseData(arrayBuffer);
-            callback(null, parsed);
+            try {
+                const parsed = STLLoader.__parseData(arrayBuffer);
+                callback(null, parsed);
+
+            } catch (e) {
+                callback(e, null);
+            }
         };
         fileReader.onerror = function (error) {
             callback(error, null);

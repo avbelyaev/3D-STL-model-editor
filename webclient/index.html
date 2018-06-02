@@ -58,7 +58,8 @@
             <div class="dropdown">
                 <div id="menu-file" onclick="Menu.toggleFile()" class="dropbtn">Файл</div>
                 <div class="dropdown-content" id="file-dropdown">
-                    <div class="dropdown-content--item">Добавить модель</div>
+                    <div class="dropdown-content--item"
+                         onClick="operationPerformer.performAddition()">Добавить модель</div>
                     <div class="dropdown-content--item"
                          onClick="operationPerformer.performDownload()">Сохранить модель</div>
                 </div>
@@ -78,7 +79,8 @@
                 <div id="menu-operation" onclick="Menu.toggleOperation()" class="dropbtn">Операция</div>
                 <div class="dropdown-content" id="operation-dropdown">
 
-                    <div class="dropdown-content--item">Выполнить</div>
+                    <div class="dropdown-content--item"
+                         onclick="operationPerformer.performBoolOp()">Выполнить</div>
                     <div class="dropdown-content--item"
                          onclick="menu.declineOperation()">Отменить
                     </div>
@@ -148,7 +150,8 @@
             <div id="control-addition" class="control">
                 <div class="control-title">Добавление модели</div>
                 <div class="control-element">
-                    <input class="control-addition--file" type="file"/>
+                    <input class="control-element__file" type="file" id="file"/>
+                    <label class="submit-button" for="file">Выбрать файл с моделью</label>
                     <div class="submit-button" id="control-addition--button"
                          onClick="operationPerformer.performAddition()">Добавить модель
                     </div>
@@ -166,8 +169,10 @@
             </div>
 
             <div id="control-adjustment" class="control">
-                <div class="control-title">Настройка модели</div>
+                <div class="control-title">Настройка активной модели</div>
                 <div class="control-element">
+                    <div class=" control-element--container control-adjustment--current-model">Нет активной модели</div>
+
                     <div class="control-element--container">
                         <div class="control-element--item">Оси:</div>
                         <div class="control-element--item">

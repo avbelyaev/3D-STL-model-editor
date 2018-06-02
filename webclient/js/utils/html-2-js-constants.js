@@ -26,12 +26,13 @@ const H2JS_CONTROL_ADJUSTMENT_SCALE = "control-adjustment--scale";
 const H2JS_CONTROL_ADJUSTMENT_ANGLE = "control-adjustment--angle";
 
 const H2JS_CONTROL_ADDITION = "control-addition";
-const H2JS_CONTROL_ADDITION_FILE = "control-addition--file";
+const H2JS_CONTROL_ELEMENT_FILE = "control-element__file";
 
 const H2JS_CONTROL_SELECTION = "control-selection";
 const H2JS_CONTROL_SELECTION_EMPTY = "control-selection__empty";
 
 const H2JS_CONTROL_ADJUSTMENT = "control-adjustment";
+const H2JS_CONTROL_ADJUSTMENT_CURRENT_MODEL = "control-adjustment--current-model";
 
 // logs
 const H2JS_LOG = "log";

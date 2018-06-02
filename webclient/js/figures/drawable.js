@@ -79,7 +79,7 @@ class Drawable {
     }
 
     updateFigure() {
-        console.log('updating figure');
+        log('updating figure');
         this.__updateNormals();
 
         // update using recounted world positions
@@ -131,12 +131,10 @@ class Drawable {
     }
 
     __updateVertices() {
-        console.log('updating vertices');
         this.vertices = reduceArrayToTriples(this.worldPositions);
     }
 
     __updateTriangles() {
-        console.log('updating triangles');
         this.triangles = reduceArrayToTriples(this.vertices);
     }
 
@@ -147,8 +145,6 @@ class Drawable {
      * FYI shader counts position like this: MVPMatrix<mat4> * position_col<vec4>
      */
     __updateWorldPositions() {
-        console.log('updating world positions');
-
         this.__updateVertices();
         this.__updateTriangles();
 
@@ -168,8 +164,6 @@ class Drawable {
     }
 
     __updateNormals() {
-        console.log('updating normals');
-
         this.__updateWorldPositions();
 
         this.normals = new Array(Math.round(this.positions.length / 9));

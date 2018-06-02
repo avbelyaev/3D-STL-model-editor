@@ -28,6 +28,8 @@ class FigureController {
         // save dynamic figure's id into radio-button
         const figureButton = this.createFigureButton(this.childElementsGroupName, dynamicFigure.id);
         this.figureControllerElement.appendChild(figureButton);
+
+        sidebar.updateOperationAndSelectedModel();
     }
 
     addStaticFigure(staticFigure) {
@@ -92,7 +94,7 @@ class FigureController {
 
         let wrapper = document.createElement('div');
         wrapper.setAttribute('class', H2JS_FIGURE_CONTROLLER_ITEM);
-        wrapper.setAttribute('onclick', 'sidebar.updateOperation()');
+        wrapper.setAttribute('onclick', 'sidebar.updateOperationAndSelectedModel()');
         wrapper.appendChild(selectedFigureButton);
         wrapper.appendChild(figureIdLabel);
         wrapper.appendChild(boolOpCheckbox);

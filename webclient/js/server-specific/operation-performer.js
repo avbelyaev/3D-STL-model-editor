@@ -8,7 +8,7 @@ class OperationPerformer {
         log(`starting Operation Performer`);
 
         // const controlAdditionElem = document.getElementById(H2JS_CONTROL_ADDITION);
-        this.modelSubmitterElement = document.getElementsByClassName(H2JS_CONTROL_ADDITION_FILE)[0];
+        this.modelSubmitterElement = document.getElementsByClassName(H2JS_CONTROL_ELEMENT_FILE)[0];
         this.canBeSubmitted = true;
         this.canBePerformed = true;
         this.canBeDownloaded = true;
@@ -18,7 +18,7 @@ class OperationPerformer {
 
     performAddition() {
         if (0 === this.modelSubmitterElement.files.length) {
-            log('Error! nothing to submit. select file first!');
+            log('Error! Nothing to submit. Please, select file');
             return;
         }
 
@@ -62,9 +62,8 @@ class OperationPerformer {
                         }
                     });
 
-
                 } else {
-                    log('file parse error: ' + err);
+                    log(`Error! Could not parse file ${filename}. Are You sure its an STL file? :)`);
                 }
                 // unlock after parse
                 this.canBeSubmitted = true;
@@ -73,7 +72,7 @@ class OperationPerformer {
             this.canBeSubmitted = false;
 
         } else {
-            log('Error! nothing to submit or already submitted');
+            log('Error! Nothing to submit or already submitted');
         }
     }
 
@@ -106,7 +105,7 @@ class OperationPerformer {
             });
 
         } else {
-            log('Error! nothing to perform or already performed');
+            log('Error! Not enough information to perform operation');
         }
     }
 
@@ -142,7 +141,7 @@ class OperationPerformer {
                         });
 
                     } else {
-                        log('Error occurred while parsing STL result');
+                        log(`Error! Could not parse file ${filename}`);
                     }
                 });
 

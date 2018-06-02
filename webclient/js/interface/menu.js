@@ -121,6 +121,11 @@ class Menu {
         }
 
         logr.innerHTML += currentTime + "\t" + text + "<br>";
+
+        //scroll log to the bottom
+        const logElement = document.getElementsByClassName(H2JS_LOG)[0];
+        const logContentElem = logElement.getElementsByClassName(H2JS_LOG_CONTENT)[0];
+        logContentElem.scrollTop = logContentElem.scrollHeight;
     }
 
 

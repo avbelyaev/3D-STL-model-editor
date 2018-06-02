@@ -131,7 +131,7 @@ html body .page .editor .view .log .log__content {
   font-size: 14px;
 }
 html body .page .editor .view .log .log__content .log__content--error {
-  color: red;
+  color: #AA1111;
   font-size: 15px;
 }
 html body .page .editor .controls {
@@ -149,7 +149,6 @@ html body .page .editor .controls .control .control-title {
   color: #716f6f;
 }
 html body .page .editor .controls .control .control-element .control-element--container {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -164,6 +163,14 @@ html body .page .editor .controls .control .control-element .control-operation--
 html body .page .editor .controls .control .control-element__scrollable {
   overflow-y: scroll;
   height: 160px;
+}
+html body .page .editor .controls .control .control-element__file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
 }
 html body .page .editor .controls .submit-button {
   width: 100%;

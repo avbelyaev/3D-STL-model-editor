@@ -6,6 +6,7 @@ $color-dark-blue: #17395d;
 $font-helvetica: "Trebuchet MS", Helvetica, sans-serif;
 $font-courier: "Courier New", Courier, monospace;
 $font-color: #d0d0d0;
+$error-font-color: #AA1111;
 
 $border-list-item: 1px solid $color-dark-blue;
 $border-menu-item: 1px solid $color-light-blue;
@@ -181,7 +182,7 @@ html {
               font-size: 14px;
 
               .log__content--error {
-                color: red;
+                color: $error-font-color;
                 font-size: 15px;
               }
             }
@@ -207,7 +208,6 @@ html {
               //padding-left: 4px;
 
               .control-element--container {
-                width: 100%;
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
@@ -225,6 +225,15 @@ html {
             .control-element__scrollable {
               overflow-y: scroll;
               height: 160px;
+            }
+
+            .control-element__file {
+              width: 0.1px;
+              height: 0.1px;
+              opacity: 0;
+              overflow: hidden;
+              position: absolute;
+              z-index: -1;
             }
           }
 
