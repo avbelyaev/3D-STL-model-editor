@@ -12,18 +12,22 @@ const log = (text) => Menu.log(text);
 const vsSource = `
     attribute vec3 aPosition;
     attribute vec3 aColor;
+    attribute vec3 aNormal;
     
     uniform mat4 uModel;
     uniform mat4 uView;
     uniform mat4 uProjection;
+    uniform mat4 uWorldInverseTranspose;
     
     varying vec3 fragColor;
+    varying vec3 v_normal;
     
     void main() {
         mat4 mvp = uProjection * uView * uModel;
         gl_Position = mvp * vec4(aPosition, 1);
       
         fragColor = aColor;
+        v_normal = mat3(uWorldInverseTranspose) * aNormal;
     }
   `;
 
@@ -31,10 +35,17 @@ const fsSource = `
     precision highp float;
     
     varying vec3 fragColor;
-
+    varying vec3 v_normal;
+    uniform vec3 uReverseLightDirection;
+    
     void main() {
-      gl_FragColor = vec4(fragColor, 1.0);
-      // gl_FragColor = vec4(1.0, 0.0, 0, 0);
+        vec3 normal = normalize(v_normal);
+        float light = dot(normal, uReverseLightDirection);
+    
+        gl_FragColor = vec4(fragColor, 1.0);
+        // gl_FragColor = vec4(1.0, 0.0, 0, 0);
+        
+        gl_FragColor.rgb *= light;
     }
   `;
 
@@ -106,9 +117,9 @@ function main() {
     Cropper.initCroppers();
 
 
-    // const letterF = new Figure(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource, 'letter-F', DRAWABLES.FIGURE);
-    // letterF.init();
-    // figureController.addDynamicFigure(letterF);
+    const letterF = new Figure(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource, 'letter-F', DRAWABLES.FIGURE);
+    letterF.init();
+    figureController.addDynamicFigure(letterF);
 
 
     log("Starting render loop");

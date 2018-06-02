@@ -34,7 +34,8 @@ class OperationPerformer {
                     const vertices = meshData.vertices;
                     console.log(vertices);
 
-                    const mesh = new Figure(vertices, extendRandomColors(vertices), gl, vsSource, fsSource, filename);
+                    const mesh = new Figure(vertices, extendRandomColors(vertices), gl,
+                        vsSource, fsSource, filename, DRAWABLES.FIGURE);
                     mesh.init();
                     figureController.addDynamicFigure(mesh);
 
@@ -107,7 +108,8 @@ class OperationPerformer {
                     if (!err) {
                         log('Result has been successfully parsed');
 
-                        const mesh = new Figure(meshData.vertices, extendRandomColors(meshData.vertices), gl, vsSource, fsSource, filename);
+                        const mesh = new Figure(meshData.vertices, extendRandomColors(meshData.vertices),
+                            gl, vsSource, fsSource, filename, DRAWABLES.FIGURE);
                         mesh.init();
                         figureController.addDynamicFigure(mesh);
 

@@ -10,6 +10,8 @@ const CAM_HORIZONTAL_ROTATION_DECELERATION = 4;
 const CAM_VERT_ROTATION_DECELERATION = 3;
 const CAM_DIST_CHANGE_DECELERATION = 10;
 
+const LIGHT_SOURCE = [0.5, 0.8, 0.7];
+
 /**
  * Camera position is a point in spherical coordinate system
  */

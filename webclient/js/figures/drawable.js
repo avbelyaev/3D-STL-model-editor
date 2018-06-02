@@ -42,7 +42,10 @@ class Drawable {
             this.triangles = reduceArrayToTriples(this.vertices);
             this.normals = [];
 
-            this.updateFigure();
+            this.updateFigure(); // fills normals
+
+            // provide light
+            this.lightingNormals = this.__spreadNormalsToEachPosition(this.normals);
         }
     }
 
@@ -73,20 +76,20 @@ class Drawable {
             .map(angleDegree => degToRad(parseFloat(angleDegree)));
     }
 
+    updateFigure() {
+        log('updating figure');
+        this.__updateNormals();
+
+        // update using reevaluated world positions
+        this.__updateVertices();
+        this.__updateTriangles();
+    }
+
     init() {
         log(`init Drawable ${this.id}`);
         this.__initProgram();
         this.__initBuffers();
         this.__initShaderArgLocations();
-    }
-
-    updateFigure() {
-        log('updating figure');
-        this.__updateNormals();
-
-        // update using recounted world positions
-        this.__updateVertices();
-        this.__updateTriangles();
     }
 
     __initProgram() {
@@ -98,15 +101,21 @@ class Drawable {
         // log('initBuffers');
 
         const posNumComponents = 3;
+        // vertices
         this.positionBufferInfo = createBufferInfo(
             this.gl, new Float32Array(this.positions), posNumComponents, gl.FLOAT, false);
 
+        // colors
         this.colorBufferInfo = createBufferInfo(
-            this.gl, new Uint8Array(this.colors), 3, gl.UNSIGNED_BYTE, true);
+            this.gl, new Uint8Array(this.colors), posNumComponents, gl.UNSIGNED_BYTE, true);
 
         const numElements = countNumElem(this.positions, posNumComponents);
         checkAgainstColors(numElements, this.colors);
         this.numElements = numElements;
+
+        // normals
+        this.normalBufferInfo = createBufferInfo(
+            this.gl, new Float32Array(this.lightingNormals), posNumComponents, gl.FLOAT, false);
     }
 
     __initShaderArgLocations() {
@@ -114,12 +123,15 @@ class Drawable {
 
         this.attribLocations = {
             vertexPosition: this.gl.getAttribLocation(this.program, 'aPosition'),
-            vertexColor: this.gl.getAttribLocation(this.program, 'aColor')
+            vertexColor: this.gl.getAttribLocation(this.program, 'aColor'),
+            vertexNormal: this.gl.getAttribLocation(this.program, 'aNormal')
         };
         this.uniformLocations = {
             uModel: this.gl.getUniformLocation(this.program, 'uModel'),
             uView: this.gl.getUniformLocation(this.program, 'uView'),
-            uProjection: this.gl.getUniformLocation(this.program, 'uProjection')
+            uProjection: this.gl.getUniformLocation(this.program, 'uProjection'),
+            uReverseLightDirection: this.gl.getUniformLocation(this.program, "uReverseLightDirection"),
+            uWorldInverseTranspose: this.gl.getUniformLocation(this.program, "uWorldInverseTranspose")
         };
     }
 
@@ -175,6 +187,19 @@ class Drawable {
         });
 
         return this.normals;
+    }
+
+    __spreadNormalsToEachPosition(normals) {
+        const lightingNormals = [];
+        const triangleNum = this.triangles.length;
+        let  i = 0;
+        for (let j = 0; j < triangleNum; j++) {
+            lightingNormals.push(...normals[i]);
+            lightingNormals.push(...normals[i]);
+            lightingNormals.push(...normals[i]);
+            i++;
+        }
+        return lightingNormals;
     }
 
     static __throwNotImplementedError() {
