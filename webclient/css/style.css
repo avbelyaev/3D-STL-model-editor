@@ -27,6 +27,7 @@ html body .page .menu #logo {
   height: 22px;
   padding-left: 10px;
   padding-right: 10px;
+  color: #716f6f;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -124,15 +125,18 @@ html body .page .editor .view .log {
   background-color: #131111;
   padding: 2px;
 }
-html body .page .editor .view .log .log__content {
+html body .page .editor .view .log .log--content {
   height: 100%;
   overflow: auto;
   font-family: "Courier New", Courier, monospace;
   font-size: 14px;
 }
-html body .page .editor .view .log .log__content .log__content--error {
+html body .page .editor .view .log .log--content .log--content__error {
   color: #AA1111;
   font-size: 15px;
+}
+html body .page .editor .view .log .log--content .log--content__time {
+  color: #716f6f;
 }
 html body .page .editor .controls {
   width: 20%;
@@ -155,6 +159,15 @@ html body .page .editor .controls .control .control-element .control-element--co
   margin-top: 10px;
   padding-left: 4px;
   padding-right: 4px;
+}
+html body .page .editor .controls .control .control-element .control-element--container .control-element--item .x {
+  color: red;
+}
+html body .page .editor .controls .control .control-element .control-element--container .control-element--item .y {
+  color: green;
+}
+html body .page .editor .controls .control .control-element .control-element--container .control-element--item .z {
+  color: blue;
 }
 html body .page .editor .controls .control .control-element .control-operation--stats {
   margin-top: 4px;

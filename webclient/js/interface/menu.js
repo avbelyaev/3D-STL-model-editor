@@ -156,10 +156,11 @@ class Menu {
 
     static log(text) {
         const dateTimeNow = new Date();
-        const currentTime = dateTimeNow.getHours() + ":" +
+        let currentTime = dateTimeNow.getHours() + ":" +
             dateTimeNow.getMinutes() + ":" +
             dateTimeNow.getSeconds() + ":" +
             dateTimeNow.getMilliseconds();
+        currentTime = `<span class=${H2JS_LOG_CONTENT_TIME}>${currentTime}</span>`;
 
         if ('string' === typeof text && text.toLowerCase().includes('error')) {
             text = `<span class=${H2JS_LOG_CONTENT_ERROR}>${text}</span>`;

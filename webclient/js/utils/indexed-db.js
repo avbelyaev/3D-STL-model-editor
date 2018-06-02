@@ -70,25 +70,24 @@ class IndexedDB {
         B64Converter.convertFileToBase64(blob, (err, res) => {
             if (!err) {
                 const base64Id = OperationPerformer.createIdForBase64Item(figure.id);
-
-                IndexedDB.execute((err, db, store, tx) => {
-                    if (!err) {
-                        store.put(IndexedDB.storeItem(base64Id, res));
-                        log(`item ${base64Id} has been saved to IndexedDB`);
-
-                    } else {
-                        log('error while saving to db: ' + err.message);
-                    }
-                });
+                IndexedDB.storeItem(base64Id, res);
             }
         });
     }
 
     static storeItem(id, data) {
-        return {
-            id: id,
-            modeldata: data
-        };
+        IndexedDB.execute((err, db, store, tx) => {
+            if (!err) {
+                store.put({
+                    id: id,
+                    modeldata: data
+                });
+                log(`item ${id} has been saved to IndexedDB`);
+
+            } else {
+                log('error while saving to db: ' + err.message);
+            }
+        });
     }
 
     static deleteDB() {

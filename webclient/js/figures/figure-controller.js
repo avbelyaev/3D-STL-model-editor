@@ -53,6 +53,8 @@ class FigureController {
         // make sure static figures wont move
         this.staticFigures.forEach(sf => sf.draw());
         this.dynamicFigures.forEach(df => df.draw());
+        // TODO hide giant croppers :)
+        // this.toolFigures.forEach(tf => tf.draw());
     }
 
     get selectedFigure() {

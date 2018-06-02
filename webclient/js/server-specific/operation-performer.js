@@ -7,7 +7,6 @@ class OperationPerformer {
     constructor() {
         log(`starting Operation Performer`);
 
-        // const controlAdditionElem = document.getElementById(H2JS_CONTROL_ADDITION);
         this.modelSubmitterElement = document.getElementsByClassName(H2JS_CONTROL_ELEMENT_FILE)[0];
         this.canBeSubmitted = true;
         this.canBePerformed = true;
@@ -35,13 +34,7 @@ class OperationPerformer {
                     const vertices = meshData.vertices;
                     console.log(vertices);
 
-                    // const multiplyCoeff = 1000;
-                    // log(`multiplying by ${multiplyCoeff}`);
-                    // vertices.map(vertex => parseInt(vertex) * multiplyCoeff);
-
                     const mesh = new Figure(vertices, extendRandomColors(vertices), gl, vsSource, fsSource, filename);
-                    // TODO count by myself or just take from file
-                    // mesh.normals = meshData.normals;
                     mesh.init();
                     figureController.addDynamicFigure(mesh);
 
@@ -49,16 +42,7 @@ class OperationPerformer {
                     B64Converter.convertFileToBase64(file, (err, res) => {
                         if (!err) {
                             const base64Id = OperationPerformer.createIdForBase64Item(mesh.id);
-
-                            IndexedDB.execute((err, db, store, tx) => {
-                                if (!err) {
-                                    store.put(IndexedDB.storeItem(base64Id, res));
-                                    log(`item ${base64Id} has been saved to IndexedDB`);
-
-                                } else {
-                                    log('error while saving to db: ' + err.message);
-                                }
-                            });
+                            IndexedDB.storeItem(base64Id, res);
                         }
                     });
 
@@ -129,15 +113,7 @@ class OperationPerformer {
 
                         //save into DB
                         const base64Id = OperationPerformer.createIdForBase64Item(mesh.id);
-                        IndexedDB.execute((err, db, store, tx) => {
-                            if (!err) {
-                                store.put(IndexedDB.storeItem(base64Id, res));
-                                log(`item ${base64Id} has been saved to IndexedDB`);
-
-                            } else {
-                                log('error while saving to db: ' + err.message);
-                            }
-                        });
+                        IndexedDB.storeItem(base64Id, res);
 
                     } else {
                         log(`Error! Could not parse file ${filename}`);
@@ -190,15 +166,11 @@ class OperationPerformer {
             });
 
         } else {
-            log(`Error! nothing to download or download in progress`);
+            log(`Error! Nothing to download or already in progress`);
         }
     }
 
     static createIdForBase64Item(itemName) {
         return `${itemName}_base64`;
-    }
-
-    static createIdForOriginalItem(itemName) {
-        return `${itemName}_original`;
     }
 }
