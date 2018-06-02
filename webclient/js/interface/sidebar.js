@@ -42,35 +42,6 @@ class Sidebar {
         figureController.selectedFigure.visible = !figureController.selectedFigure.visible;
     }
 
-    fixSelectedModel() {
-        if (null !== figureController.selectedFigure) {
-            console.log('fixing (updating) selected model');
-            figureController.selectedFigure.updateFigure();
-
-            // make new binary file
-            const mimeTypeStl = "application/sla";
-            const byteArrays = STLExporter.exportToBinaryStl(figureController.selectedFigure);
-            const blob = new Blob([byteArrays], {type: mimeTypeStl});
-
-            // update model in DB
-            B64Converter.convertFileToBase64(blob, (err, res) => {
-                if (!err) {
-                    const base64Id = OperationPerformer.createIdForBase64Item(figureController.selectedFigure.id);
-
-                    IndexedDB.execute((err, db, store, tx) => {
-                        if (!err) {
-                            store.put(IndexedDB.storeItem(base64Id, res));
-                            log(`item ${base64Id} has been saved to IndexedDB`);
-
-                        } else {
-                            log('error while saving to db: ' + err.message);
-                        }
-                    });
-                }
-            });
-        }
-    }
-
     // this function is used in figure-controller. its a handle for models-list item
     updateOperationAndSelectedModel() {
         const modelAElem = document.getElementsByClassName(H2JS_CONTROL_OPERATION_MODEL_A)[0];

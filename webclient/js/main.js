@@ -38,21 +38,12 @@ const fsSource = `
     }
   `;
 
-const resizeCanvas = () => {
-    const width = gl.canvas.clientWidth;
-    const height = gl.canvas.clientHeight;
-    if (gl.canvas.width !== width || gl.canvas.height !== height) {
-        gl.canvas.width = width;
-        gl.canvas.height = height;
-    }
-};
-
 
 function drawScene() {
     resizeCanvas();
 
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-    gl.clearColor(0.5, 0.5, 0.5, 1.0);
+    gl.clearColor(0.6, 0.6, 0.6, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 
@@ -110,20 +101,14 @@ function main() {
     // gl.enable(gl.CULL_FACE); // dont draw back-facing (clockwise vertices) triangles
 
 
-    const grid = new Grid(200, 10, COLORS.WHITE, gl, vsSource, fsSource, 'grid');
-    grid.init();
-    figureController.addStaticFigure(grid);
-
-    initAxis();
+    Grid.initDefaultGrid();
+    Axis.initDefaultAxis();
+    Cropper.initCroppers();
 
 
-    const letterF = new Figure(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource, 'letter-F');
-    letterF.init();
-    figureController.addDynamicFigure(letterF);
-
-    const letterFF = new Figure(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource, 'letter-F');
-    letterFF.init();
-    figureController.addDynamicFigure(letterFF);
+    // const letterF = new Figure(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource, 'letter-F', DRAWABLES.FIGURE);
+    // letterF.init();
+    // figureController.addDynamicFigure(letterF);
 
 
     log("Starting render loop");

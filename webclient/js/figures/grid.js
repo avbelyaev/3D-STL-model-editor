@@ -15,6 +15,12 @@ class Grid extends Drawable {
         this.drawMode = gl.LINES;
     }
 
+    static initDefaultGrid() {
+        const grid = new Grid(200, 10, COLORS.WHITE, gl, vsSource, fsSource, 'grid');
+        grid.init();
+        figureController.addStaticFigure(grid);
+    }
+
     draw() {
         if (this.visible) {
             this.gl.useProgram(this.program);

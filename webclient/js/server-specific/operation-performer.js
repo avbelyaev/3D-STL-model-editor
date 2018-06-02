@@ -76,24 +76,23 @@ class OperationPerformer {
         }
     }
 
-    performBoolOp() {
-        if (this.canBePerformed && 1 < figureController.processedFigures.length
-        && null != this.selectedOperation) {
+    performBoolOp(op, figure1, figure2) {
+        if (this.canBePerformed) {
             IndexedDB.execute((err, db, store, tx) => {
                 if (!err) {
-                    const base64edStl1Id = OperationPerformer.createIdForBase64Item(figureController.processedFigures[0]);
+                    const base64edStl1Id = OperationPerformer.createIdForBase64Item(figure1.id);
                     const getSTL1 = store.get(base64edStl1Id);
 
                     getSTL1.onsuccess = function () {
                         const stl1Data = getSTL1.result.modeldata;
 
-                        const base64edStl2Id = OperationPerformer.createIdForBase64Item(figureController.processedFigures[1]);
+                        const base64edStl2Id = OperationPerformer.createIdForBase64Item(figure2.id);
                         const getSTL2 = store.get(base64edStl2Id);
 
                         getSTL2.onsuccess = function () {
                             const stl2Data = getSTL2.result.modeldata;
 
-                            const cmd = Models.performOnStlModel(operationPerformer.selectedOperation.id, stl1Data, stl2Data);
+                            const cmd = Models.performOnStlModel(op.id, stl1Data, stl2Data);
                             operationPerformer.performRequest(cmd);
                         };
                     }
@@ -105,7 +104,7 @@ class OperationPerformer {
             });
 
         } else {
-            log('Error! Not enough information to perform operation');
+            log('Error! Already performing');
         }
     }
 

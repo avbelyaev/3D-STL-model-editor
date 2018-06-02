@@ -23,7 +23,7 @@
 <script src="js/maths/surface.js"></script>
 
 <!--webgl-specific-->
-<script src="js/webgl-specific/buffers.js"></script>
+<script src="js/webgl-specific/utils.js"></script>
 <script src="js/webgl-specific/shaders.js"></script>
 <script src="js/webgl-specific/colors.js"></script>
 
@@ -41,6 +41,7 @@
 <script src="js/figures/grid.js"></script>
 <script src="js/figures/predefined/letter-f.js"></script>
 <script src="js/figures/predefined/axis.js"></script>
+<script src="js/figures/predefined/cropping-models.js"></script>
 
 <!--server-specific-->
 <script src="js/server-specific/models-operations.js"></script>
@@ -69,8 +70,16 @@
                 <div id="menu-edit" onclick="Menu.toggleEdit()" class="dropbtn">Правка</div>
                 <div class="dropdown-content" id="edit-dropdown">
 
-                    <div class="dropdown-content--item ">Зафиксировать активную модель</div>
-                    <div class="dropdown-content--item ">Удалить активную модель</div>
+                    <div class="dropdown-content--item "
+                         onclick="menu.editFixSelectedModel()">Зафиксировать активную модель</div>
+                    <div class="dropdown-content--item "
+                         onclick="menu.editRemoveSelectedModel()">Удалить активную модель</div>
+                    <div class="dropdown-content--item "
+                         onclick="menu.editCropPerpendicularlyToOX()">Отрезать перпендикулярно OX</div>
+                    <div class="dropdown-content--item "
+                         onclick="menu.editCropPerpendicularlyToOY()">Отрезать перпендикулярно OY</div>
+                    <div class="dropdown-content--item "
+                         onclick="menu.editCropPerpendicularlyToOZ()">Отрезать перпендикулярно OZ</div>
 
                 </div>
             </div>
@@ -80,7 +89,7 @@
                 <div class="dropdown-content" id="operation-dropdown">
 
                     <div class="dropdown-content--item"
-                         onclick="operationPerformer.performBoolOp()">Выполнить</div>
+                         onclick="menu.performOperation()">Выполнить</div>
                     <div class="dropdown-content--item"
                          onclick="menu.declineOperation()">Отменить
                     </div>
@@ -211,7 +220,7 @@
                     </div>
 
                     <div class="submit-button" id="control-adjustment--button__fix"
-                         onClick="sidebar.fixSelectedModel()">Зафиксировать положение
+                         onClick="menu.editFixSelectedModel()">Зафиксировать положение
                     </div>
                 </div>
             </div>
@@ -224,7 +233,7 @@
                     <div class="control-operation--stats control-operation--model-b">Модель 'B' не выбрана</div>
 
                     <div class="submit-button" id="control-operation--button"
-                         onClick="operationPerformer.performBoolOp()">Выполнить операцию
+                         onclick="menu.performOperation()">Выполнить операцию
                     </div>
                 </div>
             </div>

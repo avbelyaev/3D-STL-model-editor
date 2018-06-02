@@ -26,8 +26,12 @@ class Menu {
         Menu.__hideAllDropdownsExceptElement(H2JS_FILE_DROPDOWN);
     };
 
-    static fileNewModel() {
+    fileNewModel() {
+        operationPerformer.performAddition();
+    }
 
+    fileSaveModel() {
+        operationPerformer.performDownload();
     }
 
     // ===================================
@@ -37,6 +41,34 @@ class Menu {
         Menu.__hideAllDropdownsExceptElement(H2JS_EDIT_DROPDOWN);
     };
 
+    editFixSelectedModel() {
+        figureController.fixSelectedModel();
+    }
+
+    editRemoveSelectedModel() {
+
+    }
+
+    editCropPerpendicularlyToOX() {
+        Menu.__crop(CROPPER_TYPE.OX);
+    }
+
+    editCropPerpendicularlyToOY() {
+        Menu.__crop(CROPPER_TYPE.OY);
+    }
+
+    editCropPerpendicularlyToOZ() {
+        Menu.__crop(CROPPER_TYPE.OZ);
+    }
+
+    static __crop(cropperType) {
+        const cropper = figureController.getToolFigureBySubtype(cropperType)[0];
+        if (cropper) {
+            cropper.updateFigure();
+            operationPerformer.performBoolOp(
+                Operations.INTERSECT, figureController.selectedFigure, cropper);
+        }
+    }
 
     // ===================================
     // ------------ Operation ------------
@@ -44,6 +76,19 @@ class Menu {
     static toggleOperation() {
         Menu.__hideAllDropdownsExceptElement(H2JS_OPERATION_DROPDOWN);
     };
+
+    performOperation() {
+        if (1 < figureController.processedFigures.length
+            && null != figureController.selectedOperation) {
+            operationPerformer.performBoolOp(
+                operationPerformer.selectedOperation,
+                figureController.processedFigures[0],
+                figureController.processedFigures[1]);
+
+        } else {
+            log('Error! Not enough information to perform operation');
+        }
+    }
 
     updateSelectedOperation(operation) {
         const opElem = document.getElementsByClassName(H2JS_CONTROL_OPERATION_CURRENT_OP)[0];

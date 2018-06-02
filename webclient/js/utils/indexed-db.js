@@ -60,6 +60,30 @@ class IndexedDB {
 
     };
 
+    static upsertFigure(figure) {
+        // make new binary file
+        const mimeTypeStl = "application/sla";
+        const byteArrays = STLExporter.exportToBinaryStl(figure);
+        const blob = new Blob([byteArrays], {type: mimeTypeStl});
+
+        // update model in DB
+        B64Converter.convertFileToBase64(blob, (err, res) => {
+            if (!err) {
+                const base64Id = OperationPerformer.createIdForBase64Item(figure.id);
+
+                IndexedDB.execute((err, db, store, tx) => {
+                    if (!err) {
+                        store.put(IndexedDB.storeItem(base64Id, res));
+                        log(`item ${base64Id} has been saved to IndexedDB`);
+
+                    } else {
+                        log('error while saving to db: ' + err.message);
+                    }
+                });
+            }
+        });
+    }
+
     static storeItem(id, data) {
         return {
             id: id,

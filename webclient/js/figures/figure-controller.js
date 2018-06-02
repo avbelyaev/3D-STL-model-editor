@@ -8,6 +8,7 @@ class FigureController {
 
         this.dynamicFigures = new Map();
         this.staticFigures = new Map();
+        this.toolFigures = new Map();
 
         const controlSelectionElem = document.getElementById(H2JS_CONTROL_SELECTION);
         this.figureControllerElement = controlSelectionElem.getElementsByClassName(H2JS_CONTROL_ELEMENT)[0];
@@ -18,6 +19,10 @@ class FigureController {
     }
 
     addDynamicFigure(dynamicFigure) {
+        if (DRAWABLES.CROPPER === dynamicFigure.type) {
+            log('cannot add system-tool figure as dynamic');
+            return;
+        }
         if (0 === this.dynamicFigures.size) {
             sidebar.removePlaceholderOnEmptyList();
         }
@@ -36,6 +41,12 @@ class FigureController {
         log(`adding static figure ${staticFigure.id}`);
 
         this.staticFigures.set(staticFigure.id, staticFigure);
+    }
+
+    addToolFigure(toolFigure) {
+        if (DRAWABLES.CROPPER === toolFigure.type) {
+            this.toolFigures.set(toolFigure.id, toolFigure);
+        }
     }
 
     drawFigures() {
@@ -61,6 +72,11 @@ class FigureController {
         return Array.from(document.getElementsByClassName(this.processedFiguresClass))
             .filter(checkbox => checkbox.checked)
             .map(checkedCheckBox => checkedCheckBox.getAttribute(this.figureIdAttrName));
+    }
+
+    getToolFigureBySubtype(subtype) {
+        return Array.from(this.toolFigures.values())
+            .filter(toolFigure => subtype === toolFigure.subtype);
     }
 
     toggleDynamicFiguresVisibility(isVisible) {
@@ -101,4 +117,13 @@ class FigureController {
 
         return wrapper;
     };
+
+    fixSelectedModel() {
+        if (null !== figureController.selectedFigure) {
+            console.log('fixing (updating) selected model');
+            figureController.selectedFigure.updateFigure();
+
+            IndexedDB.upsertFigure(figureController.selectedFigure);
+        }
+    }
 }

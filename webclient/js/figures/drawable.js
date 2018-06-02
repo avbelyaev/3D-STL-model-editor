@@ -5,7 +5,8 @@
 const DRAWABLES = Object.freeze({
     FIGURE: "figure",
     GRID: "grid",
-    AXIS: "axis"
+    AXIS: "axis",
+    CROPPER: "cropper"
 });
 
 class Drawable {
@@ -30,11 +31,12 @@ class Drawable {
         this.rotationVec = [0, 0, 0];
 
         this.type = type;
+        this.subtype = null; // to distinguish croppers
 
         this.visible = true;
 
         // only for objects made of triangles
-        if (DRAWABLES.FIGURE === this.type) {
+        if (DRAWABLES.FIGURE === this.type || DRAWABLES.CROPPER === this.type) {
             // update world positions -> vertices -> triangles -> normals
             this.vertices = reduceArrayToTriples(this.worldPositions);
             this.triangles = reduceArrayToTriples(this.vertices);

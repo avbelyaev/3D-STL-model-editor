@@ -2,6 +2,15 @@
  * Created by anthony on 14.01.2018.
  */
 
+const resizeCanvas = () => {
+    const width = gl.canvas.clientWidth;
+    const height = gl.canvas.clientHeight;
+    if (gl.canvas.width !== width || gl.canvas.height !== height) {
+        gl.canvas.width = width;
+        gl.canvas.height = height;
+    }
+};
+
 const countNumElem = (positionsArray, numComponents) => {
     let numElem = positionsArray.length / numComponents;
 
