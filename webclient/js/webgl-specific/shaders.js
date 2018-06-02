@@ -2,6 +2,44 @@
  * Created by anthony on 11.01.2018.
  */
 
+// since line should not be lighten up
+// we can remove all "light-related" evaluations from shaders
+// all shader inputs are the same but no computations in shader
+const vsSourceNoLight = `
+    attribute vec3 aPosition;
+    attribute vec3 aColor;
+    attribute vec3 aNormal;
+    
+    uniform mat4 uModel;
+    uniform mat4 uView;
+    uniform mat4 uProjection;
+    uniform mat4 uWorldInverseTranspose;
+    
+    varying vec3 fragColor;
+    varying vec3 v_normal;
+    
+    void main() {
+        mat4 mvp = uProjection * uView * uModel;
+        gl_Position = mvp * vec4(aPosition, 1);
+      
+        fragColor = aColor;
+    }
+  `;
+
+const fsSourceNoLight = `
+    precision highp float;
+    
+    varying vec3 fragColor;
+    varying vec3 v_normal;
+    uniform vec3 uReverseLightDirection;
+    
+    void main() {
+        gl_FragColor = vec4(fragColor, 1.0);
+        // gl_FragColor = vec4(1.0, 0.0, 0, 0);    
+    }
+  `;
+
+
 function loadShader(gl, type, source) {
     const shader = gl.createShader(type);
     gl.shaderSource(shader, source);

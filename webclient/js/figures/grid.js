@@ -16,7 +16,7 @@ class Grid extends Drawable {
     }
 
     static initDefaultGrid() {
-        const grid = new Grid(200, 10, COLORS.WHITE, gl, vsSource, fsSource, 'grid');
+        const grid = new Grid(200, 10, COLORS.WHITE, gl, vsSourceNoLight, fsSourceNoLight, 'grid');
         grid.init();
         figureController.addStaticFigure(grid);
     }
