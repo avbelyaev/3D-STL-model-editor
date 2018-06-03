@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+  jinx:
+    image: jinx
+    build: ./nginx
+    ports:
+      - "443:443"
+    restart: always
+    depends_on:
+      - rocket
+
+  rocket:
+    image: rocket
+    build: ./backend
+    ports:
+      - "8000:8000"
