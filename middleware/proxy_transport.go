@@ -16,6 +16,7 @@ const (
 	HEADER_REQUEST_MODIFIED  = "X-Request-Modified"
 	HEADER_RESPONSE_MODIFIED = "X-Response-Modified"
 	PATH_PERFORM             = "perform"
+	HEADER_TEST				 = "X-test"
 )
 
 type ProxyTransport struct {
@@ -42,13 +43,12 @@ func (t *ProxyTransport) RoundTrip(request *http.Request) (*http.Response, error
 	// acquire response
 	var response, roundTripErr = http.DefaultTransport.RoundTrip(request)
 
-	if strings.Contains(request.RequestURI, PATH_PERFORM) {
+	if strings.Contains(request.RequestURI, PATH_PERFORM) || "" != request.Header.Get(HEADER_TEST) {
 		response.Header.Set(HEADER_RESPONSE_MODIFIED, "0")
-		if "POST" == request.Method {
-		    t.log.Info("modifying response")
+		t.log.Info("modifying response")
 
-			modifyResponse(response)
-		}
+		modifyResponse(response)
+
 		response.Header.Set(HEADER_RESPONSE_MODIFIED, "1")
 	}
 
@@ -72,6 +72,8 @@ func modifyResponse(response *http.Response) {
 	var originalResponse = readResponseBody(response)
 
 	var fileContent, readErr = ioutil.ReadFile(originalResponse.Result)
+	println("read bytes of response: ", len(fileContent))
+
 	check(readErr)
 
 	var encodedBase64Response = base64.StdEncoding.EncodeToString(fileContent)
