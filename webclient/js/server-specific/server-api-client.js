@@ -27,29 +27,34 @@ class ServerApiClient {
             });
     }
 
-    performBoolOp(boolOpCommand, callback) {
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", `${this.stlUrl}/perform`, true);
-        xhr.setRequestHeader("Content-type", "application/json");
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                callback(null, xhr.response);
-            }
-        };
-        xhr.send(boolOpCommand);
+    // TODO gzip
+    performBoolOpRequest(boolOpCommand, callback) {
+        if (boolOpCommand.hasOwnProperty('operation')
+            && boolOpCommand.hasOwnProperty('stl1')
+            && boolOpCommand.hasOwnProperty('stl2')) {
 
-        //     axios.post(`${this.stlUrl}/perform`, boolOpCommand, {
-        //         headers: {
-        //             'Content-type': 'text/plain'
-        //         }
-        //     })
-        //         .then(response => {
-        //             // TODO gzip
-        //             callback(null, response);
-        //         })
-        //         .catch(error => {
-        //             log(`Error occurred while performing bool op on STLs: ${error}`);
-        //             callback(error, null);
-        //         });
+            // XHR uses SPDY
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", `${this.stlUrl}/perform`, true);
+            xhr.setRequestHeader("Content-type", "application/json");
+
+            xhr.responseType = 'json';
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    callback(null, xhr.response);
+
+                } else {
+                    callback(Error('Error: XHR response status: ' + xhr.status), null);
+                }
+            };
+            xhr.send(JSON.stringify({
+                operation: boolOpCommand.operation,
+                stl1: boolOpCommand.stl1,
+                stl2: boolOpCommand.stl2
+            }));
+
+        } else {
+            log('XHR error: not enough request data to complete POST');
+        }
     }
 }

@@ -63,10 +63,13 @@ class Menu {
 
     static __crop(cropperType) {
         const cropper = figureController.getToolFigureBySubtype(cropperType)[0];
-        if (cropper) {
+        if (cropper && null !== figureController.selectedFigure) {
             cropper.updateFigure();
             operationPerformer.performBoolOp(
                 Operations.INTERSECT, figureController.selectedFigure, cropper);
+
+        } else {
+            log(`Error! Nothing to crop. Select figure first`);
         }
     }
 

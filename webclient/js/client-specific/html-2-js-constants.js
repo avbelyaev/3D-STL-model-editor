@@ -37,5 +37,5 @@ const H2JS_CONTROL_ADJUSTMENT_CURRENT_MODEL = "control-adjustment--current-model
 // logs
 const H2JS_LOG = "log";
 const H2JS_LOG_CONTENT = "log--content";
-const H2JS_LOG_CONTENT_ERROR = "log--content--error";
+const H2JS_LOG_CONTENT_ERROR = "log--content__error";
 const H2JS_LOG_CONTENT_TIME = "log--content__time";

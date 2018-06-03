@@ -94,13 +94,21 @@ class OperationPerformer {
     }
 
     performRequest(cmd) {
-        serverApiClient.performBoolOp(cmd, (err, response) => {
+        serverApiClient.performBoolOpRequest(cmd, (err, response) => {
             if (!err) {
                 log('converting base64 to blob and then to a file');
+                const res = response.res;
 
-                const res = response.data.res;
-                const mimeTypeStl = "application/sla";
-                const blob = B64Converter.convertBase64ToBlob(res, mimeTypeStl, 512);
+                let blob = null;
+                try {
+                    const mimeTypeStl = "application/sla";
+                    blob = B64Converter.convertBase64ToBlob(res, mimeTypeStl, 512);
+
+                } catch (e) {
+                    log(`Aborting on Base64 -> Blob conversion error: ${e.message}`);
+                    return;
+                }
+
                 const filename = "result.stl";
                 const file = new File([blob], filename);
 
