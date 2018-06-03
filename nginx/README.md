@@ -3,7 +3,7 @@
 ### Commands
 
 ```
-# start
+# start (if theres an error, try sudo)
 nginx
 
 # reload conf

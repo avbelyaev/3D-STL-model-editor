@@ -100,6 +100,9 @@ func readRequestBody(request *http.Request) *RequestMessage {
 	var buf, readErr = ioutil.ReadAll(request.Body)
 	check(readErr)
 
+	var bodyStr = string(buf)
+	println("-> Rq body: ", bodyStr[:50])
+
 	var message RequestMessage
 	var deserializeErr = json.Unmarshal(buf, &message)
 	check(deserializeErr)
@@ -110,6 +113,9 @@ func readRequestBody(request *http.Request) *RequestMessage {
 func readResponseBody(response *http.Response) *ResponseMessage {
 	var buf, readErr = ioutil.ReadAll(response.Body)
 	check(readErr)
+
+	var bodyStr = string(buf)
+	println("<- Rsp body: ", bodyStr)
 
 	var message ResponseMessage
 	var deserializeErr = json.Unmarshal(buf, &message)
