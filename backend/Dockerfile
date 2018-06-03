@@ -46,6 +46,5 @@ WORKDIR /app
 RUN cargo update -p libc && \
     cargo build
 
-EXPOSE 8000
 
 ENTRYPOINT ["cargo", "run"]

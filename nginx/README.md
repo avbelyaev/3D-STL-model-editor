@@ -1,7 +1,6 @@
 # Nginx
 
-### Commands
-
+Nginx commands:
 ```
 # start (if theres an error, try sudo)
 nginx
@@ -14,9 +13,19 @@ nginx -s stop
 ```
 
 
+Docker build & run:
+```
+docker build -t jinx .
+docker run jinx
+```
+
+
 ### Notes
 
-Generate certs
+- If launched inside container, `host` from `proxy_pass http://<host>:5000;` 
+defines a service name (rocket/goproxy/...), which is not localhost
+
+- Generate certs (since HTTP/2 requires TLS)
 ```
 openssl req -x509 -nodes \
     -days 365 \
@@ -25,11 +34,10 @@ openssl req -x509 -nodes \
     -out cert.crt
 ```
 
----
+- Nginx conf path on macOS (brew): `/usr/local/etc/nginx`
 
-Nginx conf path on macOS (brew): `/usr/local/etc/nginx`
 
----
+### FAQ
 
 Error:
 ```
@@ -40,6 +48,4 @@ Solve:
 ```
 sudo chmod -R 766 /usr/local/var/log/nginx
 ```
-
----
 
