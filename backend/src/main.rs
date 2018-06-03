@@ -46,6 +46,11 @@ fn stl_performer_wrapper(cmd: Json<perform_on_stl_command::PerformOnStlCommand>)
     stl_resource::perform_bool_op_on_stl(cmd)
 }
 
+#[get("/stub")]
+fn stl_stub_wrapper() -> Json<StlFilepathModel> {
+    Json(StlFilepathModel{ res: "/Users/anthony/STL/Hydrogel_Hand_Bone_Scaffolds/234MP345DP.stl".to_string() })
+}
+
 
 fn rocket() -> Rocket {
     rocket::ignite()
@@ -54,7 +59,11 @@ fn rocket() -> Rocket {
             mesh_stub_wrapper,
             mesh_performer_wrapper
         ])
-        .mount("/api/stl", routes![create_stl_wrapper, stl_performer_wrapper])
+        .mount("/api/stl", routes![
+            create_stl_wrapper,
+            stl_performer_wrapper,
+            stl_stub_wrapper
+        ])
         .attach(CORS())
 }
 
