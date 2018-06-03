@@ -35,10 +35,14 @@ func getAddr() (string, string) {
 func main() {
 	var selfAddr, targetAddr = getAddr()
 
-	var proxy = NewCachingProxy(selfAddr, targetAddr)
+	var proxy = NewSimpleProxy(targetAddr)
 	http.HandleFunc("/", proxy.handle)
+
+	//var certFile = "certificate.pem"
+	//var keyFile = "key.pem"
+
 
 	proxy.log.Info(fmt.Sprintf("starting proxy: %s -> %s", selfAddr, targetAddr))
 	proxy.log.Error("proxy listener failed", "error",
-		http.ListenAndServe(selfAddr, nil))
+		http.ListenAndServe(selfAddr,nil))
 }

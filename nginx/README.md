@@ -1,5 +1,21 @@
 # Nginx
 
+### Commands
+
+```
+# start
+nginx
+
+# reload conf
+nginx -s reload
+
+# stop
+nginx -s stop
+```
+
+
+### Notes
+
 Generate certs
 ```
 openssl req -x509 -nodes \
@@ -8,4 +24,22 @@ openssl req -x509 -nodes \
     -keyout cert.key \
     -out cert.crt
 ```
+
+---
+
+Nginx conf path on macOS (brew): `/usr/local/etc/nginx`
+
+---
+
+Error:
+```
+nginx: [alert] could not open error log file: open() "/usr/local/var/log/nginx/error.log" failed (13: Permission denied)
+```
+
+Solve:
+```
+sudo chmod -R 766 /usr/local/var/log/nginx
+```
+
+---
 

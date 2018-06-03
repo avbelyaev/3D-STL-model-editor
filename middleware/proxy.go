@@ -7,22 +7,22 @@ import (
 	"net/http"
 )
 
-type CachingProxy struct {
+type SimpleProxy struct {
 	target *url.URL
 	proxy  *httputil.ReverseProxy
 	log    log.Logger
 }
 
-func NewCachingProxy(listen, target string) *CachingProxy {
+func NewSimpleProxy(target string) *SimpleProxy {
 	var targetUrl, _ = url.Parse(target)
-	return &CachingProxy{
+	return &SimpleProxy{
 		target: targetUrl,
 		proxy:  httputil.NewSingleHostReverseProxy(targetUrl),
 		log:    log.New("proxy"),
 	}
 }
 
-func (p *CachingProxy) handle(rsp http.ResponseWriter, rq *http.Request) {
+func (p *SimpleProxy) handle(rsp http.ResponseWriter, rq *http.Request) {
 	p.log.Info("proxying request")
 
 	rsp.Header().Set("X-proxy", "GoProxy")

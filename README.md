@@ -55,12 +55,19 @@ Added to PATH: `export PATH=$PATH:/path/to/dart-sass`. Usage: `sass style.scss s
 Or it can be done with brew: `brew install --devel sass/sass/sass`
 
 
+## Middleware (reverse proxy)
+Generate key (HTTP/2 works only over TLS)
+```
+openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out certificate.pem
+```
+
+
 ## Notes
 - Back to stable version of Rust: `rustup default stable`
 - Lib `gmp` can be omitted on Mac: `brew install gmp`
 - Allow Chrome open local files on OSX
 ```
-open /Applications/Google\ Chrome.app --args --allow-file-access-from-files
+open /Applications/Google\ Chrome.app --args --allow-file-access-from-files --disable-web-security --user-data-dir
 ```
 - Proxy may be needed to use brew: `export ALL_PROXY=https://host:port`
 - Proxy for git (cargo/docker): `git config --global http.proxy http://host:port`

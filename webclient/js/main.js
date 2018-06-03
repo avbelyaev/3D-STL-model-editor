@@ -100,7 +100,7 @@ function main() {
     gl = initGL();
     figureController = new FigureController();
     operationPerformer = new OperationPerformer();
-    serverApiClient = new ServerApiClient('localhost', 5000);
+    serverApiClient = new ServerApiClient('https', 'localhost', 443);
     log("FigureController, OperationPerformer have started");
 
 
@@ -117,9 +117,9 @@ function main() {
     Cropper.initCroppers();
 
 
-    const letterF = new Figure(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource, 'letter-F', DRAWABLES.FIGURE);
-    letterF.init();
-    figureController.addDynamicFigure(letterF);
+    // const letterF = new Figure(LetterF.positions(), LetterF.colors(), gl, vsSource, fsSource, 'letter-F', DRAWABLES.FIGURE);
+    // letterF.init();
+    // figureController.addDynamicFigure(letterF);
 
 
     log("Starting render loop");
