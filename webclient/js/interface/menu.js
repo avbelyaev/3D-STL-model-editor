@@ -78,8 +78,7 @@ class Menu {
     };
 
     performOperation() {
-        if (1 < figureController.processedFigures.length
-            && null != figureController.selectedOperation) {
+        if (1 < figureController.processedFigures.length && null != operationPerformer.selectedOperation) {
             operationPerformer.performBoolOp(
                 operationPerformer.selectedOperation,
                 figureController.processedFigures[0],

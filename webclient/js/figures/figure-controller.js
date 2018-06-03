@@ -71,9 +71,11 @@ class FigureController {
     }
 
     get processedFigures() {
-        return Array.from(document.getElementsByClassName(this.processedFiguresClass))
+        const processedFiguresIds = Array.from(document.getElementsByClassName(this.processedFiguresClass))
             .filter(checkbox => checkbox.checked)
             .map(checkedCheckBox => checkedCheckBox.getAttribute(this.figureIdAttrName));
+        return Array.from(this.dynamicFigures.values())
+            .filter(f => processedFiguresIds.includes(f.id));
     }
 
     getToolFigureBySubtype(subtype) {
