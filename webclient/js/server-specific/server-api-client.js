@@ -40,11 +40,14 @@ class ServerApiClient {
 
             xhr.responseType = 'json';
             xhr.onreadystatechange = function () {
-                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                    callback(null, xhr.response);
+                if (xhr.readyState === XMLHttpRequest.DONE) {
 
-                } else {
-                    callback(Error('Error: XHR response status: ' + xhr.status), null);
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        callback(null, xhr.response);
+
+                    } else {
+                        callback(Error('Error: XHR response status: ' + xhr.status), null);
+                    }
                 }
             };
             xhr.send(JSON.stringify({
