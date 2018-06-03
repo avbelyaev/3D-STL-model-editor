@@ -46,6 +46,4 @@ WORKDIR /app
 RUN cargo update -p libc && \
     cargo build
 
-ENV ROCKET_ENV=production
-
 ENTRYPOINT ["cargo", "run"]

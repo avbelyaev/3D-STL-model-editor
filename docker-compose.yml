@@ -11,7 +11,9 @@ services:
       - rocket
 
   rocket:
-    image: rocket
-    build: ./backend
+    image: server
+    #build: ./backend
+    env:
+      - ROCKET_ENV: production
     ports:
-      - "8000:8000"
+      - "8000:5000"

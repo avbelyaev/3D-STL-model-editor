@@ -7,7 +7,7 @@ limits = { forms = 32768, json = 5242880 }
 
 [production]
 address = "0.0.0.0"
-port = 5000
+port = 8000
 workers = 4
 log = "normal"
-limits = { forms = 32768, json = 5242880 }
+limits = { forms = 32768, json = 120042880 }
