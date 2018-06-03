@@ -3,7 +3,6 @@ use application::stl_reader::binary_stl_reader;
 use std::fs::File;
 use std::io::prelude::*;
 use geometry_kernel::primitives::mesh;
-use geometry_kernel::bool_op::BoolOpResult;
 
 
 pub fn perform_on_stls(operation_name: &str, stl1_filepath: &str, stl2_filepath: &str) -> String {
@@ -19,9 +18,11 @@ pub fn perform_on_stls(operation_name: &str, stl1_filepath: &str, stl2_filepath:
     let mesh2 = mesh::BinaryStlFile::read_stl(&mut f2).unwrap();
 
 
+    // generate name for file
+    let res_path = format!("/tmp/stl-res-{}-{}.stl", operation_name, stl1_filepath);
+
     // perform operation
-    let res_path = "/tmp/stl-res.stl";
-    let mut f_res= File::create(res_path).unwrap();
+    let mut f_res= File::create(&res_path).unwrap();
 
     let result = BoolOpResult::new(&mesh1, &mesh2)
         .expect("The error was raised in a constructor of <BoolOpResult>!");
@@ -55,8 +56,11 @@ pub fn perform_on_stls(operation_name: &str, stl1_filepath: &str, stl2_filepath:
     }
 
     // return only filepath
-    res_path.to_string()
+    res_path
 }
+
+
+use geometry_kernel::bool_op::BoolOpResult;
 
 fn valid_operation(op_name: &str) -> bool {
     "bad" != op_name
