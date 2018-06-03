@@ -183,7 +183,7 @@ class Drawable {
         this.normals = new Array(Math.round(this.positions.length / 9));
         let j = 0;
         this.triangles.forEach(triangle => {
-            this.normals[j++] = Surface.countNormal(triangle[0], triangle[1], triangle[2]);
+            this.normals[j++] = countNormal(triangle[0], triangle[1], triangle[2]);
         });
 
         return this.normals;
