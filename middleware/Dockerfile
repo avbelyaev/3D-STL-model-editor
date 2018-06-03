@@ -1,9 +1,11 @@
-FROM golang:1.8
+FROM golang:1.10
+
+COPY . /go/src/app
 
 WORKDIR /go/src/app
-COPY . .
 
-RUN go get -d -v ./...
+# '...' tells golang to go down recursively
+RUN go get -d ./...
 
 ENV LOGXI=*
 ENV LOGXI_FORMAT=pretty,happy

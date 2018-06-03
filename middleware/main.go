@@ -7,26 +7,23 @@ import (
 )
 
 const (
-	ENV_SELF_PORT = "SELF_PORT"
-	ENV_TARGET_PORT = "TARGET_PORT"
+	ENV_SELF_ADDR   = "SELF_ADDR"
+	ENV_TARGET_ADDR = "TARGET_ADDR"
+
+	DEFAULT_SELF_ADDR = "localhost:5000"
+	DEFAULT_TARGET_ADDR = "http://localhost:8000"
 )
 
 
 func getAddr() (string, string) {
-	var selfAddrStr = "localhost:"
-	if "" != os.Getenv(ENV_SELF_PORT) {
-		selfAddrStr += os.Getenv(ENV_SELF_PORT)
-
-	} else {
-		selfAddrStr += "5000"
+	var selfAddrStr = DEFAULT_SELF_ADDR
+	if "" != os.Getenv(ENV_SELF_ADDR) {
+		selfAddrStr = os.Getenv(ENV_SELF_ADDR)
 	}
 
-	var targetAddrStr = "http://localhost:"
-	if "" != os.Getenv(ENV_TARGET_PORT) {
-		targetAddrStr += os.Getenv(ENV_TARGET_PORT)
-
-	} else {
-		targetAddrStr += "8000"
+	var targetAddrStr = "http://" + DEFAULT_TARGET_ADDR
+	if "" != os.Getenv(ENV_TARGET_ADDR) {
+		targetAddrStr = "http://" + os.Getenv(ENV_TARGET_ADDR)
 	}
 
 	return selfAddrStr, targetAddrStr
@@ -37,9 +34,6 @@ func main() {
 
 	var proxy = NewSimpleProxy(targetAddr)
 	http.HandleFunc("/", proxy.handle)
-
-	//var certFile = "certificate.pem"
-	//var keyFile = "key.pem"
 
 
 	proxy.log.Info(fmt.Sprintf("starting proxy: %s -> %s", selfAddr, targetAddr))

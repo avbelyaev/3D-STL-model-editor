@@ -8,12 +8,23 @@ services:
       - "443:443"
     restart: always
     depends_on:
-      - rocket
+      - gopro
 
   rocket:
-    image: server
+    image: rocket
     #build: ./backend
     env:
       - ROCKET_ENV: production
     ports:
-      - "8000:5000"
+      - "8000:8000"
+    restart: always
+
+  gopro:
+    image: gopro
+    build: ./middleware
+    env:
+      - SELF_ADDR: "0.0.0.0:5000"
+      - TARGET_ADDR: "rocket:8000"
+    ports:
+      - "5000:5000"
+    restart: always
