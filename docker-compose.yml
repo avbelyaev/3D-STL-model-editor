@@ -23,6 +23,7 @@ services:
       depends_on:
         - rocket
 
+  # gopro and rocket should have same shared volume to share STLs
   rocket:
     image: rocket
     #build: ./backend
