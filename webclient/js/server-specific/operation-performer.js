@@ -32,7 +32,7 @@ class OperationPerformer {
                     log(`file ${filename} has been successfully parsed`);
 
                     const vertices = meshData.vertices;
-                    console.log(vertices);
+                    // console.log(vertices);
 
                     const mesh = new Figure(vertices, COLORS.RANDOM(), gl,
                         vsSource, fsSource, filename, DRAWABLES.FIGURE);
@@ -68,12 +68,14 @@ class OperationPerformer {
                     const base64edStl1Id = OperationPerformer.createIdForBase64Item(figure1.id);
                     const getSTL1 = store.get(base64edStl1Id);
 
+                    log(`reading file ${base64edStl1Id} from IndexedDB`);
                     getSTL1.onsuccess = function () {
                         const stl1Data = getSTL1.result.modeldata;
 
                         const base64edStl2Id = OperationPerformer.createIdForBase64Item(figure2.id);
                         const getSTL2 = store.get(base64edStl2Id);
 
+                        log(`reading file ${base64edStl2Id} from IndexedDB`);
                         getSTL2.onsuccess = function () {
                             const stl2Data = getSTL2.result.modeldata;
 
@@ -94,6 +96,7 @@ class OperationPerformer {
     }
 
     performRequest(cmd) {
+        log(`Please, wait for a while while performing request. Model will be added as soon as it ready`);
         serverApiClient.performBoolOpRequest(cmd, (err, response) => {
             if (!err) {
                 log('converting base64 to blob and then to a file');

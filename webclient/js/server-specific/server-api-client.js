@@ -27,13 +27,13 @@ class ServerApiClient {
             });
     }
 
-    // TODO gzip
     performBoolOpRequest(boolOpCommand, callback) {
         if (boolOpCommand.hasOwnProperty('operation')
             && boolOpCommand.hasOwnProperty('stl1')
             && boolOpCommand.hasOwnProperty('stl2')) {
 
-            // XHR uses SPDY
+            // XHR uses SPDY and gzip natively
+            // if server supports them
             const xhr = new XMLHttpRequest();
             xhr.open("POST", `${this.stlUrl}/perform`, true);
             xhr.setRequestHeader("Content-type", "application/json");
@@ -46,7 +46,7 @@ class ServerApiClient {
                         callback(null, xhr.response);
 
                     } else {
-                        callback(Error('Error: XHR response status: ' + xhr.status), null);
+                        callback(Error('XHR error'), null);
                     }
                 }
             };

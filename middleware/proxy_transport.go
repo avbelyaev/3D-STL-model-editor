@@ -10,6 +10,7 @@ import (
 	"github.com/satori/go.uuid"
 	"encoding/base64"
 	"strings"
+	"golang.org/x/crypto/openpgp/errors"
 )
 
 const (
@@ -30,14 +31,12 @@ func NewProxyTransport() *ProxyTransport {
 }
 
 func (t *ProxyTransport) RoundTrip(request *http.Request) (*http.Response, error) {
+	var modifyErr error
 	if strings.Contains(request.RequestURI, PATH_PERFORM) {
-		request.Header.Set(HEADER_REQUEST_MODIFIED, "0")
 		if "POST" == request.Method {
-		    t.log.Info("modifying request")
-
-			modifyRequest(request)
+			t.log.Info("\n--> Modifying request!")
+			modifyErr = t.modifyRequest(request)
 		}
-		request.Header.Set(HEADER_REQUEST_MODIFIED, "1")
 	}
 
 	// acquire response
@@ -45,9 +44,13 @@ func (t *ProxyTransport) RoundTrip(request *http.Request) (*http.Response, error
 
 	if strings.Contains(request.RequestURI, PATH_PERFORM) || "" != request.Header.Get(HEADER_TEST) {
 		response.Header.Set(HEADER_RESPONSE_MODIFIED, "0")
-		t.log.Info("modifying response")
 
-		modifyResponse(response)
+		t.log.Info("\n<-- Modifying response!")
+		modifyErr = t.modifyResponse(response)
+		if nil != modifyErr {
+			t.log.Error("replying with status 500 on error: " + modifyErr.Error())
+			response.Status = "500"
+		}
 
 		response.Header.Set(HEADER_RESPONSE_MODIFIED, "1")
 	}
@@ -55,75 +58,112 @@ func (t *ProxyTransport) RoundTrip(request *http.Request) (*http.Response, error
 	return response, roundTripErr
 }
 
-func modifyRequest(request *http.Request) {
-	var originalMessage = readRequestBody(request)
+func (t *ProxyTransport) modifyRequest(request *http.Request) error {
+	t.log.Debug("reading request body")
+	var originalMessage, readRqBodyErr = readRequestBody(request)
+	if nil != readRqBodyErr {
+		return readRqBodyErr
+	}
 
-	var filepath1 = decodeFileAndSaveToDisk(originalMessage.Stl1)
-	var filepath2 = decodeFileAndSaveToDisk(originalMessage.Stl2)
+	t.log.Debug("decoding files from base64 and dumping to disk")
+	var filepath1, decodeErr1 = decodeFileAndSaveToDisk(originalMessage.Stl1)
+	if nil != decodeErr1 {
+		return decodeErr1
+	}
+	var filepath2, decodeErr2 = decodeFileAndSaveToDisk(originalMessage.Stl2)
+	if nil != decodeErr2 {
+		return decodeErr2
+	}
 
+	t.log.Debug("composing new message with filenames instead of files")
 	var modifiedMsg = NewRequestMessage(originalMessage.Operation, filepath1, filepath2)
 	var modMsgBytes, serializeErr = json.Marshal(modifiedMsg)
 	check(serializeErr)
 
+	t.log.Debug("modifying outcoming request")
 	modifyRequestBody(request, modMsgBytes)
+	return nil
 }
 
-func modifyResponse(response *http.Response) {
-	var originalResponse = readResponseBody(response)
+func (t *ProxyTransport) modifyResponse(response *http.Response) error {
+	t.log.Debug("reading response body")
+	var originalResponse, readResponseBodyErr = readResponseBody(response)
+	if nil != readResponseBodyErr {
+		return readResponseBodyErr
+	}
 
+	t.log.Debug("reading file: " + originalResponse.Result)
 	var fileContent, readErr = ioutil.ReadFile(originalResponse.Result)
+	if nil != readErr {
+		return errors.InvalidArgumentError("could not read file: " + originalResponse.Result)
+	}
 	println("read bytes of response: ", len(fileContent))
 
-	check(readErr)
-
+	t.log.Debug("encoding into base64 and composing new message")
 	var encodedBase64Response = base64.StdEncoding.EncodeToString(fileContent)
 
 	var modifiedResponse = NewResponseMessage(encodedBase64Response)
 	var serialized, serializeErr = json.Marshal(modifiedResponse)
-	check(serializeErr)
+	if nil != serializeErr {
+		return errors.InvalidArgumentError("response cannot be serialized after modification")
+	}
 
+	t.log.Debug("modifying outcoming response")
 	modifyResponseBody(response, []byte(serialized))
+	return nil
 }
 
 // dumps file to disk and returns filepath
-func decodeFileAndSaveToDisk(fileContentBase64 string) string {
+func decodeFileAndSaveToDisk(fileContentBase64 string) (string, error) {
 	var filename = "/tmp/stl-" + uuid.Must(uuid.NewV4()).String() + ".stl"
 	var decoded, decodeErr = base64.StdEncoding.DecodeString(fileContentBase64)
-	check(decodeErr)
+	if nil != decodeErr {
+		return "", errors.InvalidArgumentError("could not convert from base64")
+	}
 
 	var writeFileErr = ioutil.WriteFile(filename, decoded, 0644)
-	check(writeFileErr)
+	if nil != writeFileErr {
+		return "", errors.InvalidArgumentError("could not write file")
+	}
 
-	return filename
+	return filename, nil
 }
 
 // deserializes request body into type RequestMessage
-func readRequestBody(request *http.Request) *RequestMessage {
+func readRequestBody(request *http.Request) (*RequestMessage, error) {
 	var buf, readErr = ioutil.ReadAll(request.Body)
-	check(readErr)
+	if nil != readErr {
+		return nil, errors.InvalidArgumentError("request body cannot be read")
+	}
 
 	var bodyStr = string(buf)
 	println("-> Rq body: ", bodyStr[:50])
 
 	var message RequestMessage
 	var deserializeErr = json.Unmarshal(buf, &message)
-	check(deserializeErr)
+	if nil != deserializeErr {
+		return nil, errors.InvalidArgumentError("request cannot be deserialized")
+	}
 
-	return &message
+	return &message, nil
 }
 
-func readResponseBody(response *http.Response) *ResponseMessage {
+func readResponseBody(response *http.Response) (*ResponseMessage, error) {
 	var buf, readErr = ioutil.ReadAll(response.Body)
-	check(readErr)
+	if nil != readErr {
+		return nil, errors.InvalidArgumentError("response body cannot be read")
+	}
 
 	var bodyStr = string(buf)
 	println("<- Rsp body: ", bodyStr)
 
 	var message ResponseMessage
 	var deserializeErr = json.Unmarshal(buf, &message)
-	check(deserializeErr)
+	if nil != deserializeErr {
+		return nil, errors.InvalidArgumentError("response could not be deserialized")
+	}
 
-	return &message
+	return &message, nil
 }
 
 func modifyRequestBody(request *http.Request, newBody []byte) {
@@ -141,6 +181,6 @@ func modifyResponseBody(response *http.Response, newBody []byte) {
 
 func check(e error) {
 	if e != nil {
-		panic(e)
+		log.Fatal("ERROR:", e)
 	}
 }
