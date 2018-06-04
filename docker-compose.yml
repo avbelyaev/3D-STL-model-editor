@@ -22,8 +22,10 @@ services:
       restart: always
       depends_on:
         - rocket
+      volumes:
+        - stl-folder:/tmp
 
-  # gopro and rocket should have same shared volume to share STLs
+  # TODO add env var pointing to where save to and read STL from
   rocket:
     image: rocket
     #build: ./backend
@@ -32,3 +34,8 @@ services:
     ports:
       - "8000:8000"
     restart: always
+    volumes:
+      - stl-folder:/tmp
+
+volumes:
+  stl-folder:
