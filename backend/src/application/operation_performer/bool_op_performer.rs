@@ -11,17 +11,22 @@ pub fn perform_on_stls(operation_name: &str, stl1_filepath: &str, stl2_filepath:
     }
 
     // create 2 stl files
+    println!("converting file1: {} to mesh", stl1_filepath);
     let mut f1 = File::open(stl1_filepath).unwrap();
     let mesh1 = mesh::BinaryStlFile::read_stl(&mut f1).unwrap();
 
+    println!("converting file2: {} to mesh", stl2_filepath);
     let mut f2 = File::open(stl2_filepath).unwrap();
     let mesh2 = mesh::BinaryStlFile::read_stl(&mut f2).unwrap();
 
 
     // generate name for file
-    let res_path = format!("/tmp/stl-res-{}-{}.stl", operation_name, stl1_filepath);
+    let mut split = stl1_filepath.split("/");
+    let vec: Vec<&str> = split.collect();
+    let res_path = format!("/tmp/res-{}", vec[vec.len() - 1].to_string());
 
     // perform operation
+    println!("creating file: {}", res_path);
     let mut f_res= File::create(&res_path).unwrap();
 
     let result = BoolOpResult::new(&mesh1, &mesh2)
@@ -63,7 +68,10 @@ pub fn perform_on_stls(operation_name: &str, stl1_filepath: &str, stl2_filepath:
 use geometry_kernel::bool_op::BoolOpResult;
 
 fn valid_operation(op_name: &str) -> bool {
-    "bad" != op_name
+    "difference_ab" == op_name
+    || "difference_ba" == op_name
+    || "intersection" == op_name
+    || "union" == op_name
 }
 
 fn create_stl_file<'a>(filepath: &'a str, content: Vec<u8>) -> File {
