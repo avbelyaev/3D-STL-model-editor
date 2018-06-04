@@ -3,7 +3,7 @@ version: '2'
 services:
   jinx:
     image: jinx
-    build: ./nginx
+    #build: ./nginx
     ports:
       - "443:443"
     restart: always
@@ -13,10 +13,10 @@ services:
 
   gopro:
       image: gopro
-      build: ./middleware
-      env:
-        - SELF_ADDR: "0.0.0.0:5000"
-        - TARGET_ADDR: "rocket:8000"
+      #build: ./middleware
+      environment:
+        - SELF_ADDR=0.0.0.0:5000
+        - TARGET_ADDR=rocket:8000
       ports:
         - "5000:5000"
       restart: always
@@ -26,8 +26,8 @@ services:
   rocket:
     image: rocket
     #build: ./backend
-    env:
-      - ROCKET_ENV: production
+    environment:
+      - ROCKET_ENV=production
     ports:
       - "8000:8000"
     restart: always

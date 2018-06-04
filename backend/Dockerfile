@@ -33,9 +33,9 @@ RUN set -eux; \
 RUN apt-get update
 RUN yes | apt-get install libgmp3-dev
 
-RUN rustup update && \
-    rustup install nightly && \
-    rustup default nightly && \
+RUN rustup update
+RUN rustup install nightly
+RUN rustup default nightly && \
     rustc --version
 
 COPY . /app
