@@ -23,7 +23,7 @@ docker run jinx
 ### Notes
 
 - If launched inside container, `host` from `proxy_pass http://<host>:5000;` 
-defines a service name (rocket/goproxy/...), which is not localhost
+defines a service name (rocket/goproxy/...) from `docker-compose.yml`, which is not localhost
 
 - Generate certs (since HTTP/2 requires TLS)
 ```
@@ -39,7 +39,7 @@ openssl req -x509 -nodes \
 
 ### FAQ
 
-Error:
+There is an error with log file access. Nginx does not care if log file that you defined in `nginx.conf` is another:
 ```
 nginx: [alert] could not open error log file: open() "/usr/local/var/log/nginx/error.log" failed (13: Permission denied)
 ```
