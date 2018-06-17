@@ -12,6 +12,7 @@ const makeModelMatrix = (isMovable, scaleVec, translationVec, rotationVec) => {
     // scale
     mat4.scale(modelMatrix, modelMatrix, scaleVec);
 
+    // TODO swap move and rotate. it seems that there is an error here otherwise
     // move
     const figureMove = isMovable ? translationVec : [0, 0, 0];
     mat4.translate(modelMatrix, modelMatrix, figureMove);
