@@ -2,8 +2,8 @@ version: '2'
 
 services:
   jinx:
-    image: jinx
-    #build: ./nginx
+#    image: jinx
+    build: ./nginx
     ports:
       - "443:443"
     restart: always
@@ -12,8 +12,8 @@ services:
       - rocket
 
   gopro:
-      image: gopro
-      #build: ./middleware
+#      image: gopro
+      build: ./middleware
       environment:
         - SELF_ADDR=0.0.0.0:5000
         - TARGET_ADDR=rocket:8000
@@ -27,8 +27,8 @@ services:
 
   # TODO add env var pointing to where save to and read STL from
   rocket:
-    image: rocket
-    #build: ./backend
+#    image: rocket
+    build: ./backend
     environment:
       - ROCKET_ENV=production
     ports:
