@@ -80,3 +80,21 @@ fn create_stl_file<'a>(filepath: &'a str, content: Vec<u8>) -> File {
 
     File::open(filepath).unwrap()
 }
+
+#[cfg(test)]
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn test_operation_is_valid() {
+        let expected = valid_operation("union");
+        assert_eq!(expected, true);
+    }
+
+//    #[test]
+//    #[should_panic]
+//    fn test_exception_is_thrown() {
+//        divide_by_zero(777);
+//    }
+}
