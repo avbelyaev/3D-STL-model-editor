@@ -1,5 +1,11 @@
 # STL-Editor
 
+[light-ui](screen1.png)
+
+### Dark mode
+
+[dark-ui](screen2.png)
+
 ## Server-side (Rocket backend, GoProxy, Nginx)
 
 Build and run with Docker compose:
