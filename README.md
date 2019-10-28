@@ -1,10 +1,10 @@
 # STL-Editor
 
-[light-ui](screen1.png)
+![light-ui](screen1.png)
 
 ### Dark mode
 
-[dark-ui](screen2.png)
+![dark-ui](screen2.png)
 
 ## Server-side (Rocket backend, GoProxy, Nginx)
 
