@@ -1,17 +1,23 @@
 # STL-Editor
 
+#### Editor for models in 3D-prinatble STL format
+
 ![light-ui](screen1.png)
 
 ### Dark mode
 
 ![dark-ui](screen2.png)
 
-## Server-side (Rocket backend, GoProxy, Nginx)
 
-Build and run with Docker compose:
-```
-docker-compose up
-```
+#### Tech overview
+
+- Vanilla JavaScript frontend
+    - Graphics based on vanilla WebGL with shaders and geometry maths :)
+    - Models are stored in Indexed DB in browser  
+- Nginx for HTTPS and Gzip
+- Rust Rocket backend 
+
+It was never intented to run in production. The main purpose was to learn fullstack development via project that is more interesting and more difficult that TODO app
 
 
 ## Client-side (WebGL client)
@@ -24,7 +30,9 @@ In order to adjust style use SASS-preprocessor from [this link](http://sass-lang
 Add to PATH: `export PATH=$PATH:/path/to/dart-sass`. Usage: `sass style.scss style.css`.
 Or it can be downloader with brew: `brew install --devel sass/sass/sass`
 
+## Server-side (Nginx, Goproxy, Rust)
 
+Run: `docker-compose up`
 
 ### Notes
 - Back to stable version of Rust: `rustup default stable`
